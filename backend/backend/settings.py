@@ -32,10 +32,13 @@ INSTALLED_APPS = [
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
+    'two_factor',
     'csp',
     'django_extensions',
-    'shop',
+    'social_django',
+    'rest_framework_social_oauth2',
     'oauth2_provider',
+    'shop',
     
     
 ]

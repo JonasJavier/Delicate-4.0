@@ -16,6 +16,10 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.exceptions import NotFound
 
+# Social Auth Imports
+from social_django.utils import load_strategy, load_backend
+from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
+
 # Local Imports
 from .models import UserProfile
 from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserProfileSerializer
