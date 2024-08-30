@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../assets/css/ProductCard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -59,6 +60,10 @@ const ProductCard = ({ onQuickView }) => {
       </div>
     </div>
   );
+};
+
+ProductCard.propTypes = {
+  onQuickView: PropTypes.func.isRequired,
 };
 
 export default ProductCard;

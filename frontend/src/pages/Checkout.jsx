@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Container as BootstrapContainer, FormGroup as BootstrapFormGroup, FormControl as BootstrapFormControl, FormSelect as BootstrapFormSelect, FormCheck as BootstrapFormCheck, Card as BootstrapCard } from 'react-bootstrap';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import strawberryImg from '../assets/images/products/img-2.png';
 import lemonImg from '../assets/images/products/img-3.png';
 
-const Container = styled.div`
+const StyledContainer = styled.div`
   margin: 3% 0;
   padding: 0 5%;
 
@@ -35,11 +37,11 @@ const Container = styled.div`
   }
 `;
 
-const FormGroup = styled.div`
+const StyledFormGroup = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const FormControl = styled.input`
+const StyledFormControl = styled.input`
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.5rem;
@@ -47,7 +49,7 @@ const FormControl = styled.input`
   border-radius: 0.25rem;
 `;
 
-const FormSelect = styled.select`
+const StyledFormSelect = styled.select`
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.5rem;
@@ -55,14 +57,14 @@ const FormSelect = styled.select`
   border-radius: 0.25rem;
 `;
 
-const FormCheck = styled.div`
+const StyledFormCheck = styled.div`
   margin-top: 0.5rem;
   .form-check-input {
     margin-right: 0.5rem;
   }
 `;
 
-const Card = styled.div`
+const StyledCard = styled.div`
   border: 1px solid #ddd;
   border-radius: 0.5rem;
   margin-top: 1.5rem;
@@ -171,7 +173,7 @@ const Checkout = () => {
   };
 
   return (
-    <Container>
+    <StyledContainer>
       <h2 className="page-title">Checkout</h2>
       <div className="row">
         <div className="col-lg-8 col-md-12">
@@ -182,47 +184,72 @@ const Checkout = () => {
           <OrderSummary cartItems={cartItems} total={total} formData={formData} handlePaymentChange={handlePaymentChange} />
         </div>
       </div>
-    </Container>
+    </StyledContainer>
   );
 };
 
 const BillingInfo = ({ formData, handleInputChange }) => (
   <>
     <h5>Billing Information</h5>
-    <FormGroup>
-      <FormControl type="text" name="firstName" placeholder="Your first name" onChange={handleInputChange} value={formData.firstName} />
-      <FormControl type="text" name="lastName" placeholder="Your last name" onChange={handleInputChange} value={formData.lastName} className="mt-2" />
-      <FormControl type="text" name="company" placeholder="Company name (optional)" onChange={handleInputChange} value={formData.company} className="mt-2" />
-      <FormControl type="text" name="address" placeholder="Street Address" onChange={handleInputChange} value={formData.address} className="mt-2" />
-      <FormControl type="email" name="email" placeholder="Email" onChange={handleInputChange} value={formData.email} className="mt-2" />
-      <FormSelect name="country" onChange={handleInputChange} value={formData.country} className="mt-2">
+    <StyledFormGroup>
+      <StyledFormControl type="text" name="firstName" placeholder="Your first name" onChange={handleInputChange} value={formData.firstName} />
+      <StyledFormControl type="text" name="lastName" placeholder="Your last name" onChange={handleInputChange} value={formData.lastName} className="mt-2" />
+      <StyledFormControl type="text" name="company" placeholder="Company name (optional)" onChange={handleInputChange} value={formData.company} className="mt-2" />
+      <StyledFormControl type="text" name="address" placeholder="Street Address" onChange={handleInputChange} value={formData.address} className="mt-2" />
+      <StyledFormControl type="email" name="email" placeholder="Email" onChange={handleInputChange} value={formData.email} className="mt-2" />
+      <StyledFormSelect name="country" onChange={handleInputChange} value={formData.country} className="mt-2">
         <option value="">Country / Region</option>
         <option value="us">United States</option>
         <option value="ca">Canada</option>
         {/* Add more countries here */}
-      </FormSelect>
-      <FormControl type="text" name="state" placeholder="State" onChange={handleInputChange} value={formData.state} className="mt-2" />
-      <FormControl type="text" name="zip" placeholder="Zip Code" onChange={handleInputChange} value={formData.zip} className="mt-2" />
-      <FormControl type="text" name="phone" placeholder="Phone number" onChange={handleInputChange} value={formData.phone} className="mt-2" />
-      <FormCheck>
+      </StyledFormSelect>
+      <StyledFormControl type="text" name="state" placeholder="State" onChange={handleInputChange} value={formData.state} className="mt-2" />
+      <StyledFormControl type="text" name="zip" placeholder="Zip Code" onChange={handleInputChange} value={formData.zip} className="mt-2" />
+      <StyledFormControl type="text" name="phone" placeholder="Phone number" onChange={handleInputChange} value={formData.phone} className="mt-2" />
+      <StyledFormCheck>
         <input className="form-check-input" type="checkbox" name="shipDifferent" id="shipDifferent" onChange={handleInputChange} checked={formData.shipDifferent} />
         <label className="form-check-label" htmlFor="shipDifferent">Ship to a different address</label>
-      </FormCheck>
-    </FormGroup>
+      </StyledFormCheck>
+    </StyledFormGroup>
   </>
 );
+
+BillingInfo.propTypes = {
+  formData: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    company: PropTypes.string,
+    address: PropTypes.string,
+    email: PropTypes.string,
+    country: PropTypes.string,
+    state: PropTypes.string,
+    zip: PropTypes.string,
+    phone: PropTypes.string,
+    shipDifferent: PropTypes.bool,
+    notes: PropTypes.string,
+    paymentMethod: PropTypes.string,
+  }).isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+};
 
 const AdditionalInfo = ({ formData, handleInputChange }) => (
   <>
     <h5 className="mt-4">Additional Info</h5>
-    <FormGroup>
+    <StyledFormGroup>
       <textarea className="form-control" rows="3" name="notes" placeholder="Notes about your order, e.g. special notes for delivery" onChange={handleInputChange} value={formData.notes}></textarea>
-    </FormGroup>
+    </StyledFormGroup>
   </>
 );
 
+AdditionalInfo.propTypes = {
+  formData: PropTypes.shape({
+    notes: PropTypes.string,
+  }).isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+};
+
 const OrderSummary = ({ cartItems, total, formData, handlePaymentChange }) => (
-  <Card>
+  <StyledCard>
     <div className="card-body">
       <h5 className="card-title">Order Summary</h5>
       {cartItems.map(item => (
@@ -262,7 +289,22 @@ const OrderSummary = ({ cartItems, total, formData, handlePaymentChange }) => (
       </Link>
       <button className="btn btn-secondary w-100 mt-2">Save for later</button>
     </div>
-  </Card>
+  </StyledCard>
 );
+
+OrderSummary.propTypes = {
+  cartItems: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    quantity: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+  })).isRequired,
+  total: PropTypes.number.isRequired,
+  formData: PropTypes.shape({
+    paymentMethod: PropTypes.string,
+  }).isRequired,
+  handlePaymentChange: PropTypes.func.isRequired,
+};
 
 export default Checkout;

@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loader from './Loader'; // Assuming you have a Loader component
-import { getCookie } from '../utils/cookies'; // Ensure this is correctly imported
+import { getCookie } from '../utils/cookies';
+import PropTypes from 'prop-types';
 
 const AdminRoute = ({ children }) => {
-  const [loading, setLoading] = useState(true);  // Loading state
-  const [error, setError] = useState(null);      // Error state
-  const [isAdmin, setIsAdmin] = useState(false); // Admin state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
-  const token = getCookie('access_token');  // Retrieve access token
+  const token = getCookie('access_token');
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -30,10 +31,10 @@ const AdminRoute = ({ children }) => {
           navigate('/');
         }
       } catch (error) {
-        setError('Failed to verify admin status.'); // Set error message
+        setError('Failed to verify admin status.');
         navigate('/login');
       } finally {
-        setLoading(false); // End loading state
+        setLoading(false);
       }
     };
 
@@ -41,14 +42,18 @@ const AdminRoute = ({ children }) => {
   }, [token, navigate]);
 
   if (loading) {
-    return <Loader />; // Show loader while checking
+    return <Loader />;
   }
 
   if (error) {
-    return <div>{error}</div>; // Optionally display the error
+    return <div>{error}</div>;
   }
 
-  return token && isAdmin ? children : null;  // Render children if authenticated and admin
+  return token && isAdmin ? children : null;
+};
+
+AdminRoute.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default AdminRoute;

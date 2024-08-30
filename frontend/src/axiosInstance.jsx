@@ -1,7 +1,7 @@
-// src/axiosInstance.jsx
 import axios from 'axios';
-import { getCookie, setCookie, deleteCookie } from './utils/cookies';
+import { getCookie, setCookie } from './utils/cookies';
 import { handleTokenRefresh, handleUnauthorized } from './utils/auth';
+import { jwtDecode } from 'jwt-decode';  // Corrección en la importación
 
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/',
@@ -18,7 +18,7 @@ const refreshTokenIfNeeded = async () => {
   if (!token) return;
 
   try {
-    const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+    const tokenPayload = jwtDecode(token);  // Usar jwtDecode correctamente
     const expirationTime = tokenPayload.exp * 1000;
     const currentTime = new Date().getTime();
 
@@ -30,12 +30,12 @@ const refreshTokenIfNeeded = async () => {
     }
   } catch (error) {
     console.error('Error decoding token:', error);
+    handleUnauthorized(); // Desencadenar flujo de no autorizado si falla la decodificación del token
   }
 };
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    console.debug('Making request to', config.url);
     await refreshTokenIfNeeded();
     const token = getCookie('access_token');
     if (token) {
@@ -44,16 +44,12 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error('Error in request:', error);
     return Promise.reject(error);
   }
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => {
-    console.debug('Received response from', response.config.url);
-    return response;
-  },
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
     if (error.response) {
@@ -67,18 +63,9 @@ axiosInstance.interceptors.response.use(
             return axiosInstance(originalRequest);
           }
         } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
           handleUnauthorized();
         }
-      } else if (error.response.status >= 500) {
-        console.error('Server error:', error.response.status, error.response.data);
-      } else {
-        console.warn('Request failed:', error.response.status, error.response.data);
       }
-    } else if (error.request) {
-      console.error('No response received:', error.request);
-    } else {
-      console.error('Request setup failed:', error.message);
     }
     return Promise.reject(error);
   }

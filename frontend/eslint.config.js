@@ -1,12 +1,12 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import js from '@eslint/js';
+import globals from 'globals';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
   {
-    ignores: ['dist'],  // Ignora la carpeta dist en los reportes de eslint
+    ignores: ['dist'],
   },
   {
     files: ['**/*.{js,jsx}'],
@@ -20,7 +20,7 @@ export default [
       },
     },
     settings: {
-      react: { version: '18.3' },  // Configura la versión de React
+      react: { version: 'detect' },
     },
     plugins: {
       react,
@@ -32,11 +32,21 @@ export default [
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
-      'react/jsx-no-target-blank': 'off',  // Ajusta reglas específicas
+      'react/jsx-no-target-blank': 'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
       ],
+      'react/react-in-jsx-scope': 'off',  // Desactiva la regla de React en el ámbito JSX
+      'no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'after-used',
+          ignoreRestSiblings: true,
+          varsIgnorePattern: '^React$',  // Ignora la variable 'React'
+        },
+      ],
     },
   },
-]
+];

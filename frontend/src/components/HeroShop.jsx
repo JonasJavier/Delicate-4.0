@@ -132,4 +132,6 @@ const HeroShop = React.memo(() => {
   );
 });
 
+HeroShop.displayName = 'HeroShop';
+
 export default HeroShop;

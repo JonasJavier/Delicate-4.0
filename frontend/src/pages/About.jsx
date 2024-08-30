@@ -1,5 +1,4 @@
-// About.jsx
-import React, { lazy, Suspense, useMemo, useEffect, startTransition } from 'react';
+import React, { lazy, Suspense, useEffect, startTransition } from 'react';
 import AboutHero from '../components/AboutHero';
 import Feature from '../components/Feature';
 import FAQ from '../components/FAQ';
@@ -18,8 +17,6 @@ const MemoizedServices = React.memo(Services);
 const MemoizedTestimonials = React.memo(Testimonials);
 
 const About = () => {
-  const memoizedValue = useMemo(() => "Some memoized value", []);
-
   useEffect(() => {
     startTransition(() => {
       console.log("Component mounted or updated");

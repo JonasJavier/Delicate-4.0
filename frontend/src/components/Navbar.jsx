@@ -107,9 +107,9 @@ const Navbar = () => {
                 )}
               </div>
             </div>
-            <button className="navbar-toggler order-2" type="button" onClick={() => setShowHamburgerMenu(!showHamburgerMenu)}>
-              <FontAwesomeIcon icon={navbarCollapsed ? faBars : faTimes} />
-            </button>
+            <button className="navbar-toggler order-2" type="button" onClick={toggleNavbar}>
+  <FontAwesomeIcon icon={navbarCollapsed ? faBars : faTimes} />
+</button>
           </div>
           <div className={`collapse navbar-collapse ${navbarCollapsed ? '' : 'show'}`}>
             <ul className="navbar-nav mx-auto">

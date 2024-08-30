@@ -1,5 +1,5 @@
-// QuickViewModal.jsx
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
@@ -53,6 +53,17 @@ const QuickViewModal = ({ show, handleClose, product }) => {
       </Modal.Body>
     </Modal>
   );
+};
+
+QuickViewModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  product: PropTypes.shape({
+    imgSrc: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    price: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default QuickViewModal;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -82,6 +83,12 @@ const Paginations = ({ currentPage, totalPages, onPageChange }) => {
       </ul>
     </PaginationNav>
   );
+};
+
+Paginations.propTypes = {
+  currentPage: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
 };
 
 export default Paginations;

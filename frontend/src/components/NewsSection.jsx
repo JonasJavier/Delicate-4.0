@@ -32,7 +32,7 @@ const NewsSection = () => {
           <div className="card news-card">
             <img src={img2} className="card-img-top2" alt="News 2" />
             <div className="card-body2">
-              <h5 className="card-title2">A man's worth has its season, like tomato.</h5>
+              <h5 className="card-title2">A man&apos;s worth has its season, like tomato.</h5>
               <div className="card-meta mb-2 text-muted">
                 <span><i className="fas fa-user"></i> Admin</span>
                 <span><i className="fas fa-calendar-alt"></i> 27 December, 2019</span>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 // Styles for the ErrorBoundary
 const ErrorWrapper = styled.div`
@@ -45,16 +46,12 @@ class ErrorBoundary extends Component {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
-    // Update state so the next render shows the fallback UI.
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
 
   componentDidCatch(error, errorInfo) {
-    // Log error details
     console.error("ErrorBoundary caught an error", error, errorInfo);
-    // Optionally, you can log this error to an error reporting service
-    // Sentry.captureException(error); 
   }
 
   handleBackToHome = () => {
@@ -77,8 +74,12 @@ class ErrorBoundary extends Component {
       );
     }
 
-    return this.props.children; 
+    return this.props.children;
   }
 }
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default ErrorBoundary;

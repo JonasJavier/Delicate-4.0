@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import ErrorBoundary from './ErrorBoundary';
+import Loader from './Loader'; // Asegúrate de tener un componente Loader
 
 const PrivateRoute = () => {
     const authContext = useContext(AuthContext);

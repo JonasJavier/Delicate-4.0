@@ -4,7 +4,7 @@ import axios from 'axios';
 import '../assets/css/RegisterPage.css';
 import RegisterImage from '../assets/images/RegisterLogin/register.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
@@ -30,10 +30,7 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/register/', {
-        email: email,
-        password: password,
-      });
+      
       navigate('/login');
     } catch (error) {
       console.error('Register error:', error);

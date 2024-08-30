@@ -5,9 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faTwitter, faPinterest, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import Img1 from '../assets/images/Blog/blog1.jpg';
-import Img2 from '../assets/images/Blog/blog2.jpg';
-import Img3 from '../assets/images/Blog/blog3.jpg';
-import Img4 from '../assets/images/Blog/blog4.jpg';
+import Img2 from '../assets/images/Blog/blog2.jpg'
 import '../assets/css/BlogDetail.css';
 
 const blogPosts = [

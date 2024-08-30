@@ -1,6 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min'; // Asegúrate de importar el JS de Bootstrap
-
 
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -12,7 +9,6 @@ import Navbar from './components/Navbar';
 import Loader from './components/Loader';
 import ErrorBoundary from './components/ErrorBoundary';
 import PrivateRoute from './components/PrivateRoute'; 
-import AdminRoute from './components/AdminRoute'; 
 import { AuthProvider } from './context/AuthContext';
 import ProductManagement from './pages/ProductManagement'; 
 

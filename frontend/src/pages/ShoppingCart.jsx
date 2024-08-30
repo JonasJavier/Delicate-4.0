@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchCart, addToCart as addToCartAPI, updateCartItem as updateCartItemAPI, removeFromCart as removeFromCartAPI } from '../services/api';
+import { fetchCart, updateCartItem as updateCartItemAPI, removeFromCart as removeFromCartAPI } from '../services/api';
 import '../assets/css/ShoppingCart.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { getCart, addItemToCart, updateCartItem, removeItemFromCart } from '../utils/cart';
+import { getCart, updateCartItem, removeItemFromCart } from '../utils/cart';
 import { getCookie } from '../utils/cookies';
 
 const ShoppingCart = () => {
@@ -32,21 +32,6 @@ const ShoppingCart = () => {
 
     getCartItems();
   }, [token]);
-
-  const handleAddToCart = async (productId, quantity) => {
-    if (token) {
-      try {
-        const { data } = await addToCartAPI(productId, quantity);
-        setCartItems(data.items);
-      } catch (error) {
-        setError('Failed to add item to the cart. Please try again.');
-      }
-    } else {
-      const newItem = { id: productId, quantity, product: { id: productId, price: 0 } };
-      addItemToCart(newItem);
-      setCartItems(getCart());
-    }
-  };
 
   const handleUpdateQuantity = async (cartItemId, quantity) => {
     if (quantity < 1) return;  // Prevent setting quantity below 1
@@ -88,7 +73,7 @@ const ShoppingCart = () => {
         <div className="empty-cart-message text-center">
           <FontAwesomeIcon icon={faShoppingCart} size="6x" className="mb-3" />
           <h4>Please sign in to access your cart</h4>
-          <p>You need to be signed in to add items to your cart and view your cart.</p>
+          <p>You need to be signed in to add items to your cart and view your cart.&rsquo;</p>
           <Link to="/login">
             <button className="btn btn-dark return-button">Sign In</button>
           </Link>

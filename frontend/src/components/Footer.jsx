@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../assets/css/Footer.css';
-import logo from '../assets/images/logo.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+
 
 const Footer = () => {
   return (

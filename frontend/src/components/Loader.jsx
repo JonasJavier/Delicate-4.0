@@ -1,6 +1,6 @@
-// src/components/Loader.js
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import PropTypes from 'prop-types';
 
 const bounce = keyframes`
   0%, 100% {
@@ -49,6 +49,10 @@ const Loader = ({ minLoadTime = 2000 }) => {
       <Circle color="#cd8532" delay="0.3s" />
     </LoaderWrapper>
   );
+};
+
+Loader.propTypes = {
+  minLoadTime: PropTypes.number,
 };
 
 export default Loader;

@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../context/AuthContext';
 
-const ProductsShop = memo(() => {
+const ProductsShop = memo(function ProductsShop() {
   const [products, setProducts] = useState([]);
   const { isAdmin } = useContext(AuthContext);
   const navigate = useNavigate();

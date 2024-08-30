@@ -13,7 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/ProductDetail.css';
 import { addToCart, fetchProductById } from '../services/api'; // Import the fetchProductById function
 import { getCookie } from '../utils/cookies'; // Function to get cookies
-import Footer from '../components/Footer';
+
 
 const ProductDetail = () => {
   const { id } = useParams(); // Get the product ID from the URL
