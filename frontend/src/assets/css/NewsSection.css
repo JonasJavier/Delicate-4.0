@@ -1,0 +1,148 @@
+.container2 {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 15px;
+  margin-top: 10% !important;
+}
+
+.text-orange {
+  color: #f7941d;
+  font-family: Pro-text;
+}
+
+.btn-orange {
+  background-color: #f7941d;
+  color: white;
+}
+
+.news-card {
+  border: none;
+  margin-bottom: 2rem;
+  height: 100%; /* Ensure cards take up full height */
+}
+
+.card-img-top2 {
+  height: 250px; /* Adjusted height of the image */
+  object-fit: cover;
+  transition: filter 0.3s ease; /* Add transition for filter */
+  box-shadow: 0px 0px 20px rgba(96, 96, 96, 0.584); /* Increased shadow */
+}
+
+.news-card:hover .card-img-top2 {
+  filter: brightness(1.3); /* Brighten the image */
+}
+
+.card-body2 {
+  padding: 1.5rem;
+  box-shadow: 0px 0px 20px rgba(96, 96, 96, 0.584); /* Increased shadow */
+}
+
+.card-title2 {
+  font-size: 1.5rem; /* Increased font size */
+  margin-bottom: 0.75rem;
+  font-family: Poppings-regular;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-bottom: 0.75rem;
+}
+
+.card-text {
+  font-size: 1rem; /* Increased font size */
+  margin-bottom: 1.25rem;
+  margin-top: 1rem;
+  text-align: left;
+  font-family: Poppings-light;
+}
+
+.read-more {
+  font-weight: bold;
+  color: #000;
+  text-decoration: none;
+}
+
+.read-more i {
+  margin-left: 5px;
+}
+
+/* Styling for the main title */
+.display-4 {
+  font-weight: 700; /* Increase the font weight */
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+.display-4::after {
+  content: "";
+  width: 50px;
+  height: 4px;
+  background-color: #f7941d; /* Orange color */
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+
+/* Media query for devices with a max-width of 1000px */
+@media (max-width: 1000px) {
+  .news-card {
+    border: none;
+    margin-bottom: 2rem;
+    height: 100%;
+    width: 100%;
+  }
+
+  .col-12, .col-md-6, .col-lg-3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .col-12 {
+    flex: 0 0 0%;
+    max-width: 100%;
+  }
+}
+
+/* Media query for devices with a max-width of 350px */
+@media (max-width: 360px) {
+  
+  .text-orange {
+    font-size: 2rem;
+;
+  }
+
+  
+  .container2 {
+    padding: 10px;
+    margin-top: 15% !important;
+  }
+
+  .card-img-top2 {
+    height: 200px; /* Adjusted height for smaller screens */
+  }
+
+  .card-body2 {
+    padding: 1rem;
+  }
+
+  .card-title2 {
+    font-size: 1.2rem; /* Adjusted font size for smaller screens */
+  }
+
+  .card-text {
+    font-size: 0.9rem; /* Adjusted font size for smaller screens */
+  }
+
+  .display-4 {
+    font-size: 2rem; /* Adjusted font size for smaller screens */
+  }
+
+  .display-4::after {
+    width: 30px; /* Adjusted width for smaller screens */
+  }
+}

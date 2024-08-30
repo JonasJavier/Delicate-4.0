@@ -1,0 +1,157 @@
+/* Font Faces */
+@font-face {
+    font-family: 'Pro-text';
+    src: url('../fonts/Pro-text.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppings-regular';
+    src: url('../fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppings-semibold';
+    src: url('../fonts/Poppins-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppings-light';
+    src: url('../fonts/Poppins-Light.ttf') format('truetype');
+}
+
+/* Hero Section */
+.hero-section4 {
+    width: 100%;
+    height: 90vh;
+    background-image: url('../images/hero/2.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    background-attachment: fixed; 
+}
+
+.overlay4 {
+    background: linear-gradient(to bottom, rgba(36, 36, 36, 0.651), rgba(48, 48, 48, 0));
+}
+
+.content4 {
+    z-index: 1; 
+}
+
+.small-title4 {
+    color: #f28123;
+    font-size: 3.5rem !important; 
+    margin-top: 5%;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); 
+    font-family: 'Poppings-semibold';
+}
+
+.main-title4 {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 4.5rem;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Pro-text';
+}
+
+/* Blog Page */
+.blog-page .card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.blog-page .card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.blog-page .card .date-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-family: 'Poppings-semibold';
+}
+
+.blog-page .card .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-family: 'Poppings-regular';
+}
+
+.blog-page .card .card-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    font-family: 'Poppings-light';
+}
+
+.blog-page .btn-read-more {
+    background: none;
+    border: none;
+    color: #f28123;
+    cursor: pointer;
+    font-family: 'Poppings-regular';
+}
+
+/* Responsive Design */
+@media (max-width: 1080px) {
+    .small-title4 {
+        font-size: 2.5rem;
+    }
+
+    .main-title4 {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .small-title4 {
+        font-size: 2rem !important;
+    }
+
+    .main-title4 {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .hero-section4 {
+        height: 80vh; 
+    }
+
+    .small-title4 {
+        font-size: 1.5rem !important;
+    }
+
+    .main-title4 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .hero-section4 {
+        height: 70vh; 
+    }
+
+    .small-title4 {
+        font-size: 1.25rem !important;
+    }
+
+    .main-title4 {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .hero-section4 {
+        height: 60vh; 
+    }
+
+    .small-title4 {
+        font-size: 1rem !important;
+    }
+
+    .main-title4 {
+        font-size: 1.5rem;
+    }
+}

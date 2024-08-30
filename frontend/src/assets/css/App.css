@@ -1,0 +1,83 @@
+/* Estilos globales del scroll */
+::-webkit-scrollbar {
+    width: 13px;
+  }
+  
+  /* Fondo del scroll */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  /* Color del scroll */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 12px;
+  }
+  
+  /* Color del scroll cuando está siendo interactuado */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e8902c;
+  }
+  
+  
+
+@font-face {
+  font-family: 'BALQIS';
+  src: url('../fonts/BALQIS.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Pro-text';
+  src: url('../fonts/Pro-text.ttf') format('truetype');
+}
+
+
+
+@font-face {
+  font-family: 'Sf-light';
+  src: url('../fonts/sf-dispay-light.OTF') format('truetype');
+}
+
+
+
+@font-face {
+  font-family: 'Poppings-regular';
+  src: url('../fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Poppings-semibold';
+  src: url('../fonts/Poppins-SemiBold.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Poppings-light';
+  src: url('../fonts/Poppins-Light.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Poppings-extra';
+  src: url('../fonts/Poppins-ExtraLight.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Qafientola';
+  src: url('../fonts/Qafientola.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RadingRegular';
+  src: url('../fonts/RadingRegular.ttf') format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Sarlotte';
+  src: url('../fonts/Sarlotte.otf') format('truetype');
+}

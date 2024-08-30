@@ -1,0 +1,44 @@
+.services-container {
+    padding: 20px;
+}
+
+.services-title {
+    font-size: 4rem;
+    color: #333;
+    margin-bottom: 5%;
+    margin-top: -5%;
+    font-family: Pro-text;
+    font-weight: bold;
+}
+
+
+.service-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    min-height: 205px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+}
+
+.service-card i {
+    color: #28a745;
+}
+
+.service-card h5 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.service-card:hover {
+    background-color: #28a745;
+    color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Aumentar la sombra al hacer hover */
+}
+
+.service-card:hover i {
+    color: white;
+}
+
+.service-card:hover h5 {
+    color: white;
+}

@@ -1,0 +1,66 @@
+/* Fonts */
+@font-face {
+  font-family: 'Pro-text';
+  src: url('../fonts/Pro-text.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppings-regular';
+  src: url('../fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppings-light';
+  src: url('../fonts/Poppins-Light.ttf') format('truetype');
+}
+
+
+
+.product-management100 {
+  background-color: #333;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 700px;
+  margin: 5% auto;
+}
+
+.title100 {
+  font-family: 'Pro-text', sans-serif;
+  color: #f1f1f1;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-product .form-label {
+  font-weight: bold;
+  color: #cccccc;
+  font-family: 'Poppings-light', sans-serif;
+}
+
+.form-product .form-control {
+  background-color: #444;
+  border: 1px solid #555;
+  color: #e0e0e0;
+}
+
+.form-product .form-control:focus {
+  background-color: #555;
+  color: #ffffff;
+  border-color: #777;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background-color: #ff4081;
+  border-color: #ff4081;
+  font-family: 'Poppings-regular', sans-serif;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #ff80ab;
+  border-color: #ff80ab;
+}
