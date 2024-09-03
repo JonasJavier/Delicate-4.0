@@ -46,7 +46,16 @@ class RegisterView(APIView):
                 return Response({"error": "El correo electrónico ya está registrado."}, status=status.HTTP_400_BAD_REQUEST)
 
             user = User.objects.create_user(email=email, password=password)
-            UserProfile.objects.create(user=user, email=email)
+            
+            # Ensure profile creation
+            try:
+                profile = UserProfile.objects.create(user=user, email=email)
+                logger.debug(f"Profile created for user {email}.")
+            except Exception as profile_error:
+                user.delete()  # Rollback user creation if profile fails
+                logger.error(f"Failed to create profile for {email}: {profile_error}")
+                return Response({"error": "Error creating user profile."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
             logger.debug(f"User {email} registered successfully.")
             return Response({"message": "Usuario registrado exitosamente"}, status=status.HTTP_201_CREATED)
 
@@ -59,6 +68,13 @@ class RegisterView(APIView):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return super().post(request, *args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error during token obtain: {e}")
+            return Response({'error': 'An error occurred during authentication. Please try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer

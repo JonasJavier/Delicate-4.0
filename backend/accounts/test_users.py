@@ -28,10 +28,10 @@ class UserTests(TestCase):
         response = self.client.post(self.register_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
-        self.assertEqual(User.objects.get().email, 'testuser@example.com')
 
-        # Verificar que se crea un perfil de usuario al registrarse
-        profile = User.objects.get().profile
+        user = User.objects.get(email='testuser@example.com')
+        profile = user.profile
+        self.assertIsNotNone(profile)
         self.assertEqual(profile.email, 'testuser@example.com')
 
     def test_register_user_with_existing_email(self):

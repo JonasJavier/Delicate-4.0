@@ -26,17 +26,29 @@ const LoginPage = () => {
             login({ email, access_token: response.data.access, refresh_token: response.data.refresh });
             navigate('/');
         } else {
-            setError('Invalid response from server.');
+            setError('Unexpected error: Invalid response from server.');
         }
     } catch (error) {
         console.error('Login error:', error);
-        if (error.response && error.response.data) {
-            setError(error.response.data.detail || 'Invalid credentials');
+        if (error.response) {
+            switch (error.response.status) {
+                case 400:
+                    setError('Invalid credentials. Please check your email and password.');
+                    break;
+                case 401:
+                    setError('Unauthorized access. Please try logging in again.');
+                    break;
+                case 500:
+                    setError('Server error. Please try again later.');
+                    break;
+                default:
+                    setError('An unexpected error occurred. Please try again later.');
+            }
         } else {
-            setError('An error occurred, please try again later.');
+            setError('Network error. Please check your internet connection.');
         }
     }
-};
+  };
 
 
   return (

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from .models import CustomUser
+from .models import CustomUser, UserProfile
 
 class UserAdmin(BaseUserAdmin):
     list_display = ('email', 'is_staff', 'is_active')
@@ -24,4 +24,5 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 admin.site.register(CustomUser, UserAdmin)
+admin.site.register(UserProfile)  
 admin.site.unregister(Group)

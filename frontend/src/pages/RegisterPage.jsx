@@ -15,31 +15,55 @@ const RegisterPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Función para validar el formulario
+  const validateForm = () => {
+    if (!email || !password || !confirmPassword) {
+      setError('All fields are required.');
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return false;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long.');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password || !confirmPassword) {
-      setError('All fields are required');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
+    // Validación del formulario antes de enviar la solicitud
+    if (!validateForm()) return;
 
     try {
-      
-      navigate('/login');
+      const response = await axios.post('http://127.0.0.1:8000/api/register/', { email, password });
+      if (response.data) {
+        navigate('/login');
+      } else {
+        setError('Unexpected error: Invalid response from server.');
+      }
     } catch (error) {
       console.error('Register error:', error);
-
-      if (error.response && error.response.data) {
-        const errorData = error.response.data;
-        setError(errorData.error || 'An error occurred. Please try again later.');
+      if (error.response) {
+          switch (error.response.status) {
+              case 400:
+                  setError(error.response.data.error || 'Invalid registration details.');
+                  break;
+              case 500:
+                  setError('Server error. Please try again later.');
+                  break;
+              default:
+                  setError('An unexpected error occurred. Please try again later.');
+          }
       } else {
-        setError('An error occurred. Please try again later.');
+          setError('Network error. Please check your internet connection.');
       }
     }
   };

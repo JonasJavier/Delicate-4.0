@@ -1,5 +1,3 @@
-# middleware.py
-
 import json
 from django.http import JsonResponse
 import logging
