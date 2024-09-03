@@ -7,6 +7,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import update_session_auth_hash
 
 # Django Rest Framework Imports
 from rest_framework import generics, status
@@ -24,12 +26,13 @@ from social_core.exceptions import MissingBackend, AuthTokenError, AuthForbidden
 from .models import UserProfile
 from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserProfileSerializer
 
-# Get User model
+# Obtener el modelo de usuario
 User = get_user_model()
 
-# Set up logging
+# Configuración del logger
 logger = logging.getLogger(__name__)
 
+# Vista para registrar usuarios
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -38,34 +41,35 @@ class RegisterView(APIView):
         password = request.data.get('password')
 
         try:
-            logger.debug(f"Attempting to validate email: {email}")
+            logger.debug(_("Attempting to validate email: %(email)s") % {'email': email})
             validate_password(password)
 
             if User.objects.filter(email=email).exists():
-                logger.debug(f"Email {email} is already registered.")
-                return Response({"error": "El correo electrónico ya está registrado."}, status=status.HTTP_400_BAD_REQUEST)
+                logger.debug(_("Email %(email)s is already registered.") % {'email': email})
+                return Response({"error": _("This email is already registered.")}, status=status.HTTP_400_BAD_REQUEST)
 
             user = User.objects.create_user(email=email, password=password)
-            
-            # Ensure profile creation
+
+            # Asegurar la creación del perfil
             try:
                 profile = UserProfile.objects.create(user=user, email=email)
-                logger.debug(f"Profile created for user {email}.")
+                logger.debug(_("Profile created for user %(email)s.") % {'email': email})
             except Exception as profile_error:
                 user.delete()  # Rollback user creation if profile fails
-                logger.error(f"Failed to create profile for {email}: {profile_error}")
-                return Response({"error": "Error creating user profile."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                logger.error(_("Failed to create profile for %(email)s: %(error)s") % {'email': email, 'error': profile_error})
+                return Response({"error": _("Error creating user profile.")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            logger.debug(f"User {email} registered successfully.")
-            return Response({"message": "Usuario registrado exitosamente"}, status=status.HTTP_201_CREATED)
+            logger.debug(_("User %(email)s registered successfully.") % {'email': email})
+            return Response({"message": _("User registered successfully.")}, status=status.HTTP_201_CREATED)
 
         except ValidationError as e:
-            logger.error(f"Validation Error: {e}")
+            logger.error(_("Validation Error: %(error)s") % {'error': e})
             return Response({"password": e.messages}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger.error(f"Unexpected Error: {e}")
-            return Response({"error": "Unexpected error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error(_("Unexpected Error: %(error)s") % {'error': e})
+            return Response({"error": _("Unexpected error occurred.")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# Vista personalizada para obtener el token JWT
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
@@ -73,9 +77,10 @@ class MyTokenObtainPairView(TokenObtainPairView):
         try:
             return super().post(request, *args, **kwargs)
         except Exception as e:
-            logger.error(f"Error during token obtain: {e}")
-            return Response({'error': 'An error occurred during authentication. Please try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error(_("Error during token obtain: %(error)s") % {'error': e})
+            return Response({'error': _("An error occurred during authentication. Please try again later.")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# Vista para obtener y actualizar el perfil del usuario
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -83,25 +88,22 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         try:
             profile = self.request.user.profile
-            logger.debug(f"Profile found for user {self.request.user.email}")
+            logger.debug(_("Profile found for user %(email)s") % {'email': self.request.user.email})
             return profile
         except UserProfile.DoesNotExist:
-            logger.error(f"Profile does not exist for user {self.request.user.email}")
-            raise NotFound("El perfil de usuario no existe.")
+            logger.error(_("Profile does not exist for user %(email)s") % {'email': self.request.user.email})
+            raise NotFound(_("User profile not found."))
 
-    def get(self, request):
-        profile = self.get_object()
-        serializer = self.get_serializer(profile)
-        return Response(serializer.data)
-
-    def put(self, request):
+    def put(self, request, *args, **kwargs):
         profile = self.get_object()
         serializer = self.get_serializer(profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        logger.warning(_("Profile update failed: %(errors)s") % {'errors': serializer.errors})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Vista para verificar el correo electrónico del usuario
 class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
 
@@ -115,16 +117,18 @@ class VerifyEmailView(APIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_email_verified = True
             user.save()
-            return Response({'message': 'Email verified successfully!'}, status=status.HTTP_200_OK)
+            return Response({'message': _("Email verified successfully!")}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'Invalid verification link!'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': _("Invalid verification link!")}, status=status.HTTP_400_BAD_REQUEST)
 
+# Vista protegida de ejemplo
 class ProtectedView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({'message': 'This is a protected view'})
+        return Response({'message': _("This is a protected view.")})
 
+# Vista para el inicio de sesión con Google
 class GoogleLoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -138,8 +142,32 @@ class GoogleLoginView(APIView):
             user = backend.do_auth(token)
             if user and user.is_active:
                 login(request, user)
-                return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+                return Response({'message': _("Login successful")}, status=status.HTTP_200_OK)
             else:
-                return Response({'error': 'Authentication failed'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': _("Authentication failed")}, status=status.HTTP_400_BAD_REQUEST)
         except (MissingBackend, AuthTokenError, AuthForbidden) as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        current_password = request.data.get("current_password")
+        new_password = request.data.get("new_password")
+
+        if not user.check_password(current_password):
+            return Response({"error": _("The current password is incorrect.")}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            validate_password(new_password, user)
+            user.set_password(new_password)
+            user.save()
+
+            update_session_auth_hash(request, user)
+
+            return Response({"message": _("Password changed successfully.")}, status=status.HTTP_200_OK)
+
+        except ValidationError as e:
+            return Response({"error": e.messages}, status=status.HTTP_400_BAD_REQUEST)

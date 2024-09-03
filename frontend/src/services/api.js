@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosInstance from '../axiosInstance'; 
 
 const API_URL = 'http://127.0.0.1:8000/api';
 
@@ -151,5 +152,25 @@ export const updateUserProfile = async (profileData) => {
   } catch (error) {
     console.error('Error updating user profile:', error);
     throw error;
+  }
+};
+
+
+export const changePassword = async (passwordData) => {
+  try {
+    const response = await axiosInstance.post('/change-password/', passwordData);
+    return response.data;
+  } catch (error) {
+    console.error("Error details:", error); // Registro detallado del error
+    if (error.response) {
+      // Si el error tiene una respuesta, devolver esa información
+      throw error.response.data;
+    } else if (error.request) {
+      // El error fue causado por no recibir respuesta (posible problema de red)
+      throw new Error('No response received from server. Please check your network.');
+    } else {
+      // Ocurrió algo en la configuración de la solicitud que desencadenó un error
+      throw new Error('An unexpected error occurred while trying to change the password.');
+    }
   }
 };
