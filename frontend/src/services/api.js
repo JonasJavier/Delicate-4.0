@@ -8,6 +8,7 @@ const API = axios.create({
   withCredentials: true,
 });
 
+
 API.interceptors.request.use((config) => {
   // Aplicar token de autenticación a todas las solicitudes excepto a las que son públicas
   const token = localStorage.getItem('access_token');
@@ -77,7 +78,7 @@ export const addToCart = async (product_id, quantity) => {
 // Remove an item from the cart
 export const removeFromCart = async (cart_item_id) => {
   try {
-    const response = await API.post('/cart/remove/', { cart_item_id });
+    const response = await API.delete(`/cart/remove/${cart_item_id}/`);
     return response.data;
   } catch (error) {
     console.error('Error removing from cart:', error);

@@ -1,239 +1,266 @@
-/* Container */
-.container70 {
-    padding-top: 5%;
-    font-family: 'Poppins-Regular', sans-serif;
-  }
-  
-  /* Title */
-  .page-title70 {
-    margin-bottom: 4rem;
-    font-size: 3rem;
-    font-family: 'Pro-text', sans-serif;
-    text-align: center;
-    color: #333;
-    font-weight: bold;
-    padding-top: 10%;
-  }
-  
-  @media (max-width: 768px) {
-    .page-title {
-      font-size: 2rem;
-    }
-  }
-  
-  @media (max-width: 500px) {
-    .page-title {
-      font-size: 1.5rem;
-    }
-  }
-  
-  /* Table */
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-  }
-  
-  @media (max-width: 768px) {
-    .table {
-      overflow-x: auto;
-      display: block;
-    }
-  }
-  
-  .table th, .table td {
-    padding: 1rem;
-    border: 1px solid #ddd;
-  }
-  
-  /* Product Image */
-  .product-img {
-    width: 60px;
-    margin-right: 10px;
-  }
-  
-  @media (max-width: 1200px) {
-    .product-img {
-      width: 50px;
-    }
-  }
-  @media (max-width: 800px) {
-    .product-img {
-      width: 45px;
-    }
-  }
-  @media (max-width: 600px) {
-    .product-img {
-      width: 40px;
-    }
-  }
-  @media (max-width: 400px) {
-    .product-img {
-      width: 35px;
-    }
-  }
-  
-  /* Quantity Control */
-  .quantity-control {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  @media (max-width: 600px) {
-    .quantity-control {
-      flex-direction: column;
-    }
-  }
-  
-  /* Circle Button */
-  .circle-button {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: none;
-    background-color: #f28123;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .circle-button:hover {
-    background-color: #1a1919;
-  }
-  
-  .circle-button:disabled {
-    background-color: #f0f0f0;
-    cursor: not-allowed;
-  }
-  
-  /* Button */
-  .btn {
-    padding: 0.5rem 1rem;
-    margin: 0.5rem 0;
-    border: none;
-    color: #f28123;
-    background-color: #333;
-    font-family: 'Poppins-Regular', sans-serif;
-    font-size: 1rem;
-  }
-  
-  .btn:hover {
-    background-color: #1b1b1b;
-  }
-  
-  .btn.danger {
-    color: #f28123;
-    background-color: transparent;
-  }
-  
-  .btn.danger:hover {
-    color: white;
-    background-color: #f28123;
-  }
-  
-  .btn.outline {
-    color: #f28123;
-    background-color: transparent;
-    border: 1px solid #f28123;
-  }
-  
-  .btn.outline:hover {
-    color: white;
-    background-color: #f28123;
-  }
-  
-  /* Card */
-  .card70 {
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    margin-bottom: 1rem;
-  }
-  
-  .card-body70 {
-    padding: 1rem;
-    text-align: center;
-  }
-  
-  .card-body70 h5 {
-    font-size: 1.5rem;
-    font-family: 'Poppins-SemiBold', sans-serif;
-    color: #333;
-  }
-  
-  .card-body70 p {
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    color: #555;
-  }
-  
-/* Messge when  cart is empty */
-  
-
-
-.empty-cart-message {
-  margin-top: 100px;
+/* Contenedor general con márgenes */
+.container21 {
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 10%;
 }
 
-.empty-cart-message h4 {
-  font-size: 32px;
+/* Flexbox para alinear ambas secciones en la misma línea en pantallas grandes */
+.row.align-items-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* Imagen del producto en el carrito */
+.cart-item-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Mantener alineación de los elementos en una fila */
+.quantity-control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 150px;
+}
+
+.btn-quantity-control {
+  background-color: #000;
+  color: #f28123;
+  border-radius: 50%;
+  border: none;
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-quantity-control:hover {
+  background-color: #f28123;
+  color: #000;
+}
+
+/* Centrar palabra "Quantity" con los botones */
+.table-hover th {
+  text-align: center;
+}
+
+/* Asegurar que las imágenes no distorsionen el layout */
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Botón "Return to shop" más pequeño, estilo rectangular */
+.btn-attractive {
+  background-color: #000;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-attractive:hover {
+  background-color: #f28123;
+  color: white;
+}
+
+/* Botón "Check Out" */
+.btn-dark {
+  background-color: #f28123;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.btn-dark:hover {
+  background-color: #333;
+}
+
+/* Alinear texto de "Cart Total" */
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cart-total h5,
+.cart-total p {
+  margin-top: 0;
+}
+
+.cart-total h5 {
+  font-weight: bold;
+}
+
+.cart-total .price {
+  font-weight: normal;
+}
+
+/* Eliminar hover gris en las filas del producto */
+.table-hover tbody tr:hover {
+  background-color: transparent;
+}
+
+/* Márgenes alrededor de la tabla */
+.table-hover {
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.empty-cart-message p {
-  font-size: 18px;
+/* Añadir espacio para los items en la tabla */
+.table-hover tbody tr {
+  vertical-align: middle;
+  padding: 15px 0;
 }
 
-.return-button {
-  background-color: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+/* Margen para el botón de remover */
+.btn-sm {
+  margin-left: 10px;
 }
 
-.return-button:hover {
-  background-color: #333;
-  transform: scale(1.05);
+/* Ajustes para alineación y márgenes */
+.align-middle td {
+  vertical-align: middle !important;
+  padding: 12px;
 }
 
-.return-button:focus {
-  outline: none;
-}
-
-.product-img {
-  max-width: 70px;
-  margin-right: 10px;
-}
-
-.quantity-control {
+/* Márgenes y estilo del mensaje de carrito vacío */
+.empty-cart-container {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  min-height: 50vh;
+  color: #000;
+  padding-top: 17%;
+  align-content: center;
 }
 
-.circle-button {
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  line-height: 1;
-  text-align: center;
-  cursor: pointer;
-  margin: 0 5px;
-  padding: 0;
+.empty-cart-icon {
+  font-size: 4rem;
+  color: #000;
+  margin-bottom: 20px;
 }
 
-.circle-button:hover {
-  background-color: #ddd;
+@media (max-width:400px){
+
+  .empty-cart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 30vh;
+    color: #000;
+    padding-top: 50%;
+    align-content: center;
+    font-size: 0.8rem;
+  }
+  
+  .empty-cart-icon {
+    font-size: 3.5rem;
+    color: #000;
+    margin-bottom: 20px;
+  }
 }
 
-.page-title {
-  font-size: 36px;
-  font-weight: bold;
+
+/* ------- Media Queries para Responsividad ------- */
+
+/* Para pantallas medianas (tabletas) */
+@media (max-width: 992px) {
+  .row.align-items-center {
+    flex-direction: column;
+  }
+
+  .cart-item-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .btn-quantity-control {
+    width: 35px;
+    height: 35px;
+  }
+
+  .btn-dark {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .btn-attractive {
+    width: 100%;
+  }
+
+  .cart-total h5,
+  .cart-total .price {
+    font-size: 16px;
+  }
+}
+
+
+
+/* Para pantallas menores a 645px */
+@media (max-width: 655px) {
+  /* Cambia la estructura de tabla a lista */
+  .table-hover {
+    display: block;
+    width: 100%;
+    align-items: center;
+    align-content: center;
+  }
+
+  /* Reemplaza las filas de la tabla por un bloque tipo tarjeta */
+  .table-hover tbody tr {
+    display: flex;
+    flex-direction: column;
+align-items: center;
+align-content: center;
+    margin-bottom: 25px;
+    padding: 50px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+
+  .table-hover thead {
+    display: none; /* Oculta los encabezados de la tabla en pantallas pequeñas */
+  }
+
+  /* Alineación de cada columna (celda) en el bloque */
+  .cart-item,
+  td {
+    width: 100%;
+    text-align: left;
+    padding: 5px 0;
+  }
+
+  .cart-item-image {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+  }
+
+  /* Botones de cantidad ajustados */
+  .btn-quantity-control {
+    width: 35px;
+    height: 35px;
+  }
+
+  .btn-sm {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .cart-total h5,
+  .cart-total .price {
+    font-size: 16px;
+  }
 }

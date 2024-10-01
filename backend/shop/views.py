@@ -35,28 +35,40 @@ def cart_detail(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_to_cart(request):
-    product_id = request.data.get('product_id')
+    product_id = request.data.get('product_id')  # Solo debe recibir el ID
     quantity = int(request.data.get('quantity', 1))
     quantity = max(1, quantity)
 
-    product = get_object_or_404(Product, id=product_id)
-    logger.debug(f"Adding product to cart: {product}, quantity: {quantity}")
+    try:
+        product = get_object_or_404(Product, id=product_id)  # Buscar el producto por su ID
+    except Product.DoesNotExist:
+        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
+    # Validar que el producto tenga stock suficiente
+    if product.stock < quantity:
+        return Response({"error": f"Only {product.stock} items left in stock."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Validar si el precio cambió en la base de datos
+    if product.price != request.data.get('price', product.price):
+        return Response({
+            "error": "Price has changed for this product.",
+            "current_price": product.price
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    # Obtener o crear el carrito del usuario
     cart = get_user_cart(request)
-    logger.debug(f"Cart before adding item: {cart}, items: {cart.items.all()}")
 
+    # Agregar o actualizar el item en el carrito
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
     if not created:
         cart_item.quantity += quantity
-        cart_item.save()
     else:
         cart_item.quantity = quantity
-        cart_item.save()
-
-    logger.debug(f"Cart after adding item: {cart}, items: {cart.items.all()}")
+    cart_item.save()
 
     serializer = CartSerializer(cart)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -67,15 +79,32 @@ def update_cart_item(request):
     if quantity < 1:
         return Response({"error": "Quantity must be at least 1"}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Obtener el item del carrito del usuario
     cart_item = get_cart_item_for_user_or_session(request, cart_item_id)
     if not cart_item:
+        logger.error(f"Cart item not found: {cart_item_id} for user {request.user.email}")
         return Response({"error": "Cart item not found or not authorized"}, status=status.HTTP_404_NOT_FOUND)
 
+    product = cart_item.product
+
+    # Verificar que haya stock suficiente
+    if product.stock < quantity:
+        return Response({"error": f"Only {product.stock} items left in stock."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Verificar si el precio ha cambiado
+    if product.price != request.data.get('price', product.price):
+        return Response({
+            "error": "Price has changed for this product.",
+            "current_price": product.price
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    # Actualizar la cantidad si todas las validaciones pasaron
     cart_item.quantity = quantity
     cart_item.save()
 
     serializer = CartSerializer(cart_item.cart)
     return Response(serializer.data)
+
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -92,30 +121,22 @@ def remove_from_cart(request, cart_item_id):
     return Response(serializer.data)
 
 def get_user_cart(request):
-    # Obtener o crear el carrito asociado al usuario autenticado
     cart, created = Cart.objects.get_or_create(user=request.user)
 
-    # Intentar fusionar el carrito de sesión anterior con el carrito del usuario autenticado
     session_key = request.session.session_key
     if session_key:
         try:
-            # Buscar si existe un carrito asociado a la sesión actual
             session_cart = Cart.objects.get(session_key=session_key)
             if session_cart and session_cart.items.exists():
-                # Fusionar los items del carrito de sesión con el carrito del usuario
                 for item in session_cart.items.all():
-                    # Obtener o crear el item en el carrito del usuario
-                    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=item.product)
-                    if not item_created:
-                        # Si el item ya existía, incrementar la cantidad
+                    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=item.product)
+                    if not created:
                         cart_item.quantity += item.quantity
                     cart_item.save()
-                # Eliminar el carrito de sesión una vez fusionado
                 session_cart.delete()
-                logger.debug(f"Session cart merged into user cart for user {request.user.email}")
+                logger.debug(f"Session cart merged into user cart for {request.user.email}")
         except Cart.DoesNotExist:
-            # No hay carrito de sesión para fusionar
-            logger.debug(f"No session cart to merge for user {request.user.email}")
+            logger.debug(f"No session cart found for {request.user.email}")
 
     return cart
 
@@ -128,12 +149,13 @@ def get_cart_item_for_user_or_session(request, cart_item_id):
         logger.error(f"Error retrieving cart item for authenticated user: {e}")
         return None
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def add_product(request):
-    logger.debug(f"Authorization header: {request.headers.get('Authorization')}")
-    logger.debug(f"User {request.user.email} is trying to add a product.")
+    # Make sure user is authenticated and an admin
+    if not request.user.is_staff:
+        return Response({'detail': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)
+
     serializer = ProductSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

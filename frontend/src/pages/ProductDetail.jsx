@@ -40,26 +40,29 @@ const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     const token = getCookie('access_token');
-
+  
     if (!token) {
       alert('Please log in to add items to your cart.');
-      navigate('/login'); // Redirect to login page
+      navigate('/login'); // Redirigir a la página de inicio de sesión si no está autenticado
       return;
     }
-
+  
     if (!product || typeof product.id !== 'number') {
       alert('Invalid product.');
       return;
     }
-
+  
     try {
-      await addToCart(product.id, 1); // Ensure product.id is the correct ID
+      // Solo enviar el product_id y la cantidad
+      await addToCart(product.id, 1); // product.id es el único dato que necesita el backend para agregar al carrito
       alert('Product added to cart successfully');
     } catch (error) {
       console.error('Error adding to cart:', error);
       alert('Error adding product to cart');
     }
   };
+  
+
 
   if (loading) {
     return <p>Loading...</p>; // Show loading indicator
@@ -88,12 +91,7 @@ const ProductDetail = () => {
             <span className="discount-percentage">64% Off</span>
           </div>
           <p className="product-description">{product.description}</p>
-          <InputGroup className="quantity-selector">
-            <Button variant="outline-secondary">-</Button>
-            <FormControl aria-label="Quantity" value="1" readOnly className="text-center" />
-            <Button variant="outline-secondary">+</Button>
-          </InputGroup>
-          <div className="action-buttons">
+                   <div className="action-buttons">
             <Button variant="success" className="add-to-cart-button" onClick={handleAddToCart}>Add to Cart</Button>
             <Button variant="outline-secondary" className="wishlist-button">
               <FontAwesomeIcon icon={faHeart} className="wishlist-icon" />

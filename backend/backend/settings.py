@@ -54,7 +54,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_otp.middleware.OTPMiddleware',
-    'csp.middleware.CSPMiddleware',  # Colocado para asegurar que las políticas de CSP se apliquen después de cargar el contenido necesario
+    'csp.middleware.CSPMiddleware', 
+    'shop.middleware.UserCartOwnershipMiddleware',# Colocado para asegurar que las políticas de CSP se apliquen después de cargar el contenido necesario
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -62,7 +63,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Agregar la carpeta templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
