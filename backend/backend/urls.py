@@ -7,7 +7,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # Ruta para el panel de administración
     path('api/', include('accounts.urls')),  # Tus rutas para la app accounts
     path('api/', include('shop.urls')),  # Tus rutas para la app shop
-    path('accounts/', include('django.contrib.auth.urls')),  # Incluye las URLs de autenticación de Django
+    path('contact/', include('contact.urls')),
+    path('accounts/', include('django.contrib.auth.urls')), 
+    path('accounts/', include('allauth.urls')),  # Agrega esta línea
+    path('accounts/', include('accounts.urls')),
 ]
 
 # Serve media files during development

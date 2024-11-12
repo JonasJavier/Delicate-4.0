@@ -1,72 +1,95 @@
-/* Settings Page */
+/* Container Styling */
 .user-page-container {
-  background-color: #f2f2f2;
+  background-color: #f8f9fa;
   min-height: 100vh;
-  margin-top: 7%;
+  margin-top: 5%;
+  padding-bottom: 50px;
 }
 
+/* General Card Styling */
 .settings-container {
   background-color: #ffffff;
-  border: none;
   border-radius: 12px;
-  padding: 20px;
-  transition: box-shadow 0.3s ease;
+  padding: 30px;
 }
 
+
+
+/* Typography */
 .settings-container h4 {
-  font-family: 'Roboto', sans-serif;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+label {
+  color: #495057;
   font-weight: 500;
-  color: #333333;
-}
-
-.card30 {
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.card30 form {
-  margin: 0;
-}
-
-.form-group label {
-  font-weight: 500;
-  color: #555555;
 }
 
 .form-control {
-  background-color: #fafafa;
-  border: 1px solid #dddddd;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: border-color 0.2s ease;
+  border-radius: 6px;
+  box-shadow: none;
+  border: 1px solid #ced4da;
+  transition: all 0.3s;
 }
 
 .form-control:focus {
   border-color: #007bff;
-  box-shadow: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
+/* Button Styling */
 .btn-primary {
   background-color: #007bff;
-  border: none;
+  border-color: #007bff;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1rem;
   font-weight: 500;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 .btn-primary:hover {
   background-color: #0056b3;
+  border-color: #0056b3;
 }
 
-.btn-block {
-  display: block;
-  width: 100%;
+/* Form Section Spacing */
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
-.settings-container:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+.form-group.row .col-md-6 {
+  padding-right: 10px;
+  padding-left: 10px;
 }
 
+/* Placeholder Styling */
+::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+/* Success and Error Messages */
+.text-success, .text-danger {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .settings-container, .card30 {
+      padding: 20px;
+  }
+
+  .btn-primary {
+      font-size: 0.9rem;
+      padding: 8px 15px;
+  }
+
+  h4 {
+      font-size: 1.3rem;
+  }
+}

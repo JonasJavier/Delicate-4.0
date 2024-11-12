@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../assets/css/Footer.css';
 
-
 const Footer = () => {
+  const [email, setEmail] = useState('');
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch('http://localhost:8000/contact/api/newsletter/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.success);
+      setEmail(''); // Clear the input field after successful subscription
+    } else {
+      alert(data.error);
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="container">
@@ -20,8 +41,15 @@ const Footer = () => {
           </div>
           <div className="footer-newsletter">
             <h4>Subscribe to our Newsletter</h4>
-            <form>
-              <input type="email" placeholder="Enter your email" aria-label="Enter your email" required />
+            <form onSubmit={handleSubscribe}>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                aria-label="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
               <button type="submit">Subscribe</button>
             </form>
           </div>

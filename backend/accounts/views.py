@@ -32,7 +32,6 @@ User = get_user_model()
 # Configuración del logger
 logger = logging.getLogger(__name__)
 
-# Vista para registrar usuarios
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -41,33 +40,53 @@ class RegisterView(APIView):
         password = request.data.get('password')
 
         try:
-            logger.debug(_("Attempting to validate email: %(email)s") % {'email': email})
+            logger.debug("Attempting to register user with email: %s", email)
             validate_password(password)
 
             if User.objects.filter(email=email).exists():
-                logger.debug(_("Email %(email)s is already registered.") % {'email': email})
+                logger.debug("Email %s is already registered", email)
                 return Response({"error": _("This email is already registered.")}, status=status.HTTP_400_BAD_REQUEST)
 
             user = User.objects.create_user(email=email, password=password)
+            profile = UserProfile.objects.create(user=user, email=email)
+            user.send_verification_email()
+            logger.debug("User registered and verification email sent to %s", email)
 
-            # Asegurar la creación del perfil
-            try:
-                profile = UserProfile.objects.create(user=user, email=email)
-                logger.debug(_("Profile created for user %(email)s.") % {'email': email})
-            except Exception as profile_error:
-                user.delete()  # Rollback user creation if profile fails
-                logger.error(_("Failed to create profile for %(email)s: %(error)s") % {'email': email, 'error': profile_error})
-                return Response({"error": _("Error creating user profile.")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-            logger.debug(_("User %(email)s registered successfully.") % {'email': email})
-            return Response({"message": _("User registered successfully.")}, status=status.HTTP_201_CREATED)
+            return Response({
+                "message": _("User registered successfully. Please check your email for the verification code.")
+            }, status=status.HTTP_201_CREATED)
 
         except ValidationError as e:
-            logger.error(_("Validation Error: %(error)s") % {'error': e})
+            logger.error("Password validation error: %s", e)
             return Response({"password": e.messages}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger.error(_("Unexpected Error: %(error)s") % {'error': e})
+            logger.error("Unexpected error during registration: %s", e)
             return Response({"error": _("Unexpected error occurred.")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class VerifyCodeView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        verification_code = request.data.get('verification_code')
+
+        try:
+            user = User.objects.get(email=email)
+            logger.debug("Verification attempt for user: %s", email)
+
+            if user.verification_code == verification_code:
+                user.is_email_verified = True
+                user.verification_code = None
+                user.save()
+                logger.debug("Verification successful for user: %s", email)
+                return Response({"message": _("Email verified successfully!")}, status=status.HTTP_200_OK)
+            else:
+                logger.warning("Invalid verification code for user: %s", email)
+                return Response({"error": _("Invalid verification code.")}, status=status.HTTP_400_BAD_REQUEST)
+
+        except User.DoesNotExist:
+            logger.error("User with email %s not found", email)
+            return Response({"error": _("User not found.")}, status=status.HTTP_404_NOT_FOUND)
 
 # Vista personalizada para obtener el token JWT
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -171,3 +190,4 @@ class ChangePasswordView(APIView):
 
         except ValidationError as e:
             return Response({"error": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+        

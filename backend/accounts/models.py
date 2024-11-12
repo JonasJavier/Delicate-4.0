@@ -3,6 +3,8 @@ from django.db import models
 from django.core.validators import EmailValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail  # Importar para enviar correos
+import random 
 
 # Manager personalizado para el modelo CustomUser
 class CustomUserManager(BaseUserManager):
@@ -34,6 +36,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         validators=[EmailValidator(message=_("Please enter a valid email address."))]
     )
     is_email_verified = models.BooleanField(default=False)
+    verification_code = models.CharField(max_length=6, blank=True, null=True)  # Código de verificación
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -49,6 +52,24 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+
+    def generate_verification_code(self):
+        """Genera un código de 6 dígitos y lo guarda en el campo verification_code."""
+        code = str(random.randint(100000, 999999))
+        self.verification_code = code
+        self.save()
+        return code
+
+    def send_verification_email(self):
+        """Envía un correo con el código de verificación."""
+        code = self.generate_verification_code()
+        send_mail(
+            'Your Verification Code',
+            f'Your verification code is: {code}',
+            'no-reply@yourdomain.com',  # Cambia al email desde el cual enviarás
+            [self.email],
+            fail_silently=False,
+        )
 
 # Asignar el modelo de usuario personalizado a la variable User
 User = CustomUser

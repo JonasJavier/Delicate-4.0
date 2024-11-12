@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+import resend
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,16 +19,18 @@ SITE_ID=1
 
 # Application definition
 INSTALLED_APPS = [
+    # Django built-in apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    "django.contrib.sites",
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'accounts',
     'corsheaders',
     'django_otp',
     'django_otp.plugins.otp_static',
@@ -38,10 +41,18 @@ INSTALLED_APPS = [
     'social_django',
     'rest_framework_social_oauth2',
     'oauth2_provider',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    
+    # Custom apps
+    'accounts',
     'shop',
-    
-    
+    'contact',
+    'resend',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',  # Mantener primero para garantizar la seguridad
@@ -50,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',  # Debe estar después de CustomExceptionMiddleware
     'django.middleware.csrf.CsrfViewMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -133,6 +145,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny', 
+    ],
+    
 }
 
 
@@ -158,7 +175,37 @@ CSRF_TRUSTED_ORIGINS = [
 
 ]
 
+# Configuración de allauth
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        },
+        'CLIENT_ID': '***REMOVED***.apps.googleusercontent.com',  # Cliente ID de Google
+        'SECRET': '***REMOVED***',  # Secreto del cliente de Google
+    }
+}
+
+
+LOGIN_REDIRECT_URL = '/'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Usando Gmail como ejemplo
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '***REMOVED***'  # Tu correo de Gmail
+EMAIL_HOST_PASSWORD = '***REMOVED***'  # Contraseña de aplicación de Gmail
+DEFAULT_FROM_EMAIL = 'redacted@example.com'  # Opcional, el remitente predeterminado
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = False
@@ -200,13 +247,9 @@ CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'",)
 CSP_IMG_SRC = ("'self'", 'data:')
 
-# Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.example.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = '***REMOVED***'
-EMAIL_HOST_PASSWORD = '***REMOVED***'
+
+
+
 
 # Logging configuration
 LOGGING = {

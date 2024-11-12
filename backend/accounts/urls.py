@@ -3,7 +3,7 @@ from django.urls import path, include
 from .views import MyTokenObtainPairView, RegisterView, UserProfileView, VerifyEmailView, ProtectedView
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenBlacklistView
-from .views import ChangePasswordView
+from .views import ChangePasswordView, VerifyCodeView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -15,5 +15,6 @@ urlpatterns = [
     path('auth/', include('rest_framework_social_oauth2.urls')),
     path('profile/', UserProfileView.as_view(), name='user_profile'),
      path('change-password/', ChangePasswordView.as_view(), name='change_password'),
+     path('verify-code/', VerifyCodeView.as_view(), name='verify-code'),
     
 ]

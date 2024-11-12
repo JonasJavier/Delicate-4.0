@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 // Definiendo los estilos con styled-components
 const Container = styled.div`
@@ -162,6 +163,51 @@ const Button = styled.button`
 `;
 
 const ContactPage = () => {
+  const [subject, setSubject] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Simple frontend validation
+    if (!subject || !email || !message) {
+      setStatus('All fields are required.');
+      return;
+    }
+
+    const formData = { subject, email, message };
+
+    setIsLoading(true);
+    setStatus('');
+
+    try {
+      const response = await fetch('http://localhost:8000/contact/api/contact/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus('Message sent successfully!');
+        setSubject('');
+        setEmail('');
+        setMessage('');
+      } else {
+        const errorData = await response.json();
+        setStatus(errorData.error || 'Something went wrong.');
+      }
+    } catch (error) {
+      setStatus('Failed to send message.');
+    }
+
+    setIsLoading(false);
+  };
+
   return (
     <Container>
       <Row>
@@ -187,13 +233,33 @@ const ContactPage = () => {
             <Subtitle>
               Do you fancy saying hi to me or you want to get started with your project and you need my help? Feel free to contact me.
             </Subtitle>
-            <form>
-              <Input type="text" placeholder="Template Cookie" />
-              <Input type="email" placeholder="redacted@example.com" />
-              <TextArea rows="3" placeholder="Hello"></TextArea>
-              <Input type="text" placeholder="Subjects" />
-              <Button type="submit">Send Message</Button>
+            <form onSubmit={handleSubmit}>
+              <Input 
+                type="text" 
+                placeholder="Subject" 
+                value={subject} 
+                onChange={(e) => setSubject(e.target.value)} 
+                disabled={isLoading} 
+              />
+              <Input 
+                type="email" 
+                placeholder="Your email redacted@example.com" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                disabled={isLoading} 
+              />
+              <TextArea 
+                rows="3" 
+                placeholder="I just want to say Hi" 
+                value={message} 
+                onChange={(e) => setMessage(e.target.value)} 
+                disabled={isLoading} 
+              />
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Sending...' : 'Send Message'}
+              </Button>
             </form>
+            {status && <p>{status}</p>}
           </BoxRight>
         </Col>
       </Row>

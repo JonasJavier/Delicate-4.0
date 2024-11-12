@@ -87,11 +87,7 @@ function App() {
                   <Route path="/orderconfirmation" element={<OrderConfirmation />} />
                   <Route path="/admin/product-management" element={<ProductManagement />} />
                 </Route>
-
-                {/* Admin Routes */}
-                
-                 
-               
+                {/* Admin Routes */}               
               </Routes>
             </Suspense>
           </ErrorBoundary>
