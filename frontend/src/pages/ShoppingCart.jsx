@@ -7,21 +7,23 @@ import '../assets/css/ShoppingCart.css';
 import { FaShoppingCart } from 'react-icons/fa';
 
 const ShoppingCart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [cartItems, setCartItems] = useState([]); // State to hold cart items
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state for notifications
 
-  const token = getCookie('access_token');
+  const token = getCookie('access_token'); // Get access token from cookies
 
-  // Cargar los items del carrito al montar el componente
+  // Load cart items on component mount
   useEffect(() => {
     const getCartItems = async () => {
       setLoading(true);
       try {
         if (token) {
+          // Fetch cart items from API if logged in
           const data = await fetchCart();
-          setCartItems(data.items || []); // Asegurarse de que `data.items` exista
+          setCartItems(data.items || []); // Ensure `data.items` exists
         } else {
+          // Load cart items from localStorage if not logged in
           setCartItems(getCart());
         }
       } catch (error) {
@@ -34,12 +36,11 @@ const ShoppingCart = () => {
     getCartItems();
   }, [token]);
 
-  // Validar y actualizar la cantidad en el carrito
+  // Update cart item quantity and validate input
   const handleUpdateQuantity = async (cartItemId, newQuantity) => {
-    // Encontrar el producto en el carrito
-    const cartItem = cartItems.find(item => item.id === cartItemId);
+    const cartItem = cartItems.find(item => item.id === cartItemId); // Find the cart item
 
-    // Validar la cantidad mínima y el stock disponible
+    // Validate minimum quantity and stock availability
     if (newQuantity < 1) {
       setError('Quantity cannot be less than 1');
       return;
@@ -51,40 +52,38 @@ const ShoppingCart = () => {
 
     try {
       if (token) {
+        // Update cart via API if logged in
         const { data } = await updateCartItemAPI(cartItemId, newQuantity);
         if (data && data.items) {
-          setCartItems(data.items); // Actualizar el carrito en el estado
+          setCartItems(data.items); // Update state with new cart items
         }
       } else {
-        // Actualizar el carrito en localStorage
+        // Update cart in localStorage if not logged in
         updateCartItem(cartItemId, newQuantity);
-
-        // Crear una nueva copia del carrito y actualizar el estado para que React detecte el cambio
         setCartItems(prevItems =>
           prevItems.map(item =>
             item.id === cartItemId ? { ...item, quantity: newQuantity } : item
           )
-     
         );
-        window.location.reload()
-        
       }
-      window.location.reload()
-
+      window.location.reload(); // Refresh page to reflect changes
     } catch (error) {
-      console.error('Error updating cart item:', error); // Mostrar el error en consola
+      console.error('Error updating cart item:', error);
       setError('Failed to update cart item quantity. Please try again.');
     }
   };
 
+  // Remove an item from the cart
   const handleRemoveItem = async (cartItemId) => {
     try {
       if (token) {
+        // Remove item via API if logged in
         const data = await removeFromCartAPI(cartItemId);
         if (data && data.items) {
           setCartItems(data.items);
         }
       } else {
+        // Remove item from localStorage if not logged in
         removeItemFromCart(cartItemId);
         setCartItems(getCart());
       }
@@ -93,10 +92,16 @@ const ShoppingCart = () => {
     }
   };
 
-  const total = cartItems.reduce((acc, item) => acc + (parseFloat(item.product.price) * item.quantity), 0);
+  // Calculate total price for the cart
+  const total = cartItems.reduce(
+    (acc, item) => acc + parseFloat(item.product.price) * item.quantity,
+    0
+  );
 
+  // Render loading state
   if (loading) return <p>Loading...</p>;
 
+  // Render empty cart message
   if (cartItems.length === 0) {
     return (
       <div className="empty-cart-container">
@@ -110,6 +115,7 @@ const ShoppingCart = () => {
     );
   }
 
+  // Render shopping cart items and total
   return (
     <div className="container21 my-5">
       {error && <p className="text-danger">{error}</p>}
@@ -130,7 +136,11 @@ const ShoppingCart = () => {
               {cartItems.map(item => (
                 <tr key={item.id}>
                   <td className="cart-item">
-                    <img src={`http://127.0.0.1:8000${item.product.image}`} alt={item.product.name} className="cart-item-image img-fluid" />
+                    <img
+                      src={`http://127.0.0.1:8000${item.product.image}`}
+                      alt={item.product.name}
+                      className="cart-item-image img-fluid"
+                    />
                     <div className="ms-3">
                       <h6>{item.product.name}</h6>
                     </div>
@@ -162,7 +172,10 @@ const ShoppingCart = () => {
                   </td>
                   <td>${(parseFloat(item.product.price) * item.quantity).toFixed(2)}</td>
                   <td>
-                    <button className="btn btn-danger btn-sm" onClick={() => handleRemoveItem(item.id)}>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleRemoveItem(item.id)}
+                    >
                       Remove
                     </button>
                   </td>
@@ -190,7 +203,6 @@ const ShoppingCart = () => {
                 <h5>Total:</h5>
                 <p className="price">${total.toFixed(2)}</p>
               </div>
-
               <div className="checkout-container">
                 <Link to="/Checkout">
                   <button className="btn btn-dark">CHECK OUT</button>

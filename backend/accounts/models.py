@@ -53,23 +53,29 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("User")
         verbose_name_plural = _("Users")
 
-    def generate_verification_code(self):
-        """Genera un código de 6 dígitos y lo guarda en el campo verification_code."""
-        code = str(random.randint(100000, 999999))
-        self.verification_code = code
+    def generate_and_send_verification_code(self):
+        """Genera un código de verificación y envía un correo."""
+        self.verification_code = str(random.randint(100000, 999999))
         self.save()
-        return code
+        self.send_verification_email()
 
     def send_verification_email(self):
-        """Envía un correo con el código de verificación."""
-        code = self.generate_verification_code()
+        """Envía el código de verificación por correo."""
         send_mail(
-            'Your Verification Code',
-            f'Your verification code is: {code}',
-            'no-reply@yourdomain.com',  # Cambia al email desde el cual enviarás
-            [self.email],
+            subject="Your Verification Code",
+            message=f"Your verification code is: {self.verification_code}",
+            from_email="no-reply@yourdomain.com",
+            recipient_list=[self.email],
             fail_silently=False,
         )
+
+    def validate_verification_code(self, code):
+        """Valida el código de verificación."""
+        if self.verification_code == code:
+            self.verification_code = None  # Elimina el código después de usarlo
+            self.save()
+            return True
+        return False
 
 # Asignar el modelo de usuario personalizado a la variable User
 User = CustomUser

@@ -1,7 +1,8 @@
 import React from 'react'; 
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import heroImage from '../assets/images/hero/Hero.jpg'; // Asegúrate de que la ruta sea correcta
+import heroImage from '../assets/images/hero/Hero.jpg'; 
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
     return (
@@ -9,8 +10,8 @@ const HeroSection = () => {
             <div className="overlay"></div>
             <div className="content">
                 <p className="small-title">Fresh & Organic</p>
-                <h1 className="main-title">Jabones artesanales</h1>
-                <a href="shop.html" className="btn custom-btn">Shop Now</a>
+                <h1 className="main-title">Handmade Soaps</h1>
+                <Link to= "/shop" className="btn custom-btn">Shop Now</Link>
             </div>
         </StyledHeroSection>
     );
@@ -124,7 +125,7 @@ const StyledHeroSection = styled.div`
     }
 
     @media (max-width: 620px) {
-        height: 90vh; /* Adjust height for smaller screens */
+        height: 90vh; 
 
         .small-title {
             font-size: 1.8rem !important;
@@ -141,7 +142,7 @@ const StyledHeroSection = styled.div`
     }
 
     @media (max-width: 500px) {
-        height: 80vh; /* Adjust height for extra small screens */
+        height: 80vh; 
 
         .small-title {
             font-size: 1.5rem !important;
@@ -158,7 +159,7 @@ const StyledHeroSection = styled.div`
     }
 
     @media (max-width: 420px) {
-        height: 80vh; /* Adjust height for extra small screens */
+        height: 80vh; 
 
         .small-title {
             font-size: 1.2rem !important;
@@ -175,8 +176,7 @@ const StyledHeroSection = styled.div`
     }
 
     @media (max-width: 353px) {
-        height: 80vh; /* Adjust height for extra small screens */
-
+        height: 80vh; 
         .small-title {
             font-size: 0.9rem !important;
         }

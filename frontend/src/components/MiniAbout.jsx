@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import aboutImage from '../assets/images/mini-about/mini-about.jpg';
+import { useTheme } from '../context/ThemeContext'; 
 
-// Styled Components
 const Container = styled.div`
   padding: 4rem 2rem;
   font-family: 'Pro-text', sans-serif;
-  background-color: #f9f9f9;
-  text-align: left !important;
+  background-color: ${(props) => (props.theme === 'dark' ? '#1e1e1e' : '#f9f9f9')};
+  color: ${(props) => (props.theme === 'dark' ? '#e0e0e0' : '#333')};
 
   @media (max-width: 1000px) {
     padding: 3.5rem 1.5rem;
@@ -38,7 +38,6 @@ const ColumnLeft = styled.div`
   padding: 1rem;
   display: flex;
   justify-content: center;
-  
 
   img {
     width: 100%;
@@ -67,7 +66,7 @@ const ColumnRight = styled.div`
 
 const SinceYear = styled.span`
   font-size: 1.4rem;
-  color: #888;
+  color: ${(props) => (props.theme === 'dark' ? '#888' : '#888')};
   display: block;
   margin-bottom: 1rem;
 `;
@@ -76,7 +75,7 @@ const AboutTitle = styled.h2`
   font-size: 3rem;
   margin: 0.5rem 0;
   font-weight: 700;
-  color: #333;
+  color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#333')};
 
   span {
     color: #f28123;
@@ -95,6 +94,7 @@ const AboutText = styled.p`
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
   max-width: 90%;
+  color: ${(props) => (props.theme === 'dark' ? '#cccccc' : '#333')};
 
   @media (max-width: 1000px) {
     max-width: 95%;
@@ -143,19 +143,21 @@ const AboutButton = styled.button`
 `;
 
 const MiniAbout = () => {
+  const { theme } = useTheme(); 
+
   return (
-    <Container>
+    <Container theme={theme}>
       <Row>
         <ColumnLeft>
           <img src={aboutImage} alt="About Me" />
         </ColumnLeft>
         <ColumnRight>
-          <SinceYear>Since Year 2022</SinceYear>
-          <AboutTitle>We are <span>Delicate</span></AboutTitle>
-          <AboutText>
+          <SinceYear theme={theme}>Since Year 2022</SinceYear>
+          <AboutTitle theme={theme}>We are <span>Delicate</span></AboutTitle>
+          <AboutText theme={theme}>
             Etiam vulputate ut augue vel sodales. In sollicitudin neque et massa porttitor vestibulum ac vel nisi. Vestibulum placerat eget dolor sit amet posuere. In ut dolor aliquet, aliquet sapien sed, interdum velit. Nam eu molestie lorem.
           </AboutText>
-          <AboutText>
+          <AboutText theme={theme}>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente facilis illo repellat veritatis minus, et labore minima mollitia qui ducimus.
           </AboutText>
           <AboutButton>Know More</AboutButton>

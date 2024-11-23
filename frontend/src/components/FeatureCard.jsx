@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useTheme } from '../context/ThemeContext'; 
 
 const ContainerFluid = styled.div`
-  background-color: #ffffff;
+  background-color: ${(props) => (props.theme === 'dark' ? '#1e1e1e' : '#ffffff')};
   margin-top: 2rem; 
 `;
 
@@ -22,22 +23,25 @@ const Col = styled.div`
 const Card = styled.div`
   border: none;
   transition: background-color 0.3s ease, color 0.3s ease, padding 0.3s ease;
-  background-color: #ffffff;
+  background-color: ${(props) => (props.theme === 'dark' ? '#333' : '#ffffff')};
   text-align: center;
   height: 100%;
-  padding: 10px; /* Ajusta el padding según sea necesario */
+  padding: 10px; 
+
   &:hover {
-    background-color: #11ab17;
-    color: white;
-    padding: 20px; /* Ajusta el padding en hover según sea necesario */
+    background-color: ${(props) => (props.theme === 'dark' ? '#F28123' : '#11ab17')};
+    color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#ffffff')};
+    padding: 20px; 
   }
+
   &:hover .card-title,
   &:hover .card-text {
-    color: white !important; /* Asegura que el color de los iconos cambie */
+    color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#ffffff')} !important; 
   }
+
   &:hover .icon-wrapper {
-    background-color: white; 
-    border-color: white; 
+    background-color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#ffffff')}; 
+    border-color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#ffffff')}; 
   }
 `;
 
@@ -47,7 +51,7 @@ const IconWrapper = styled.div`
   display: inline-block;
   width: 70px;
   height: 70px;
-  border: 2px solid #dcdcdc;
+  border: 2px solid ${(props) => (props.theme === 'dark' ? '#555' : '#dcdcdc')};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -58,10 +62,12 @@ const IconWrapper = styled.div`
 
 const CardTitle = styled.h5`
   font-family: 'Poppins', sans-serif;
+  color: ${(props) => (props.theme === 'dark' ? '#e0e0e0' : '#000000')};
 `;
 
 const CardText = styled.p`
   font-family: 'Poppins', sans-serif;
+  color: ${(props) => (props.theme === 'dark' ? '#bbbbbb' : '#000000')};
 `;
 
 const features = [
@@ -88,18 +94,20 @@ const features = [
 ];
 
 const FeatureCard = () => {
+  const { theme } = useTheme(); // Obtener el tema actual
+
   return (
-    <ContainerFluid className="container-fluid py-4">
+    <ContainerFluid theme={theme} className="container-fluid py-4">
       <FeatureRow className="row feature-row">
         {features.map((feature, index) => (
           <Col key={index} className="col-13 col-md-6 col-lg-3 mb-3">
-            <Card className={`card feature-card ${index < features.length - 1 ? 'border-right' : ''}`}>
+            <Card className={`card feature-card ${index < features.length - 1 ? 'border-right' : ''}`} theme={theme}>
               <CardBody className="card-body3">
-                <IconWrapper className="icon-wrapper">
+                <IconWrapper className="icon-wrapper" theme={theme}>
                   <i className={`fas ${feature.icon} fa-2x text-success`}></i>
                 </IconWrapper>
-                <CardTitle className="card-title3">{feature.title}</CardTitle>
-                <CardText className="card-text3">{feature.description}</CardText>
+                <CardTitle className="card-title3" theme={theme}>{feature.title}</CardTitle>
+                <CardText className="card-text3" theme={theme}>{feature.description}</CardText>
               </CardBody>
             </Card>
           </Col>

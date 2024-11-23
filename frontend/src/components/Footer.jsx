@@ -19,7 +19,7 @@ const Footer = () => {
     const data = await response.json();
     if (response.ok) {
       alert(data.success);
-      setEmail(''); // Clear the input field after successful subscription
+      setEmail(''); 
     } else {
       alert(data.error);
     }

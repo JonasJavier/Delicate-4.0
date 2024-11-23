@@ -11,7 +11,7 @@ import '../assets/css/BlogDetail.css';
 const blogPosts = [
     { id: 1, img: Img1, title: 'Post 1', date: '18 NOV', content: 'Maecenas lacinia felis nec placerat sollicitudin. Quisque placerat dolor at scelerisque imperdiet. Phasellus tristique felis dolor.' },
     { id: 2, img: Img2, title: 'Post 2', date: '18 NOV', content: 'Maecenas elementum in risus sed condimentum. Duis convallis ante ac tempus maximus. Fusce malesuada sed velit ut dictum.' },
-    // Añade más posts aquí...
+    
 ];
 
 const comments = [

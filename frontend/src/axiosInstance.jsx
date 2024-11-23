@@ -20,7 +20,7 @@ const refreshTokenIfNeeded = async () => {
   if (!token) return;
 
   try {
-    const tokenPayload = jwtDecode(token);  // Usar jwtDecode correctamente como una función nombrada
+    const tokenPayload = jwtDecode(token); 
     const expirationTime = tokenPayload.exp * 1000;
     const currentTime = Date.now();
 
@@ -34,14 +34,14 @@ const refreshTokenIfNeeded = async () => {
     }
   } catch (error) {
     console.error('Error decoding token:', error);
-    handleUnauthorized(); // Manejo de errores de autorización
+    handleUnauthorized(); 
   }
 };
 
 // Interceptor de solicitudes
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const token = await refreshTokenIfNeeded();  // Refrescar el token antes de cada solicitud
+    const token = await refreshTokenIfNeeded();  
     const accessToken = token || getCookie('access_token');
     
     if (accessToken) {

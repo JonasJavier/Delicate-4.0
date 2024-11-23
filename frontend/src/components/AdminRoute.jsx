@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Loader from './Loader'; // Assuming you have a Loader component
+import Loader from './Loader'; 
 import { getCookie } from '../utils/cookies';
 import PropTypes from 'prop-types';
 

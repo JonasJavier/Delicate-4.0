@@ -13,12 +13,19 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from .models import Product, Review
+from .serializers import ReviewSerializer
 
 # Configura el logger para la depuración
 logger = logging.getLogger(__name__)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])  # Sobrescribe los permisos globales
+@permission_classes([AllowAny])  
 def product_list(request):
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True)
@@ -197,3 +204,24 @@ def product_detail(request, id):
         return Response(serializer.data)
     except Product.DoesNotExist:
         return Response({"error": "Product not found"}, status=404)
+    
+
+class ProductReviewView(APIView):
+    """
+    Permite listar y agregar reseñas a un producto específico.
+    """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request, product_id):
+        product = get_object_or_404(Product, id=product_id)
+        reviews = Review.objects.filter(product=product)
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, product_id):
+        product = get_object_or_404(Product, id=product_id)
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user, product=product)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

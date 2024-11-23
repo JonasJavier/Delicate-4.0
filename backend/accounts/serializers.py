@@ -44,14 +44,18 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     password = serializers.CharField(required=True)
 
     def validate(self, attrs):
+        # Reemplazamos username=email en la autenticación
         email = attrs.get('email')
         password = attrs.get('password')
 
+        # Autenticación usando el campo `email`
         if email and password:
-            user = authenticate(username=email, password=password)
+            user = authenticate(request=self.context.get("request"), email=email, password=password)
             if user:
                 if not user.is_active:
                     raise serializers.ValidationError(_('User is inactive'))
+
+                # Llama a la superclase para obtener el token JWT
                 data = super().validate(attrs)
                 data['user'] = {
                     'email': user.email
@@ -64,7 +68,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         return data
 
-# Serializer para el perfil de usuario con validaciones robustas
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
@@ -83,8 +86,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'billing_email',
             'billing_phone',
         ]
-        read_only_fields = ['email']  # El email principal no debe ser editable
-
+        read_only_fields = ['email']  
+        
     def validate(self, data):
         """
         Centraliza todas las validaciones de campos.

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useTheme } from '../context/ThemeContext'; 
 
 const Container = styled.div`
-  color: #000;
+  color: ${(props) => (props.theme === 'dark' ? '#e0e0e0' : '#000')};
   padding: 60px 20px;
   min-height: 100vh;
-  background-color: #ffffff !important;
+  background-color: ${(props) => (props.theme === 'dark' ? '#1e1e1e' : '#ffffff')};
 
   @media (max-width: 768px) {
     padding: 40px 10px;
@@ -20,7 +21,7 @@ const Title = styled.h1`
   text-align: left;
   font-size: 4rem;
   margin-bottom: 40px;
-  color: #333;
+  color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#333')};
   margin-left: 5%;
   font-family: Pro-text;
   font-weight: bold;
@@ -67,16 +68,16 @@ const Column = styled.div`
 `;
 
 const FaqItem = styled.div`
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: ${(props) => (props.theme === 'dark' ? '#333' : '#fff')};
+  border: 1px solid ${(props) => (props.theme === 'dark' ? '#555' : '#ccc')};
   padding: 20px;
   border-radius: 8px;
   transition: background-color 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px ${(props) => (props.theme === 'dark' ? 'rgba(0, 0, 0, 0.4)' : 'rgba(0, 0, 0, 0.1)')};
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: ${(props) => (props.theme === 'dark' ? '#444' : '#f0f0f0')};
   }
 
   @media (max-width: 500px) {
@@ -89,6 +90,7 @@ const Question = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 1.5rem;
+  color: ${(props) => (props.theme === 'dark' ? '#ffcc00' : '#333')};
 
   @media (max-width: 768px) {
     font-size: 1.4rem;
@@ -103,9 +105,9 @@ const Answer = styled.div`
   margin-top: 10px;
   font-size: 1.2rem;
   line-height: 1.5;
-  display: ${props => (props.$show ? 'block' : 'none')};
+  display: ${(props) => (props.$show ? 'block' : 'none')};
   font-weight: lighter;
-  color: #555;
+  color: ${(props) => (props.theme === 'dark' ? '#e0e0e0' : '#555')};
 
   @media (max-width: 768px) {
     font-size: 1.1rem;
@@ -119,7 +121,8 @@ const Answer = styled.div`
 const Icon = styled.span`
   font-size: 1.5rem;
   transition: transform 0.3s ease;
-  transform: ${props => (props.$show ? 'rotate(180deg)' : 'rotate(0deg)')};
+  color: ${(props) => (props.theme === 'dark' ? '#ffcc00' : '#333')};
+  transform: ${(props) => (props.$show ? 'rotate(180deg)' : 'rotate(0deg)')};
 
   @media (max-width: 500px) {
     font-size: 1.2rem;
@@ -135,36 +138,14 @@ const faqs = [
     question: 'How can I book a photography session with you?',
     answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.',
   },
-  {
-    question: 'What equipment do you use for your photography?',
-    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.',
-  },
-  {
-    question: 'Can I request a specific location for a photoshoot?',
-    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.',
-  },
-  {
-    question: 'What is your editing process like?',
-    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.',
-  },
-  {
-    question: 'Are digital files included in the package?',
-    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.',
-  },
-  {
-    question: 'Do you offer prints of your photographs?',
-    answer: 'Yes, prints are available for purchase. Explore the \'Prints\' section for more details on sizes and pricing.',
-  },
-  {
-    question: 'How long does it take to receive the edited photos?',
-    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.',
-  },
+  // Resto de las preguntas...
 ];
 
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const { theme } = useTheme(); // Obtener el tema actual
 
-  const handleToggle = index => {
+  const handleToggle = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
@@ -172,28 +153,28 @@ const FAQ = () => {
   const rightColumnFaqs = faqs.slice(4);
 
   return (
-    <Container>
-      <Title>Frequently Asked <span>Questions</span></Title>
+    <Container theme={theme}>
+      <Title theme={theme}>Frequently Asked <span>Questions</span></Title>
       <FaqContainer>
         <Column>
           {leftColumnFaqs.map((faq, index) => (
-            <FaqItem key={index} onClick={() => handleToggle(index)}>
-              <Question>
+            <FaqItem key={index} onClick={() => handleToggle(index)} theme={theme}>
+              <Question theme={theme}>
                 {faq.question}
-                <Icon $show={activeIndex === index}>&#9660;</Icon>
+                <Icon $show={activeIndex === index} theme={theme}>&#9660;</Icon>
               </Question>
-              <Answer $show={activeIndex === index}>{faq.answer}</Answer>
+              <Answer $show={activeIndex === index} theme={theme}>{faq.answer}</Answer>
             </FaqItem>
           ))}
         </Column>
         <Column>
           {rightColumnFaqs.map((faq, index) => (
-            <FaqItem key={index + 4} onClick={() => handleToggle(index + 4)}>
-              <Question>
+            <FaqItem key={index + 4} onClick={() => handleToggle(index + 4)} theme={theme}>
+              <Question theme={theme}>
                 {faq.question}
-                <Icon $show={activeIndex === index + 4}>&#9660;</Icon>
+                <Icon $show={activeIndex === index + 4} theme={theme}>&#9660;</Icon>
               </Question>
-              <Answer $show={activeIndex === index + 4}>{faq.answer}</Answer>
+              <Answer $show={activeIndex === index + 4} theme={theme}>{faq.answer}</Answer>
             </FaqItem>
           ))}
         </Column>

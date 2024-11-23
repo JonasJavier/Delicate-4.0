@@ -2,11 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import organicFoodImage from '../assets/images/About/main1.png';
+import { useTheme } from '../context/ThemeContext'; // Importa el contexto del tema
 
 const Container = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
   padding: 2rem;
+  background-color: ${(props) => (props.theme === 'dark' ? '#1e1e1e' : '#ffffff')};
 `;
 
 const Row = styled.div`
@@ -27,7 +29,7 @@ const Column = styled.div`
 
 const Title = styled.h1`
   font-weight: bold;
-  color: #343a40;
+  color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#343a40')};
   font-size: 3.9rem;
   margin-bottom: 1.5rem;
   font-family: Pro-text;
@@ -50,14 +52,14 @@ const Title = styled.h1`
 `;
 
 const Text = styled.p`
-  color: #343a40;
+  color: ${(props) => (props.theme === 'dark' ? '#cccccc' : '#343a40')};
   font-size: 1.3rem;
   margin-bottom: 2rem;
-  font-family: Poppings-Light;
+  font-family: Poppins-Light;
 
-span {
-  color: #f28123;
-}
+  span {
+    color: #f28123;
+  }
 
   @media (max-width: 1200px) {
     font-size: 1.3rem;
@@ -81,20 +83,23 @@ const Image = styled.img`
   width: 100%;
   object-fit: cover;
   border-radius: 0.25rem;
+  border: 2px solid ${(props) => (props.theme === 'dark' ? '#444' : '#ddd')}; 
 `;
 
 const Information = () => {
+  const { theme } = useTheme(); // Obtener el tema actual
+
   return (
-    <Container className="container">
+    <Container theme={theme} className="container">
       <Row className="row">
         <Column className="col-lg-6 col-md-12">
-          <Title> <span>100%</span> Trusted Organic </Title>
-          <Text>
+          <Title theme={theme}> <span>100%</span> Trusted Organic </Title>
+          <Text theme={theme}>
             Morbi porttitor ligula in nunc varius sagittis. Proin dui nisi, laoreet ut tempor ac, cursus vitae eros. Cras quis ultricies elit. Proin ac lectus arcu. Maecenas aliquet vel tellus at accumsan. Donec a eros non massa vulputate ornare. Vivamus ornare commodo ante, at commodo felis congue vitae.
           </Text>
         </Column>
         <Column className="col-lg-6 col-md-12">
-          <Image src={organicFoodImage} alt="Organic Food" />
+          <Image src={organicFoodImage} alt="Organic Food" theme={theme} />
         </Column>
       </Row>
     </Container>

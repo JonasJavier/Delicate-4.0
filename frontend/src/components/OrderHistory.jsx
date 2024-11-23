@@ -1,13 +1,13 @@
-
-// OrderHistory.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useTheme } from '../context/ThemeContext'; // Importa el contexto del tema
 
 const HistoryContainer = styled.div`
-  background-color: #ffffff;
+  background-color: ${(props) => (props.theme === 'dark' ? '#1e1e1e' : '#ffffff')};
+  color: ${(props) => (props.theme === 'dark' ? '#e0e0e0' : '#333')};
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 5rem;
   width: 100%;
   padding-top: 10rem;
@@ -21,15 +21,21 @@ const Table = styled.table`
   width: 100%;
   margin-bottom: 1rem;
   border-collapse: collapse;
+  color: ${(props) => (props.theme === 'dark' ? '#cccccc' : '#333')};
 
   th, td {
     padding: 0.75rem;
     text-align: left;
-    border: 1px solid #dee2e6;
+    border: 1px solid ${(props) => (props.theme === 'dark' ? '#444' : '#dee2e6')};
+  }
+
+  th {
+    background-color: ${(props) => (props.theme === 'dark' ? '#333' : '#f8f9fa')};
+    color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#000')};
   }
 
   a {
-    color: #007bff;
+    color: ${(props) => (props.theme === 'dark' ? '#ffcc00' : '#007bff')};
     text-decoration: none;
 
     &:hover {
@@ -39,6 +45,8 @@ const Table = styled.table`
 `;
 
 const OrderHistory = () => {
+  const { theme } = useTheme(); // Obtener el tema actual
+
   const orders = [
     { id: '738', date: '8 Sep, 2020', total: '$135.00 (5 Products)', status: 'Processing' },
     { id: '703', date: '24 May, 2020', total: '$25.00 (1 Product)', status: 'On the way' },
@@ -49,9 +57,9 @@ const OrderHistory = () => {
   ];
 
   return (
-    <HistoryContainer>
+    <HistoryContainer theme={theme}>
       <h5>Recent Order History</h5>
-      <Table>
+      <Table theme={theme}>
         <thead>
           <tr>
             <th>ORDER ID</th>
@@ -63,7 +71,7 @@ const OrderHistory = () => {
         <tbody>
           {orders.map((order) => (
             <tr key={order.id}>
-              <td><Link to={`/orderdetails/${order.id}`}>{order.id}</Link></td>
+              <td><Link to={`/orderdetails/${order.id}`}>{order.id} </Link> </td>
               <td>{order.date}</td>
               <td>{order.total}</td>
               <td><a href="#">{order.status}</a></td>

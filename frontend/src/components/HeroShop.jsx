@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import heroImage from '../assets/images/hero/2.jpg'; // Importar la imagen
+import heroImage from '../assets/images/hero/2.jpg'; 
 
 const HeroSection = styled.div`
   width: 100%;

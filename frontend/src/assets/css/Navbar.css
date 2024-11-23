@@ -38,8 +38,8 @@ a {
     align-items: center;
     padding: 8px 16px;
     color: #333;
-    background-color: #fff; /* Asegurarse de que el fondo sea blanco */
-    border: none; /* Elimina cualquier borde predeterminado */
+    background-color: #fff; 
+    border: none; 
     transition: background-color 0.3s ease, color 0.3s ease;
   }
   

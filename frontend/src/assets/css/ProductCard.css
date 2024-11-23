@@ -84,31 +84,31 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 50px; /* Aumentar el tamaño */
-  height: 50px; /* Aumentar el tamaño */
-  border: 2px solid rgba(0, 0, 0, 0.495); /* Borde gris claro */
+  width: 50px; 
+  height: 50px; 
+  border: 2px solid rgba(0, 0, 0, 0.495); 
   border-radius: 50%;
   background: transparent; /* Fondo transparente */
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
-  margin-right: 10px; /* Margen derecho */
+  margin-right: 10px; 
 }
 
 .product-card .icon-container:hover {
-  background-color: rgba(255, 255, 255, 0.991); /* Fondo blanco al hacer hover */
+  background-color: rgba(255, 255, 255, 0.991); 
   transform: scale(1.1);
 }
 
 .product-card .icon-container .fa-heart,
 .product-card .icon-container .fa-eye {
-  font-size: 1.5rem; /* Aumentar el tamaño del ícono */
-  color: rgba(255, 133, 33, 0.984); /* Color del ícono */
+  font-size: 1.5rem; 
+  color: rgba(255, 133, 33, 0.984); 
   transition: color 0.3s ease;
 }
 
 .product-card .icon-container:hover .fa-heart,
 .product-card .icon-container:hover .fa-eye {
-  color: #f28123; /* Color del ícono al hacer hover */
+  color: #f28123; 
 }
 
 .product-card .icon-container .icon-text {
@@ -172,7 +172,7 @@
 .view-all-btn:hover {
   background-color: #f28123;
   color: #ffffff;
-  transform: scale(1.05); /* Aumenta ligeramente el tamaño del botón */
+  transform: scale(1.05); 
 }
 
 .view-all-btn:hover .arrow-icon {
@@ -180,21 +180,21 @@
 }
 
 .icon-container.delete-icon {
-  background-color: red; /* Fondo rojo */
-  color: white; /* Icono blanco */
+  background-color: red; 
+  color: white; 
 }
 
 .icon-container.delete-icon:hover {
-  background-color: darkred; /* Fondo rojo oscuro al hacer hover */
+  background-color: darkred; 
 }
 
 .icon-container .fa-trash {
-  font-size: 1.5rem; /* Tamaño del ícono de borrador */
-  color: white; /* Color del ícono */
+  font-size: 1.5rem; 
+  color: white; 
 }
 
 .icon-container:hover .fa-trash {
-  color: white; /* Color del ícono al hacer hover */
+  color: white; 
 }
 
 /* Hide specific products on screens 1000px or smaller */
@@ -353,12 +353,12 @@
 
   .product-card .icon-container .fa-heart,
   .product-card .icon-container .fa-eye {
-    font-size: 1.2rem; /* Aumentar el tamaño del ícono */
+    font-size: 1.2rem; 
   }
 
   .product-card .icon-container {
-    width: 40px; /* Aumentar el tamaño */
-    height: 40px; /* Aumentar el tamaño */
+    width: 40px; 
+    height: 40px; 
     border-radius: 50%;
   }
 
@@ -426,12 +426,12 @@
 
   .product-card .icon-container .fa-heart,
   .product-card .icon-container .fa-eye {
-    font-size: 1rem; /* Aumentar el tamaño del ícono */
+    font-size: 1rem; 
   }
 
   .product-card .icon-container {
-    width: 30px; /* Aumentar el tamaño */
-    height: 30px; /* Aumentar el tamaño */
+    width: 30px; 
+    height: 30px; 
     border-radius: 50%;
   }
 

@@ -43,19 +43,19 @@
   color: #000;
 }
 
-/* Centrar palabra "Quantity" con los botones */
+
 .table-hover th {
   text-align: center;
 }
 
-/* Asegurar que las imágenes no distorsionen el layout */
+
 .cart-item {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* Botón "Return to shop" más pequeño, estilo rectangular */
+
 .btn-attractive {
   background-color: #000;
   color: white;
@@ -71,7 +71,7 @@
   color: white;
 }
 
-/* Botón "Check Out" */
+
 .btn-dark {
   background-color: #f28123;
   color: white;
@@ -105,35 +105,35 @@
   font-weight: normal;
 }
 
-/* Eliminar hover gris en las filas del producto */
+
 .table-hover tbody tr:hover {
   background-color: transparent;
 }
 
-/* Márgenes alrededor de la tabla */
+
 .table-hover {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-/* Añadir espacio para los items en la tabla */
+
 .table-hover tbody tr {
   vertical-align: middle;
   padding: 15px 0;
 }
 
-/* Margen para el botón de remover */
+
 .btn-sm {
   margin-left: 10px;
 }
 
-/* Ajustes para alineación y márgenes */
+
 .align-middle td {
   vertical-align: middle !important;
   padding: 12px;
 }
 
-/* Márgenes y estilo del mensaje de carrito vacío */
+
 .empty-cart-container {
   display: flex;
   flex-direction: column;

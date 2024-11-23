@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 import '../assets/css/Navbar.css';
 
 const Navbar = () => {
-  const { user, isAdmin, logout } = useContext(AuthContext);  // Get user and isAdmin from AuthContext
+  const { user, isAdmin, logout } = useContext(AuthContext);  
   const [navbarCollapsed, setNavbarCollapsed] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);

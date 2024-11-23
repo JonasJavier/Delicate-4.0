@@ -1,69 +1,117 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Modal, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faFacebook, faTwitter, faPinterest, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { Modal, Button, Row, Col } from 'react-bootstrap';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../assets/css/ProductDetail.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartPlus, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
+import { useTheme } from '../context/ThemeContext';
 
-const QuickViewModal = ({ show, handleClose, product }) => {
+const StyledModal = styled(Modal)`
+  .modal-content {
+    background-color: ${(props) => (props.theme === 'dark' ? '#1e1e1e' : '#ffffff')};
+    color: ${(props) => (props.theme === 'dark' ? '#e0e0e0' : '#000000')};
+    border-radius: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .modal-header {
+    border-bottom: ${(props) => (props.theme === 'dark' ? '1px solid #444' : '1px solid #dee2e6')};
+  }
+
+  .modal-footer {
+    border-top: ${(props) => (props.theme === 'dark' ? '1px solid #444' : '1px solid #dee2e6')};
+  }
+
+  .text-primary {
+    color: ${(props) => (props.theme === 'dark' ? '#F28123' : '#007bff')} !important;
+  }
+
+  .text-success {
+    color: ${(props) => (props.theme === 'dark' ? '#44c767' : '#28a745')} !important;
+  }
+
+  .text-muted {
+    color: ${(props) => (props.theme === 'dark' ? '#cccccc' : '#6c757d')} !important;
+  }
+
+  .btn-success {
+    background-color: ${(props) => (props.theme === 'dark' ? '#444' : '#28a745')};
+    border: none;
+
+    &:hover {
+      background-color: ${(props) => (props.theme === 'dark' ? '#F28123' : '#218838')};
+    }
+  }
+
+  .btn-outline-secondary {
+    color: ${(props) => (props.theme === 'dark' ? '#cccccc' : '#6c757d')};
+    border-color: ${(props) => (props.theme === 'dark' ? '#444' : '#dee2e6')};
+
+    &:hover {
+      background-color: ${(props) => (props.theme === 'dark' ? '#444' : '#e9ecef')};
+    }
+  }
+`;
+
+const StyledImage = styled.img`
+  border-radius: 10px;
+  max-height: 300px;
+  box-shadow: 0 4px 8px ${(props) => (props.theme === 'dark' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.1)')};
+`;
+
+const QuickViewModal = ({ product, show, onClose, onAddToCart }) => {
+  const { theme } = useTheme();
+
   if (!product) return null;
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <StyledModal show={show} onHide={onClose} centered theme={theme}>
+      <Modal.Header closeButton>
+        <Modal.Title>Quick View: {product.name}</Modal.Title>
+      </Modal.Header>
       <Modal.Body>
         <Row>
           <Col md={6}>
             <Zoom>
-              <img src={product.imgSrc} alt={product.title} className="product-image" />
+              <StyledImage
+                src={`http://127.0.0.1:8000${product.image}`}
+                alt={product.name}
+                className="img-fluid"
+                theme={theme}
+              />
             </Zoom>
           </Col>
           <Col md={6}>
-            <h1 className="product-title">{product.title}</h1>
-            <p className="text-success stock-status">In Stock</p>
-            <div className="product-price">
-              <span className="original-price">$48.00</span>
-              <span className="discounted-price">{product.price}</span>
-              <span className="discount-percentage">64% Off</span>
-            </div>
-            <p className="product-description">{product.description}</p>
-            <InputGroup className="quantity-selector">
-              <Button variant="outline-secondary">-</Button>
-              <FormControl aria-label="Quantity" value="1" readOnly className="text-center" />
-              <Button variant="outline-secondary">+</Button>
-            </InputGroup>
-            <div className="action-buttons">
-              <Button variant="success" className="add-to-cart-button">Add to Cart</Button>
-              <Button variant="outline-secondary" className="wishlist-button">
-                <FontAwesomeIcon icon={faHeart} className="wishlist-icon" />
+            <h5 className="text-primary">${product.price}</h5>
+            <p className="text-success">{product.stock ? 'In Stock' : 'Out of Stock'}</p>
+            <p>{product.description || 'No description available for this product.'}</p>
+            <div className="d-flex justify-content-start align-items-center gap-2 mt-4">
+              <Button
+                variant="success"
+                onClick={() => {
+                  onAddToCart(product.id);
+                  onClose();
+                }}
+              >
+                <FontAwesomeIcon icon={faCartPlus} className="me-2" />
+                Add to Cart
               </Button>
-            </div>
-            <div className="share-item">
-              <span>Share item: </span>
-              <FontAwesomeIcon icon={faFacebook} size="2x" />
-              <FontAwesomeIcon icon={faTwitter} size="2x" />
-              <FontAwesomeIcon icon={faPinterest} size="2x" />
-              <FontAwesomeIcon icon={faInstagram} size="2x" />
+              <Button variant="outline-secondary" onClick={onClose}>
+                Close
+              </Button>
             </div>
           </Col>
         </Row>
       </Modal.Body>
-    </Modal>
+      <Modal.Footer className="justify-content-start">
+        <p className="text-muted">
+          <FontAwesomeIcon icon={faCheckCircle} className="me-2 text-success" />
+          View more details on the product page.
+        </p>
+      </Modal.Footer>
+    </StyledModal>
   );
-};
-
-QuickViewModal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  product: PropTypes.shape({
-    imgSrc: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    price: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 export default QuickViewModal;

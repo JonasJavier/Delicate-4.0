@@ -1,4 +1,3 @@
-
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
@@ -10,7 +9,10 @@ import Loader from './components/Loader';
 import ErrorBoundary from './components/ErrorBoundary';
 import PrivateRoute from './components/PrivateRoute'; 
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import ProductManagement from './pages/ProductManagement'; 
+import ThemeToggleButton from './components/ThemeToggleButton';
+import './assets/css/global.css'; // Estilos globales para temas
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -40,7 +42,16 @@ const fadeIn = keyframes`
 
 const AppWrapper = styled.div`
   animation: ${fadeIn} 1s ease-in-out;
+  background-color: ${(props) => (props.theme === 'dark' ? '#121212' : '#ffffff')};
+  color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#000000')};
+  min-height: 100vh;
+  transition: all 0.3s ease;
 `;
+
+function ThemedAppWrapper({ children }) {
+  const { theme } = useTheme();
+  return <AppWrapper theme={theme}>{children}</AppWrapper>;
+}
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -58,42 +69,44 @@ function App() {
   }
 
   return (
-    <AppWrapper>
-      <AuthProvider>
-        <Router>
-          <ErrorBoundary>
-            <Suspense fallback={<Loader />}>
-              <Navbar />
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:id" element={<BlogDetail />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/shoppingcart" element={<ShoppingCart />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                
-                {/* Private Routes */}
-                <Route element={<PrivateRoute />}>
-                  <Route path="/orderhistorypage" element={<OrderHistoryPage />} />
-                  <Route path="/orderdetails/:id" element={<OrderDetailsPage />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                  <Route path="/thankyoupage" element={<ThankYouPage />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/orderconfirmation" element={<OrderConfirmation />} />
-                  <Route path="/admin/product-management" element={<ProductManagement />} />
-                </Route>
-                {/* Admin Routes */}               
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
-        </Router>
-      </AuthProvider>
-    </AppWrapper>
+    <ThemeProvider>
+      <ThemedAppWrapper>
+        <AuthProvider>
+          <Router>
+            <ErrorBoundary>
+              <Suspense fallback={<Loader />}>
+                <Navbar />
+                <ThemeToggleButton />
+                <Routes>
+                  {/* Public Routes */}
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:id" element={<BlogDetail />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                  <Route path="/shoppingcart" element={<ShoppingCart />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+
+                  {/* Private Routes */}
+                  <Route element={<PrivateRoute />}>
+                    <Route path="/orderhistorypage" element={<OrderHistoryPage />} />
+                    <Route path="/orderdetails/:id" element={<OrderDetailsPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/thankyoupage" element={<ThankYouPage />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/orderconfirmation" element={<OrderConfirmation />} />
+                    <Route path="/admin/product-management" element={<ProductManagement />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
+          </Router>
+        </AuthProvider>
+      </ThemedAppWrapper>
+    </ThemeProvider>
   );
 }
 
