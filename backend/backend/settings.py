@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import resend
+from decouple import config, RepositoryEnv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,12 +56,12 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'accounts.middleware.CustomExceptionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'shop.middleware.UserCartOwnershipMiddleware',  
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -140,6 +141,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication', 
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -167,8 +169,10 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:8000",
     "http://127.0.0.1:5173",
+    " http://localhost:3000,"
 
 ]
+
 
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend', 
@@ -176,33 +180,32 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# Configuración de claves de Google para social-auth-app-django
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '***REMOVED***'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '***REMOVED***'
+# Configuración de claves de Google
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 
-
-# Configuración de Django Allauth para Google (opcional si usas social-auth-app-django)
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': ['profile', 'email'],
         'AUTH_PARAMS': {'access_type': 'offline'},
-        'CLIENT_ID': '***REMOVED***.apps.googleusercontent.com',
-        'SECRET': '***REMOVED***',
+        'CLIENT_ID': config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
+        'SECRET': config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'),
     }
 }
-
-# Configuración de redirección
-LOGIN_REDIRECT_URL = '/'
 
 # Configuración de correo electrónico
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = '***REMOVED***'
-EMAIL_HOST_PASSWORD = '***REMOVED***'  # Usa variables de entorno en producción
-DEFAULT_FROM_EMAIL = 'redacted@example.com'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Configuración de redirección
+LOGIN_REDIRECT_URL = '/'
+
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = False
@@ -287,3 +290,5 @@ LOGGING = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = 'accounts.CustomUser' 
+
+

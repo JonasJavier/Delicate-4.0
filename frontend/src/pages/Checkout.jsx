@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container as BootstrapContainer, FormGroup as BootstrapFormGroup, FormControl as BootstrapFormControl, FormSelect as BootstrapFormSelect, FormCheck as BootstrapFormCheck, Card as BootstrapCard } from 'react-bootstrap';
+import { Container as BootstrapContainer } from 'react-bootstrap';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import strawberryImg from '../assets/images/products/img-2.png';
 import lemonImg from '../assets/images/products/img-3.png';
+import { useTheme } from '../context/ThemeContext';
 
 const StyledContainer = styled.div`
   margin: 3% 0;
   padding: 0 5%;
+  background-color: ${({ theme }) => theme === 'dark' ? '#1e1e1e' : '#fff'};
+  color: ${({ theme }) => theme === 'dark' ? '#f5f5f5' : '#000'};
 
   .page-title {
     font-size: 3rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 4rem;
-
+    color: ${({ theme }) => theme === 'dark' ? '#f5f5f5' : '#000'};
+    
     @media (max-width: 1200px) {
       font-size: 1.75rem;
     }
@@ -45,30 +49,40 @@ const StyledFormControl = styled.input`
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid ${({ theme }) => theme === 'dark' ? '#555' : '#ccc'};
   border-radius: 0.25rem;
+  background-color: ${({ theme }) => theme === 'dark' ? '#2e2e2e' : '#fff'};
+  color: ${({ theme }) => theme === 'dark' ? '#fff' : '#000'};
 `;
 
 const StyledFormSelect = styled.select`
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid ${({ theme }) => theme === 'dark' ? '#555' : '#ccc'};
   border-radius: 0.25rem;
+  background-color: ${({ theme }) => theme === 'dark' ? '#2e2e2e' : '#fff'};
+  color: ${({ theme }) => theme === 'dark' ? '#fff' : '#000'};
 `;
 
 const StyledFormCheck = styled.div`
   margin-top: 0.5rem;
+
   .form-check-input {
     margin-right: 0.5rem;
+  }
+
+  label {
+    color: ${({ theme }) => theme === 'dark' ? '#fff' : '#000'};
   }
 `;
 
 const StyledCard = styled.div`
-  border: 1px solid #ddd;
+  border: 1px solid ${({ theme }) => theme === 'dark' ? '#555' : '#ddd'};
   border-radius: 0.5rem;
   margin-top: 1.5rem;
-  overflow: hidden;
+  background-color: ${({ theme }) => theme === 'dark' ? '#2e2e2e' : '#fff'};
+  color: ${({ theme }) => theme === 'dark' ? '#fff' : '#000'};
 
   .card-body {
     padding: 1.5rem;
@@ -76,11 +90,9 @@ const StyledCard = styled.div`
     @media (max-width: 600px) {
       text-align: center;
     }
-
     @media (max-width: 400px) {
       font-size: 0.875rem;
     }
-
     @media (max-width: 300px) {
       font-size: 0.75rem;
     }
@@ -118,20 +130,21 @@ const PaymentButton = styled.button`
   margin-bottom: 10px;
   padding: 0.5rem;
   border: 1px solid transparent;
-  background-color: ${({ selected }) => (selected ? '#007bff' : 'transparent')};
-  color: ${({ selected }) => (selected ? '#fff' : '#007bff')};
+  background-color: ${({ selected, theme }) => selected ? '#007bff' : theme === 'dark' ? '#555' : 'transparent'};
+  color: ${({ selected, theme }) => selected ? '#fff' : theme === 'dark' ? '#f5f5f5' : '#007bff'};
   border-color: #007bff;
   border-radius: 0.25rem;
   cursor: pointer;
-  
+
   &:hover {
-    background-color: ${({ selected }) => (selected ? '#0056b3' : '#e6f2ff')};
-    color: ${({ selected }) => (selected ? '#fff' : '#0056b3')};
+    background-color: ${({ selected, theme }) => selected ? '#0056b3' : theme === 'dark' ? '#333' : '#e6f2ff'};
+    color: ${({ selected, theme }) => selected ? '#fff' : theme === 'dark' ? '#f5f5f5' : '#0056b3'};
   }
 `;
 
 const AcceptedCards = styled.div`
   margin-top: 1rem;
+
   img {
     width: 40px;
     margin-right: 10px;
@@ -139,6 +152,7 @@ const AcceptedCards = styled.div`
 `;
 
 const Checkout = () => {
+  const { theme } = useTheme(); // Access current theme (dark/light)
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -173,40 +187,39 @@ const Checkout = () => {
   };
 
   return (
-    <StyledContainer>
+    <StyledContainer theme={theme}>
       <h2 className="page-title">Checkout</h2>
       <div className="row">
         <div className="col-lg-8 col-md-12">
-          <BillingInfo formData={formData} handleInputChange={handleInputChange} />
-          <AdditionalInfo formData={formData} handleInputChange={handleInputChange} />
+          <BillingInfo formData={formData} handleInputChange={handleInputChange} theme={theme} />
+          <AdditionalInfo formData={formData} handleInputChange={handleInputChange} theme={theme} />
         </div>
         <div className="col-lg-4 col-md-12">
-          <OrderSummary cartItems={cartItems} total={total} formData={formData} handlePaymentChange={handlePaymentChange} />
+          <OrderSummary cartItems={cartItems} total={total} formData={formData} handlePaymentChange={handlePaymentChange} theme={theme} />
         </div>
       </div>
     </StyledContainer>
   );
 };
 
-const BillingInfo = ({ formData, handleInputChange }) => (
+const BillingInfo = ({ formData, handleInputChange, theme }) => (
   <>
     <h5>Billing Information</h5>
     <StyledFormGroup>
-      <StyledFormControl type="text" name="firstName" placeholder="Your first name" onChange={handleInputChange} value={formData.firstName} />
-      <StyledFormControl type="text" name="lastName" placeholder="Your last name" onChange={handleInputChange} value={formData.lastName} className="mt-2" />
-      <StyledFormControl type="text" name="company" placeholder="Company name (optional)" onChange={handleInputChange} value={formData.company} className="mt-2" />
-      <StyledFormControl type="text" name="address" placeholder="Street Address" onChange={handleInputChange} value={formData.address} className="mt-2" />
-      <StyledFormControl type="email" name="email" placeholder="Email" onChange={handleInputChange} value={formData.email} className="mt-2" />
-      <StyledFormSelect name="country" onChange={handleInputChange} value={formData.country} className="mt-2">
+      <StyledFormControl type="text" name="firstName" placeholder="Your first name" onChange={handleInputChange} value={formData.firstName} theme={theme} />
+      <StyledFormControl type="text" name="lastName" placeholder="Your last name" onChange={handleInputChange} value={formData.lastName} className="mt-2" theme={theme} />
+      <StyledFormControl type="text" name="company" placeholder="Company name (optional)" onChange={handleInputChange} value={formData.company} className="mt-2" theme={theme} />
+      <StyledFormControl type="text" name="address" placeholder="Street Address" onChange={handleInputChange} value={formData.address} className="mt-2" theme={theme} />
+      <StyledFormControl type="email" name="email" placeholder="Email" onChange={handleInputChange} value={formData.email} className="mt-2" theme={theme} />
+      <StyledFormSelect name="country" onChange={handleInputChange} value={formData.country} className="mt-2" theme={theme}>
         <option value="">Country / Region</option>
         <option value="us">United States</option>
         <option value="ca">Canada</option>
-        {/* Add more countries here */}
       </StyledFormSelect>
-      <StyledFormControl type="text" name="state" placeholder="State" onChange={handleInputChange} value={formData.state} className="mt-2" />
-      <StyledFormControl type="text" name="zip" placeholder="Zip Code" onChange={handleInputChange} value={formData.zip} className="mt-2" />
-      <StyledFormControl type="text" name="phone" placeholder="Phone number" onChange={handleInputChange} value={formData.phone} className="mt-2" />
-      <StyledFormCheck>
+      <StyledFormControl type="text" name="state" placeholder="State" onChange={handleInputChange} value={formData.state} className="mt-2" theme={theme} />
+      <StyledFormControl type="text" name="zip" placeholder="Zip Code" onChange={handleInputChange} value={formData.zip} className="mt-2" theme={theme} />
+      <StyledFormControl type="text" name="phone" placeholder="Phone number" onChange={handleInputChange} value={formData.phone} className="mt-2" theme={theme} />
+      <StyledFormCheck theme={theme}>
         <input className="form-check-input" type="checkbox" name="shipDifferent" id="shipDifferent" onChange={handleInputChange} checked={formData.shipDifferent} />
         <label className="form-check-label" htmlFor="shipDifferent">Ship to a different address</label>
       </StyledFormCheck>
@@ -214,42 +227,17 @@ const BillingInfo = ({ formData, handleInputChange }) => (
   </>
 );
 
-BillingInfo.propTypes = {
-  formData: PropTypes.shape({
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    company: PropTypes.string,
-    address: PropTypes.string,
-    email: PropTypes.string,
-    country: PropTypes.string,
-    state: PropTypes.string,
-    zip: PropTypes.string,
-    phone: PropTypes.string,
-    shipDifferent: PropTypes.bool,
-    notes: PropTypes.string,
-    paymentMethod: PropTypes.string,
-  }).isRequired,
-  handleInputChange: PropTypes.func.isRequired,
-};
-
-const AdditionalInfo = ({ formData, handleInputChange }) => (
+const AdditionalInfo = ({ formData, handleInputChange, theme }) => (
   <>
     <h5 className="mt-4">Additional Info</h5>
     <StyledFormGroup>
-      <textarea className="form-control" rows="3" name="notes" placeholder="Notes about your order, e.g. special notes for delivery" onChange={handleInputChange} value={formData.notes}></textarea>
+      <textarea className="form-control" rows="3" name="notes" placeholder="Notes about your order, e.g. special notes for delivery" onChange={handleInputChange} value={formData.notes} theme={theme}></textarea>
     </StyledFormGroup>
   </>
 );
 
-AdditionalInfo.propTypes = {
-  formData: PropTypes.shape({
-    notes: PropTypes.string,
-  }).isRequired,
-  handleInputChange: PropTypes.func.isRequired,
-};
-
-const OrderSummary = ({ cartItems, total, formData, handlePaymentChange }) => (
-  <StyledCard>
+const OrderSummary = ({ cartItems, total, formData, handlePaymentChange, theme }) => (
+  <StyledCard theme={theme}>
     <div className="card-body">
       <h5 className="card-title">Order Summary</h5>
       {cartItems.map(item => (
@@ -268,11 +256,11 @@ const OrderSummary = ({ cartItems, total, formData, handlePaymentChange }) => (
 
       <h5 className="mt-4">Payment Method</h5>
       <div className="payment-methods">
-        <PaymentButton selected={formData.paymentMethod === 'credit'} onClick={() => handlePaymentChange('credit')}>
+        <PaymentButton selected={formData.paymentMethod === 'credit'} onClick={() => handlePaymentChange('credit')} theme={theme}>
           <i className="fa fa-credit-card"></i> Add Credit/Debit Card
         </PaymentButton>
         <p className="text-center my-2">OR</p>
-        <PaymentButton selected={formData.paymentMethod === 'paypal'} onClick={() => handlePaymentChange('paypal')}>
+        <PaymentButton selected={formData.paymentMethod === 'paypal'} onClick={() => handlePaymentChange('paypal')} theme={theme}>
           <i className="fa fa-paypal"></i> PayPal
         </PaymentButton>
       </div>
@@ -291,20 +279,5 @@ const OrderSummary = ({ cartItems, total, formData, handlePaymentChange }) => (
     </div>
   </StyledCard>
 );
-
-OrderSummary.propTypes = {
-  cartItems: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    quantity: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-  })).isRequired,
-  total: PropTypes.number.isRequired,
-  formData: PropTypes.shape({
-    paymentMethod: PropTypes.string,
-  }).isRequired,
-  handlePaymentChange: PropTypes.func.isRequired,
-};
 
 export default Checkout;

@@ -16,7 +16,6 @@ const ServicesTitle = styled.h2`
   font-size: 4rem;
   color: ${(props) => (props.theme === 'dark' ? '#F28123' : '#333')};
   margin-bottom: 5%;
-  margin-top: -5%;
   font-family: 'Pro-text', sans-serif;
   font-weight: bold;
 

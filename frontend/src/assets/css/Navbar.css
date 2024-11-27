@@ -146,7 +146,7 @@ a {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(34, 34, 34, 0.9);
+    background-color: rgba(15, 15, 15, 0.799);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -165,10 +165,14 @@ a {
     list-style: none;
     padding: 0;
     margin: 0;
+    border: none;
+    outline: none;
 }
 
 .hamburger-menu-item {
     margin: 20px 0;
+    border: none;
+    outline: none;
 }
 
 .hamburger-menu-link {
@@ -180,6 +184,8 @@ a {
     display: block;
     padding: 15px 0;
     transition: color 0.3s ease-in-out, padding-left 0.3s ease-in-out;
+    border: none;
+    outline: none;
 }
 
 .hamburger-menu-link:hover {
@@ -218,6 +224,143 @@ a {
 .hamburger-menu-list {
     border-top: 1px solid #fff;
     padding-top: 20px;
+}
+
+/* Links en el modo responsivo */
+.collapse.show .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.555);
+    padding: 0;
+}
+
+.collapse.show .nav-link {
+    color: #f1964c;
+    font-size: 2rem;
+    margin: 20px 0;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+/* Hover con línea moderna */
+.collapse.show .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; /* Espacio debajo del texto */
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #00000092;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.collapse.show .nav-link:hover {
+    color: #fff;
+}
+
+.collapse.show .nav-link:hover::after {
+    width: 50%; /* Tamaño de la línea al hacer hover */
+    left: 25%; /* Centrar la línea */
+}
+
+/* Dropdown usuario para móviles */
+.navbar .user-icon.active .custom-dropdown {
+    display: block;
+}
+
+.custom-dropdown {
+    display: none;
+}
+
+/* Ajustes de hover para el dropdown */
+.custom-dropdown .dropdown-item {
+    font-size: 1.2rem;
+    color: #010101a7;
+    padding: 10px 16px;
+    position: relative;
+}
+
+.custom-dropdown .dropdown-item:hover {
+    color: #f1964c;
+}
+
+.custom-dropdown .dropdown-item::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #f1964c;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.custom-dropdown .dropdown-item:hover::after {
+    width: 50%;
+    left: 25%;
+}
+
+/* Botón de cierre */
+.hamburger-menu .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #f1964c;
+    font-size: 2.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.hamburger-menu-content .hamburger-menu-link {
+    font-size: 2rem;
+    color: #f1964c;
+    text-transform: uppercase;
+    margin: 15px 0;
+    position: relative;
+    text-align: center;
+    transition: color 0.3s ease;
+}
+
+.hamburger-menu-content .hamburger-menu-link:hover {
+    color: #fff;
+}
+
+.hamburger-menu-content .hamburger-menu-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #0a0a0aa8;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.hamburger-menu-content .hamburger-menu-link:hover::after {
+    width: 50%;
+    left: 25%;
+}
+
+.hamburger-menu {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hamburger-menu.closing {
+    opacity: 0;
+    transform: translateY(-10%);
+}
+
+
+/* Icono del usuario */
+.user-icon {
+    cursor: pointer;
 }
 
 /* Keyframes */

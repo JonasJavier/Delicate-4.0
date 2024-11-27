@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/User.css';
+import { useTheme } from '../context/ThemeContext';
 import { fetchUserProfile, updateUserProfile, changePassword } from '../services/api';
 
 const SettingsPage = () => {
+  const { theme } = useTheme();
   const [profile, setProfile] = useState({
     first_name: '',
     last_name: '',
@@ -122,12 +124,12 @@ const SettingsPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="user-page-container p-4 bg-light">
-      <div className="row justify-content-center">
-        <div className="col-lg-9">
-          <div className="settings-container shadow-lg p-5 mb-5 bg-white rounded">
+    <div className={`user-page-container p-4`} data-theme={theme}>
+      <div id ="containerdark" className="row justify-content-center">
+        <div id ="containerdark1" className="col-lg-9 ">
+          <div  className="settings-container shadow-lg p-5 mb-5 bg-white rounded">
             <h2 className="text-primary text-center mb-4">Account Settings</h2>
-            <div className="card card-body border-0 p-4 mb-5 shadow-sm">
+            <div id ="containerdark2" className="card card-body border-0 p-4 mb-5 shadow-sm">
               <form onSubmit={handleSubmit}>
                 <div className="row mb-3">
                   <div className="col-md-6">

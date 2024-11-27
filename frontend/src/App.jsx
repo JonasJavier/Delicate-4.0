@@ -8,11 +8,12 @@ import Navbar from './components/Navbar';
 import Loader from './components/Loader';
 import ErrorBoundary from './components/ErrorBoundary';
 import PrivateRoute from './components/PrivateRoute'; 
+import CreateBlogPost from './pages/CreateBlogPost';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import ProductManagement from './pages/ProductManagement'; 
 import ThemeToggleButton from './components/ThemeToggleButton';
-import './assets/css/global.css'; // Estilos globales para temas
+import './assets/css/global.css'; 
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -89,10 +90,13 @@ function App() {
                   <Route path="/shoppingcart" element={<ShoppingCart />} />
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/login" element={<LoginPage />} />
+                  <Route path="/" element={<Blog />} />
+                  <Route path="/blog/:id" element={<BlogDetail />} />
 
                   {/* Private Routes */}
                   <Route element={<PrivateRoute />}>
                     <Route path="/orderhistorypage" element={<OrderHistoryPage />} />
+                    <Route path="/createblogpost" element= {<CreateBlogPost/>}/>
                     <Route path="/orderdetails/:id" element={<OrderDetailsPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/thankyoupage" element={<ThankYouPage />} />

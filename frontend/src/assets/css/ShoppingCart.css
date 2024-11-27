@@ -1,181 +1,235 @@
-/* Contenedor general con márgenes */
+/* Contenedor principal */
 .container21 {
   margin-left: 20px;
   margin-right: 20px;
-  padding-top: 10%;
+  padding: 4%;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 10%;
+  padding-top: 13%;
 }
 
-/* Flexbox para alinear ambas secciones en la misma línea en pantallas grandes */
-.row.align-items-center {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+[data-theme='dark'] .container21 {
+  background-color: #121212;
+  color: #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* Imagen del producto en el carrito */
+/* Tabla */
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-hover th {
+  background-color: #333;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+[data-theme='dark'] .table-hover th {
+  background-color: #444;
+  color: #e0e0e0;
+}
+
+.table-hover tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(241, 150, 76, 0.1);
+}
+
+[data-theme='dark'] .table-hover tbody tr:hover {
+  background-color: rgba(241, 150, 76, 0.3);
+}
+
+/* Botones */
+.btn-quantity-control {
+  background-color: #ffa726;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-quantity-control:hover {
+  background-color: #e0853a;
+  transform: scale(1.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .btn-quantity-control {
+  background-color: #333;
+  color: #ffa726;
+}
+
+[data-theme='dark'] .btn-quantity-control:hover {
+  background-color: #444;
+  color: #ffa726;
+  transform: scale(1.1);
+}
+
+/* Botón atractivo */
+.btn-attractive {
+  background-color: #ffa726;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+}
+
+.btn-attractive:hover {
+  background-color: #e0853a;
+  color: #fff;
+}
+
+/* Totales */
+.cart-total h5 {
+  font-weight: bold;
+  color: #444;
+}
+
+.cart-total .price {
+  color: #ffa726;
+  font-weight: bold;
+}
+
+[data-theme='dark'] .cart-total h5 {
+  color: #e0e0e0;
+}
+
+[data-theme='dark'] .cart-total .price {
+  color: #ffa726;
+}
+
+/* Botón "CHECK OUT" */
+.btn-dark {
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-dark:hover {
+  background-color: #ffa726;
+  color: #fff;
+}
+
+[data-theme='dark'] .btn-dark {
+  background-color: #444;
+}
+
+[data-theme='dark'] .btn-dark:hover {
+  background-color: #ffa726;
+}
+
+/* Imagen de producto */
 .cart-item-image {
   width: 100px;
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
-}
-
-/* Mantener alineación de los elementos en una fila */
-.quantity-control {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 150px;
-}
-
-.btn-quantity-control {
-  background-color: #000;
-  color: #f28123;
-  border-radius: 50%;
-  border: none;
-  width: 40px;
-  height: 40px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-quantity-control:hover {
-  background-color: #f28123;
-  color: #000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
-.table-hover th {
-  text-align: center;
-}
-
-
-.cart-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-
-.btn-attractive {
-  background-color: #000;
-  color: white;
-  font-size: 18px;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-attractive:hover {
-  background-color: #f28123;
-  color: white;
-}
-
-
-.btn-dark {
-  background-color: #f28123;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
-}
-
-.btn-dark:hover {
-  background-color: #333;
-}
-
-/* Alinear texto de "Cart Total" */
-.cart-total {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.cart-total h5,
-.cart-total p {
-  margin-top: 0;
-}
-
-.cart-total h5 {
-  font-weight: bold;
-}
-
-.cart-total .price {
-  font-weight: normal;
-}
-
-
-.table-hover tbody tr:hover {
-  background-color: transparent;
-}
-
-
-.table-hover {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-
-.table-hover tbody tr {
-  vertical-align: middle;
-  padding: 15px 0;
-}
-
-
-.btn-sm {
-  margin-left: 10px;
-}
-
-
-.align-middle td {
-  vertical-align: middle !important;
-  padding: 12px;
-}
-
-
+/* Contenedor de carrito vacío */
 .empty-cart-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 50vh;
-  color: #000;
-  padding-top: 17%;
-  align-content: center;
+  min-height: 60vh;
+  color: #333;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 10%;
 }
 
+[data-theme='dark'] .empty-cart-container {
+  background-color: #121212;
+  color: #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Ícono del carrito vacío */
 .empty-cart-icon {
-  font-size: 4rem;
-  color: #000;
+  font-size: 5rem;
+  color: #ffa726;
   margin-bottom: 20px;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-@media (max-width:400px){
+[data-theme='dark'] .empty-cart-icon {
+  color: #ffa726;
+}
 
-  .empty-cart-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 30vh;
-    color: #000;
-    padding-top: 50%;
-    align-content: center;
-    font-size: 0.8rem;
-  }
-  
-  .empty-cart-icon {
-    font-size: 3.5rem;
-    color: #000;
-    margin-bottom: 20px;
-  }
+.empty-cart-icon:hover {
+  transform: scale(1.1);
+  color: #e0853a;
+}
+
+/* Encabezado y texto */
+.empty-cart-container h4 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+[data-theme='dark'] .empty-cart-container h4 {
+  color: #f0f0f0;
+}
+
+.empty-cart-container p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+[data-theme='dark'] .empty-cart-container p {
+  color: #cccccc;
+}
+
+/* Botón para volver a la tienda */
+.btn-attractive {
+  background-color: #ffa726;
+  color: #ffffff;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-attractive:hover {
+  background-color: #e0853a;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .btn-attractive {
+  background-color: #333;
+  color: #ffa726;
+}
+
+[data-theme='dark'] .btn-attractive:hover {
+  background-color: #444;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 
-/* ------- Media Queries para Responsividad ------- */
-
-/* Para pantallas medianas (tabletas) */
+/* Responsividad */
 @media (max-width: 992px) {
   .row.align-items-center {
     flex-direction: column;
@@ -199,31 +253,19 @@
   .btn-attractive {
     width: 100%;
   }
-
-  .cart-total h5,
-  .cart-total .price {
-    font-size: 16px;
-  }
 }
-
-
 
 /* Para pantallas menores a 645px */
 @media (max-width: 655px) {
-  /* Cambia la estructura de tabla a lista */
   .table-hover {
     display: block;
     width: 100%;
-    align-items: center;
-    align-content: center;
   }
 
-  /* Reemplaza las filas de la tabla por un bloque tipo tarjeta */
   .table-hover tbody tr {
     display: flex;
     flex-direction: column;
-align-items: center;
-align-content: center;
+    align-items: center;
     margin-bottom: 25px;
     padding: 50px;
     border: 1px solid #ccc;
@@ -231,10 +273,9 @@ align-content: center;
   }
 
   .table-hover thead {
-    display: none; /* Oculta los encabezados de la tabla en pantallas pequeñas */
+    display: none;
   }
 
-  /* Alineación de cada columna (celda) en el bloque */
   .cart-item,
   td {
     width: 100%;
@@ -248,7 +289,6 @@ align-content: center;
     margin-bottom: 10px;
   }
 
-  /* Botones de cantidad ajustados */
   .btn-quantity-control {
     width: 35px;
     height: 35px;

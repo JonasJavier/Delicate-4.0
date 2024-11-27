@@ -80,32 +80,24 @@ def add_to_cart(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def update_cart_item(request):
+    if not hasattr(request, 'user') or not request.user.is_authenticated:
+        return Response({"error": "Authentication is required."}, status=status.HTTP_401_UNAUTHORIZED)
+
     cart_item_id = request.data.get('cart_item_id')
     quantity = int(request.data.get('quantity', 1))
 
     if quantity < 1:
         return Response({"error": "Quantity must be at least 1"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Obtener el item del carrito del usuario
     cart_item = get_cart_item_for_user_or_session(request, cart_item_id)
     if not cart_item:
         logger.error(f"Cart item not found: {cart_item_id} for user {request.user.email}")
         return Response({"error": "Cart item not found or not authorized"}, status=status.HTTP_404_NOT_FOUND)
 
     product = cart_item.product
-
-    # Verificar que haya stock suficiente
     if product.stock < quantity:
         return Response({"error": f"Only {product.stock} items left in stock."}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Verificar si el precio ha cambiado
-    if product.price != request.data.get('price', product.price):
-        return Response({
-            "error": "Price has changed for this product.",
-            "current_price": product.price
-        }, status=status.HTTP_400_BAD_REQUEST)
-
-    # Actualizar la cantidad si todas las validaciones pasaron
     cart_item.quantity = quantity
     cart_item.save()
 
@@ -159,14 +151,33 @@ def get_cart_item_for_user_or_session(request, cart_item_id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def add_product(request):
-    # Make sure user is authenticated and an admin
+    """
+    Vista para agregar un producto al catálogo.
+    Solo permite acceso a usuarios autenticados con permisos de administrador.
+    """
+    # Verificar si el usuario tiene permisos de administrador
     if not request.user.is_staff:
+        logger.warning(f"Unauthorized access attempt by user: {request.user.email}")
         return Response({'detail': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)
-
+    
+    # Registrar intento de agregar producto
+    logger.info(f"User {request.user.email} attempting to add a product.")
+    
+    # Crear el serializer con los datos de la solicitud
     serializer = ProductSerializer(data=request.data)
+    
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            # Guardar el producto si los datos son válidos
+            product = serializer.save()
+            logger.info(f"Product created successfully: {product.name} by user {request.user.email}")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(f"Error saving product: {e}")
+            return Response({'error': 'An unexpected error occurred while saving the product.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    # Registrar errores de validación
+    logger.warning(f"Validation errors for product creation by user {request.user.email}: {serializer.errors}")
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])

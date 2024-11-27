@@ -1,4 +1,3 @@
-# shop/urls.py
 from django.urls import path
 from .views import product_list, cart_detail, add_to_cart, update_cart_item, remove_from_cart, add_product, delete_product, product_detail, ProductReviewView
 

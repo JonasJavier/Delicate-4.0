@@ -12,20 +12,28 @@ const Container = styled.div`
 `;
 
 const Title = styled.h2`
-  color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#f7941d')};
   font-family: 'Pro-text';
   text-transform: uppercase;
-  font-size: 2.5rem;
+  font-size: 4rem;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 2rem;
-  display: inline-block;
+  margin: 0 auto 2rem;
+  display: block;
   padding-bottom: 10px;
   position: relative;
 
+  /* Estilo dinámico basado en el tema */
+  span {
+    color: ${({ theme }) => (theme === 'dark' ? '#ffffff' : '#000000')}; /* "Our" cambia según el tema */
+  }
+
+  .highlight {
+    color: #f7941d; /* "News" siempre en este color */
+  }
+
   &::after {
     content: "";
-    width: 50px;
+    width: 80px;
     height: 4px;
     background-color: #f7941d;
     position: absolute;
@@ -34,14 +42,20 @@ const Title = styled.h2`
     transform: translateX(-50%);
   }
 
+  @media (max-width: 768px) {
+    font-size: 3rem;
+  }
+
   @media (max-width: 360px) {
-    font-size: 2rem;
+    font-size: 2.5rem;
 
     &::after {
-      width: 30px;
+      width: 40px;
     }
   }
 `;
+
+
 
 const Row = styled.div`
   display: flex;
@@ -138,8 +152,8 @@ const NewsSection = () => {
   return (
     <Container>
       <Title theme={theme}>
-        <span>Our</span> News
-      </Title>
+  <span>Our</span> <span className="highlight">News</span>
+</Title>
       <Row>
         <Col>
           <Card theme={theme}>

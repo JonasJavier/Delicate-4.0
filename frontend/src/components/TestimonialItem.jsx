@@ -10,7 +10,9 @@ import {
   MDBIcon,
   MDBRow,
 } from 'mdb-react-ui-kit';
+import { useTheme } from '../context/ThemeContext';
 
+// Estilo para el fondo degradado
 const GradientContainer = styled(MDBContainer)`
   background: radial-gradient(50% 123.47% at 50% 50%, #00ff94 0%, #720059 100%),
     linear-gradient(121.28deg, #669600 0%, #ff0000 100%),
@@ -21,49 +23,26 @@ const GradientContainer = styled(MDBContainer)`
   position: relative;
   height: 90vh;
   padding: 1rem;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  @media (max-width: 1100px) {
-    padding: 4rem 1rem;
-  }
+  overflow: hidden;
 
   @media (max-width: 768px) {
     height: auto;
     padding: 2rem 1rem;
   }
-
-  @media (max-width: 600px) {
-    height: auto;
-    padding: 2rem 0.5rem;
-  }
-
-  @media (max-width: 500px) {
-    height: auto;
-    padding: 1.5rem 0.5rem;
-  }
-
-  @media (max-width: 400px) {
-    height: auto;
-    padding: 1rem 0.5rem;
-  }
-
-  @media (max-width: 300px) {
-    height: auto;
-    padding: 0.5rem 0.5rem;
-  }
 `;
 
+// Nueva capa oscura semitransparente
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.203);
+  z-index: 1;
+`;
+
+// Wrapper para el contenido principal
 const TestimonialWrapper = styled.div`
   position: relative;
   z-index: 2;
@@ -78,31 +57,23 @@ const TitleBackground = styled.div`
 const TestimonialTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;
-  color: #ffffff;
+  color: #ffffff; /* Color fijo para ignorar el modo oscuro */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   font-family: 'Pro-text', sans-serif;
-
-  @media (max-width: 1100px) {
-    font-size: 2.5rem;
-  }
 
   @media (max-width: 768px) {
     font-size: 2rem;
   }
+`;
 
-  @media (max-width: 600px) {
-    font-size: 1.8rem;
-  }
+const TestimonialName = styled.h4`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#000')};
+  text-shadow: ${(props) =>
+    props.theme === 'dark' ? '1px 1px 2px rgba(255, 255, 255, 0.5)' : 'none'};
 
-  @media (max-width: 500px) {
-    font-size: 1.6rem;
-  }
-
-  @media (max-width: 400px) {
-    font-size: 1.4rem;
-  }
-
-  @media (max-width: 300px) {
+  @media (max-width: 768px) {
     font-size: 1.2rem;
   }
 `;
@@ -111,66 +82,45 @@ const TestimonialText = styled.p`
   font-size: 1.2rem;
   font-family: 'Poppings-light', sans-serif;
   text-align: left;
-
-  @media (max-width: 1100px) {
-    font-size: 1.1rem;
-  }
+  color: ${(props) => (props.theme === 'dark' ? '#e0e0e0' : '#000')};
 
   @media (max-width: 768px) {
     font-size: 1rem;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 500px) {
-    font-size: 0.8rem;
-  }
-
-  @media (max-width: 400px) {
-    font-size: 0.7rem;
-  }
-
-  @media (max-width: 300px) {
-    font-size: 0.6rem;
   }
 `;
 
 const StyledCardBody = styled(MDBCardBody)`
   padding: 5rem;
-
-  @media (max-width: 1100px) {
-    padding: 4rem;
-  }
+  background-color: ${(props) => (props.theme === 'dark' ? '#1e1e1e' : '#ffffff')};
+  border-radius: 10px;
+  box-shadow: ${(props) =>
+    props.theme === 'dark' ? '0 8px 20px rgba(255, 255, 255, 0.2)' : '0 8px 20px rgba(0, 0, 0, 0.1)'};
 
   @media (max-width: 768px) {
     padding: 2rem;
   }
-
-  @media (max-width: 600px) {
-    padding: 1.5rem;
-  }
-
-  @media (max-width: 500px) {
-    padding: 1rem;
-  }
-
-  @media (max-width: 400px) {
-    padding: 0.5rem;
-  }
-
-  @media (max-width: 300px) {
-    padding: 0.25rem;
-  }
 `;
 
+// Icono de cita con estilo fijo (sin condicionales para el modo oscuro)
 const QuoteIcon = styled(MDBIcon)`
-  color: #ffffff;
+  color: #ffffff; /* Color fijo */
   font-size: 3rem;
 `;
 
+// Flechas del carrusel
+const CarouselControl = styled.div`
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: ${(props) => (props.theme === 'dark' ? '#ffffff' : 'transparent')};
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+  }
+`;
+
 const Testimonials = () => {
+  const { theme } = useTheme();
+
   const testimonials = [
     {
       imgSrc: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(1).webp',
@@ -190,7 +140,10 @@ const Testimonials = () => {
   ];
 
   return (
-    <GradientContainer fluid className="py-5">
+    <GradientContainer fluid className="py-5" theme={theme}>
+      {/* Capa oscura */}
+      <Overlay />
+      {/* Contenido principal */}
       <TestimonialWrapper>
         <MDBRow className="d-flex justify-content-center">
           <MDBCol md="12">
@@ -201,7 +154,7 @@ const Testimonials = () => {
               <TestimonialTitle>What Our Customers Say</TestimonialTitle>
             </TitleBackground>
             <MDBCard className="testimonial-card">
-              <StyledCardBody>
+              <StyledCardBody theme={theme}>
                 <MDBCarousel showControls dark>
                   {testimonials.map((testimonial, index) => (
                     <MDBCarouselItem className={index === 0 ? 'active' : ''} key={index}>
@@ -223,8 +176,10 @@ const Testimonials = () => {
                               xl="8"
                               className="text-center text-lg-start mx-auto mx-lg-0"
                             >
-                              <h4 className="mb-4">{testimonial.name}</h4>
-                              <TestimonialText>
+                              <TestimonialName theme={theme}>
+                                {testimonial.name}
+                              </TestimonialName>
+                              <TestimonialText theme={theme}>
                                 {testimonial.text}
                               </TestimonialText>
                             </MDBCol>
@@ -236,9 +191,6 @@ const Testimonials = () => {
                 </MDBCarousel>
               </StyledCardBody>
             </MDBCard>
-            <div className="text-center mt-4 pt-2">
-              <QuoteIcon fas icon="quote-right" />
-            </div>
           </MDBCol>
         </MDBRow>
       </TestimonialWrapper>

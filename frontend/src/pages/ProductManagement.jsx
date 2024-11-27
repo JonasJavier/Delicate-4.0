@@ -12,7 +12,6 @@ const ProductManagementContainer = styled.div`
   margin: 8% auto;
   color: #e0e0e0;
   font-family: 'Poppings-regular', sans-serif;
-
 `;
 
 const Title = styled.h2`
@@ -97,6 +96,10 @@ const ProductManagement = () => {
     description: '',
     stock: '',
     image: null,
+    ingredients: '', // Nuevo campo
+    dimensions: '',  // Nuevo campo
+    weight: '',      // Nuevo campo
+    skintype: '',    // Nuevo campo
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -115,7 +118,7 @@ const ProductManagement = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      Object.keys(productData).forEach(key => {
+      Object.keys(productData).forEach((key) => {
         formData.append(key, productData[key]);
       });
 
@@ -137,23 +140,110 @@ const ProductManagement = () => {
       <Form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Product Name:</label>
-          <input type="text" id="name" name="name" className="form-control" value={productData.name} onChange={handleInputChange} required />
+          <input
+            type="text"
+            id="name"
+            name="name"
+            className="form-control"
+            value={productData.name}
+            onChange={handleInputChange}
+            required
+          />
         </div>
         <div className="mb-3">
           <label htmlFor="price" className="form-label">Price:</label>
-          <input type="number" id="price" name="price" className="form-control" value={productData.price} onChange={handleInputChange} required />
+          <input
+            type="number"
+            id="price"
+            name="price"
+            className="form-control"
+            value={productData.price}
+            onChange={handleInputChange}
+            required
+          />
         </div>
         <div className="mb-3">
           <label htmlFor="description" className="form-label">Description:</label>
-          <textarea id="description" name="description" className="form-control" value={productData.description} onChange={handleInputChange} required></textarea>
+          <textarea
+            id="description"
+            name="description"
+            className="form-control"
+            value={productData.description}
+            onChange={handleInputChange}
+            required
+          ></textarea>
         </div>
         <div className="mb-3">
           <label htmlFor="stock" className="form-label">Stock:</label>
-          <input type="number" id="stock" name="stock" className="form-control" value={productData.stock} onChange={handleInputChange} required />
+          <input
+            type="number"
+            id="stock"
+            name="stock"
+            className="form-control"
+            value={productData.stock}
+            onChange={handleInputChange}
+            required
+          />
         </div>
         <div className="mb-4">
           <label htmlFor="image" className="form-label">Image:</label>
-          <input type="file" id="image" name="image" className="form-control file-input" onChange={handleImageChange} required />
+          <input
+            type="file"
+            id="image"
+            name="image"
+            className="form-control file-input"
+            onChange={handleImageChange}
+            required
+          />
+        </div>
+        {/* Nuevos campos */}
+        <div className="mb-3">
+          <label htmlFor="ingredients" className="form-label">Ingredients:</label>
+          <input
+            type="text"
+            id="ingredients"
+            name="ingredients"
+            className="form-control"
+            value={productData.ingredients}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="dimensions" className="form-label">Dimensions:</label>
+          <input
+            type="text"
+            id="dimensions"
+            name="dimensions"
+            className="form-control"
+            value={productData.dimensions}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="weight" className="form-label">Weight:</label>
+          <input
+            type="text"
+            id="weight"
+            name="weight"
+            className="form-control"
+            value={productData.weight}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="skintype" className="form-label">Skin Type:</label>
+          <input
+            type="text"
+            id="skintype"
+            name="skintype"
+            className="form-control"
+            value={productData.skintype}
+            onChange={handleInputChange}
+            required
+          />
         </div>
         <button type="submit" className="btn btn-primary">Add Product</button>
       </Form>

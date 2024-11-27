@@ -1,59 +1,89 @@
+// Helper para manejo de logs
+const debugLog = (message, ...optionalParams) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.debug(message, ...optionalParams);
+  }
+};
+
+// Encapsular manejo de localStorage
+const getLocalStorageItem = (key, defaultValue = '[]') => {
+  try {
+    return JSON.parse(localStorage.getItem(key) || defaultValue);
+  } catch (error) {
+    console.error(`Error parsing localStorage item "${key}":`, error);
+    return JSON.parse(defaultValue);
+  }
+};
+
+const setLocalStorageItem = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    debugLog(`localStorage item "${key}" set:`, value);
+  } catch (error) {
+    console.error(`Error setting localStorage item "${key}":`, error);
+  }
+};
+
+// Obtener carrito
 export const getCart = () => {
-  // Retrieve the cart from localStorage and parse it as JSON
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  console.debug('Cart retrieved from localStorage:', cart);
+  const cart = getLocalStorageItem('cart');
+  debugLog('Cart retrieved:', cart);
   return cart;
 };
 
+// Guardar carrito
 export const saveCart = (cart) => {
-  // Save the cart back to localStorage
-  localStorage.setItem('cart', JSON.stringify(cart));
-  console.debug('Cart saved to localStorage:', cart);
+  setLocalStorageItem('cart', cart);
+  debugLog('Cart saved:', cart);
 };
 
+// Agregar elemento al carrito
 export const addItemToCart = (item) => {
-  const cart = getCart(); // Get the current cart
-  const existingItem = cart.find(cartItem => cartItem.id === item.id);
+  const cart = getCart();
+  const updatedCart = cart.map(cartItem =>
+    cartItem.id === item.id
+      ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+      : cartItem
+  );
 
-  if (existingItem) {
-    // Update quantity if the item already exists in the cart
-    existingItem.quantity += item.quantity;
-  } else {
-    // Add the new item to the cart with all required properties
-    cart.push({
-      ...item,
-      quantity: item.quantity, // Include quantity
-      image: item.image,       // Include image
-      price: item.price,       // Include price
-    });
+  // Si el item no existe, agregarlo
+  if (!updatedCart.find(cartItem => cartItem.id === item.id)) {
+    updatedCart.push({ ...item });
   }
 
-  saveCart(cart); // Save the updated cart to localStorage
+  saveCart(updatedCart);
+  debugLog('Item added to cart:', updatedCart);
 };
 
-export const updateCartItem = async (cart_item_id, quantity) => {
-  try {
-    // Send request to the server to update the cart item
-    console.log('Sending update request to server:', { cart_item_id, quantity });
-    const response = await API.post('/cart/update/', { cart_item_id, quantity });
-    console.log('Response from server:', response.data); // Log the server response
-    return response.data;
-  } catch (error) {
-    console.error('Error updating cart item via API:', error);
-    throw error; // Propagate the error to be handled elsewhere
+// Actualizar cantidad de un elemento
+export const updateCartItem = (cart_item_id, quantity) => {
+  if (quantity < 1) {
+    console.warn(`Invalid quantity "${quantity}" for cart item "${cart_item_id}".`);
+    return;
   }
+
+  const cart = getCart();
+  const updatedCart = cart.map(item =>
+    item.id === cart_item_id ? { ...item, quantity } : item
+  );
+
+  saveCart(updatedCart);
+  debugLog('Cart item updated:', updatedCart);
 };
 
+// Eliminar un elemento del carrito
 export const removeItemFromCart = async (cartItemId) => {
   try {
-    // Send a request to the server to remove the item
+    // Opcional: enviar al servidor
     const response = await axiosInstance.post('/api/cart/remove/', { id: cartItemId });
-    console.log('Item removed from server:', response.data);
+    debugLog('Item removed from server:', response.data);
 
-    // Remove the item locally from the cart in localStorage
-    const cart = getCart().filter(cartItem => cartItem.id !== cartItemId);
-    saveCart(cart); // Save the updated cart
+    // Remover del localStorage
+    const updatedCart = getCart().filter(cartItem => cartItem.id !== cartItemId);
+    saveCart(updatedCart);
+    debugLog('Item removed from local cart:', updatedCart);
   } catch (error) {
-    console.error('Failed to remove item from server:', error); // Log the error
+    console.error('Failed to remove item from cart:', error);
+    throw error;
   }
 };

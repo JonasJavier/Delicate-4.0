@@ -1,3 +1,5 @@
+/* -------- Modo Claro (Por Defecto) -------- */
+
 /* Container Styling */
 .user-page-container {
   background-color: #f8f9fa;
@@ -12,8 +14,6 @@
   border-radius: 12px;
   padding: 30px;
 }
-
-
 
 /* Typography */
 .settings-container h4 {
@@ -33,6 +33,8 @@ label {
   box-shadow: none;
   border: 1px solid #ced4da;
   transition: all 0.3s;
+  background-color: #ffffff;
+  color: #333;
 }
 
 .form-control:focus {
@@ -78,18 +80,92 @@ label {
   font-weight: 500;
 }
 
-/* Responsive Adjustments */
+/* -------- Responsividad -------- */
 @media (max-width: 768px) {
   .settings-container, .card30 {
-      padding: 20px;
+    padding: 20px;
   }
 
   .btn-primary {
-      font-size: 0.9rem;
-      padding: 8px 15px;
+    font-size: 0.9rem;
+    padding: 8px 15px;
   }
 
   h4 {
-      font-size: 1.3rem;
+    font-size: 1.3rem;
+  }
+}
+
+/* -------- Modo Oscuro -------- */
+[data-theme="dark"] .user-page-container {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  
+}
+
+
+/* Card Styling for Dark Mode */
+[data-theme="dark"] .settings-container {
+  background-color: #2c2c2c; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombra elegante */
+}
+
+/* Typography for Dark Mode */
+[data-theme="dark"] h4 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] label {
+  color: #cccccc;
+}
+
+/* Form Controls for Dark Mode */
+[data-theme="dark"] .form-control {
+  background-color: #333;
+  color: #ffffff;
+  border: 1px solid #444;
+}
+
+[data-theme="dark"] .form-control:focus {
+  border-color: #f28123;
+  box-shadow: 0 0 0 0.2rem rgba(242, 129, 35, 0.5);
+}
+
+/* Button Styling for Dark Mode */
+[data-theme="dark"] .btn-primary {
+  background-color: #f28123;
+  border-color: #f28123;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background-color: #e06b1b;
+  border-color: #e06b1b;
+}
+
+/* Success and Error Messages */
+[data-theme="dark"] .text-success {
+  color: #28a745;
+}
+
+[data-theme="dark"] .text-danger {
+  color: #dc3545;
+}
+
+/* -------- Responsividad en Modo Oscuro -------- */
+@media (max-width: 768px) {
+  [data-theme="dark"] .settings-container {
+    padding: 20px;
+  }
+
+  [data-theme="dark"] .btn-primary {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+
+  [data-theme="dark"] h4 {
+    font-size: 1.3rem;
   }
 }

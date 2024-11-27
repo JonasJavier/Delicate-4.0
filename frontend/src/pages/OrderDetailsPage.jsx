@@ -1,14 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Navigation from '../components/Navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/User.css';
 import strawberryImg from '../assets/images/products/img-2.png';
 import lemonImg from '../assets/images/products/img-3.png';
+import { useTheme } from '../context/ThemeContext';
 
 const OrderDetailsPage = () => {
   const { id } = useParams();
-
+  const { theme } = useTheme();
   const orderDetails = {
     '738': {
       date: '8 Sep, 2020',
@@ -34,7 +34,7 @@ const OrderDetailsPage = () => {
   }
 
   return (
-    <div className="user-page-container p-4">
+    <div className={`user-page-container p-4`} data-theme={theme}>
       <div className="row">
         <div className="col-lg-3">
           <Navigation />

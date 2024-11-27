@@ -35,14 +35,11 @@
 
 .price-highlight {
   display: flex;
-  
   gap: 1rem;
   padding: 1rem;
   border-radius: 10px;
   border: 1px solid #e0e0e0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
- 
-  
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .price-wrapper {
@@ -102,17 +99,38 @@
   align-items: center;
 }
 
+/* Botón "Add to Cart" */
 .add-to-cart-button {
   flex-grow: 1;
   font-size: 1.3rem;
   padding: 10px 20px;
   border-radius: 20px;
-  transition: all 0.3s ease;
+  background-color: #ffa726;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .add-to-cart-button:hover {
-  background-color: #218838;
-  color: #fff;
+  background-color: #218838; /* Color más oscuro para hover */
+  transform: translateY(-2px); /* Movimiento sutil hacia arriba */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+}
+
+
+.add-to-cart-button:active {
+  transform: translateY(1px); /* Movimiento sutil hacia abajo */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Reducción de sombra al hacer clic */
+}
+
+/* Botón deshabilitado */
+.add-to-cart-button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .wishlist-button {
@@ -133,33 +151,50 @@
 .product-tabs .react-tabs__tab-list {
     display: flex;
     justify-content: center;
-    gap: 5rem; 
-    margin-bottom: 2rem;
+    gap: 6rem; 
+    margin-bottom: 3rem;
+    border: none; 
+    margin: 0; 
+    border-bottom: none; 
+    outline: none; 
+    box-shadow: none; 
     
   }
   
   .product-tabs .react-tabs__tab {
     background-color: black;
     color: #f1964c;
-    padding: 0.7rem 1.6rem;
+    padding: 0.8rem 1.7rem;
     border-radius: 30px;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
     cursor: pointer;
     text-align: center;
     transition: transform 0.3s ease, background-color 0.3s ease;
     border: none; 
+    outline: none; 
+    box-shadow: none; 
     
   }
   
   .product-tabs .react-tabs__tab--selected {
     background-color: #f1964c; 
     color: white; 
+    border: none; 
+    margin: 0; 
+    border-bottom: none; 
+    outline: none; 
+    box-shadow: none; 
   }
   
   .product-tabs .react-tabs__tab:hover {
     transform: scale(1.05); 
     background-color: #333;
+    border: none; 
+    margin: 0; 
+    border-bottom: none; 
+    outline: none; 
+    box-shadow: none; 
   }
   
   /* Quita cualquier línea inferior o borde */
@@ -167,11 +202,18 @@
   .product-tabs .react-tabs__tab:focus {
     outline: none;
     border: none;
+    margin: 0; 
+    border-bottom: none; 
+    outline: none; 
+    box-shadow: none; 
   }
   
   /* Quita bordes de la lista de pestañas */
   .product-tabs .react-tabs__tab-list {
     border: none;
+    margin: 0; 
+    border-bottom: none; 
+    box-shadow: none; 
   }
 
 /* Estilos base para las tarjetas de reseñas */
@@ -311,33 +353,253 @@
   font-size: 1.2rem;
 }
 
-.additional-info-grid {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.additional-info-column {
-  flex: 1;
-  padding: 1rem;
-  border-radius: 10px;
-  background: #fff;
+/* General container styling */
+.product-description {
+  margin-top: 2rem;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: left;
 }
 
-.additional-info-column h5 {
+.product-description h4 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.product-summary {
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+/* Grid layout for details and instructions */
+.product-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.details-section {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.details-section h5 {
+  color: #222;
   margin-bottom: 1rem;
   font-size: 1.4rem;
-  font-weight: 600;
-  color: #222;
+  font-weight: bold;
 }
 
-.additional-info-column p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #555;
+.details-section ul,
+.details-section ol {
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
 }
+
+.details-section li {
+  margin-bottom: 0.8rem;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+/* Dark mode styling */
+.dark-mode .product-description {
+  background-color: #1f1f1f;
+  color: #ffffff;
+  border-color: #333;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode #product-description2 {
+  background-color: #1f1f1f;
+  color: #ffffff;
+  border-color: #333;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .product-details-grid .details-section {
+  background: #2a2a2a;
+  color: #cfcfcf;
+  box-shadow: none;
+}
+
+.dark-mode .details-section h5 {
+  color: #f5a623;
+}
+
+.dark-mode .details-section li {
+  color: #b0b0b0;
+}
+
+
+
+/* Modo Oscuro */
+.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.dark-mode .product-detail {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+}
+
+.dark-mode .product-image {
+  border: 1px solid #444;
+}
+
+.dark-mode .product-title {
+  color: #ffffff;
+}
+
+.dark-mode .stock-status.text-success {
+  color: #28a745;
+}
+
+.dark-mode .stock-status.text-danger {
+  color: #ff4c4c;
+}
+
+.dark-mode .price-highlight {
+  background-color: #2a2a2a;
+  border-color: #444;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .discounted-price {
+  color: #66bb6a;
+}
+
+.dark-mode .discount-percentage {
+  color: #ffa726;
+}
+
+.dark-mode .original-price {
+  color: #888888;
+}
+
+.dark-mode .price {
+  color: #e0e0e0;
+}
+
+.dark-mode .quantity-selector {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+.dark-mode .quantity-selector:focus {
+  border-color: #f1964c;
+  box-shadow: 0 0 5px rgba(241, 150, 76, 0.8);
+}
+
+
+
+.dark-mode .add-to-cart-button:hover {
+  background-color: #218838;
+}
+
+
+/* Modo Oscuro para el Contenido */
+.dark-mode-content {
+  background-color: #121212;
+  color: #e0e0e0;
+  border: 1px solid #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode-content .description-content h4 {
+  color: #f1964c;
+}
+
+.dark-mode-content .description-content p {
+  color: #b3b3b3;
+}
+
+.dark-mode-content .description-content ul li {
+  color: #e0e0e0;
+}
+
+.dark-mode-content .description-content ul li::before {
+  color: #f1964c;
+}
+
+/* Reseñas - Modo Oscuro */
+.dark-mode .review-card {
+  background-color: #1f1f1f;
+  border: 1px solid #333;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+}
+
+.dark-mode .review-card:hover {
+  box-shadow: 0 6px 10px rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+}
+
+.dark-mode .review-card .review-header {
+  color: #f5a623;
+}
+
+.dark-mode .review-card .review-rating {
+  color: #ffd700; /* Estrella dorada */
+}
+
+.dark-mode .review-card .review-comment {
+  color: #cfcfcf;
+}
+
+/* Formulario de reseñas - Modo Oscuro */
+.dark-mode .review-form {
+  background-color: #1f1f1f;
+  border: 1px solid #333;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .review-form .form-label {
+  color: #f5a623;
+}
+
+.dark-mode .review-form .form-control {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+.dark-mode .review-form .form-control:focus {
+  border-color: #f5a623;
+  box-shadow: 0 0 5px rgba(245, 166, 35, 0.5);
+}
+
+.dark-mode .review-form .btn-primary {
+  background-color: #f5a623;
+  color: #1f1f1f;
+}
+
+.dark-mode .review-form .btn-primary:hover {
+  background-color: #e09023;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Contenedor general - Modo Oscuro */
+.dark-mode .tab-content-container {
+  background-color: #121212;
+  color: #e0e0e0;
+  border: 1px solid #333;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+
 
 /* Mobile and Tablet Responsiveness */
 @media (max-width: 1024px) {

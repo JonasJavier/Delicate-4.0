@@ -1,13 +1,13 @@
 import React, { useState, useEffect, memo, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchProducts, deleteProductAPI, addToCart } from '../services/api'; // Importa addToCart
+import { fetchProducts, deleteProductAPI, addToCart } from '../services/api'; 
 import '../assets/css/ProductCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faEye, faTrash, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../context/AuthContext';
-import { getCookie } from '../utils/cookies'; // Importa getCookie para verificar autenticación
-import CartModal from '../components/CartModal'; // Importa el modal reutilizable
-import QuickViewModal from '../components/QuickViewModal'; // Importa el modal de Quick View
+import { getCookie } from '../utils/cookies'; 
+import CartModal from '../components/CartModal'; 
+import QuickViewModal from '../components/QuickViewModal'; 
 
 const Products = memo(function Products() {
   const [products, setProducts] = useState([]);
@@ -18,8 +18,8 @@ const Products = memo(function Products() {
     redirect: null,
     redirectLabel: '',
   });
-  const [quickViewProduct, setQuickViewProduct] = useState(null); // Estado para Quick View
-  const [showQuickView, setShowQuickView] = useState(false); // Controla el modal de Quick View
+  const [quickViewProduct, setQuickViewProduct] = useState(null); 
+  const [showQuickView, setShowQuickView] = useState(false); 
   const { isAdmin } = useContext(AuthContext);
   const navigate = useNavigate();
 
