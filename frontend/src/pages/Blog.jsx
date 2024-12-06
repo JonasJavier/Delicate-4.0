@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/Blog.css';
-import Img1 from '../assets/images/Blog/blog1.jpg';
-import Img2 from '../assets/images/Blog/blog2.jpg';
-import Img3 from '../assets/images/Blog/blog3.jpg';
+import Img1 from '../assets/images/news/avena.jpg'; // Imagen de avena
+import Img2 from '../assets/images/news/coco.jpg'; // Imagen de coco
+import Img3 from '../assets/images/news/naranja.jpg'; // Imagen de naranja
 import Img4 from '../assets/images/Blog/blog4.jpg';
 import Img5 from '../assets/images/Blog/blog5.jpg';
 import Img6 from '../assets/images/Blog/blog6.jpg';
@@ -14,9 +14,27 @@ import LazyLoad from 'react-lazyload';
 import { useNavigate } from 'react-router-dom';
 
 const blogPosts = [
-    { id: 1, img: Img1, title: 'Post 1', date: '18 NOV', description: 'Curabitur porttitor orci eget neque accumsan venenatis. Nunc fermentum.' },
-    { id: 2, img: Img2, title: 'Post 2', date: '18 NOV', description: 'Curabitur porttitor orci eget neque accumsan venenatis. Nunc fermentum.' },
-    { id: 3, img: Img3, title: 'Post 3', date: '18 NOV', description: 'Curabitur porttitor orci eget neque accumsan venenatis. Nunc fermentum.' },
+    {
+        id: 1,
+        img: Img1, // Importación correcta
+        title: 'Glow Naturally with Oatmeal Magic', // Título correspondiente
+        date: '28 NOV', // Fecha actualizada
+        description: 'Discover the gentle exfoliation and soothing benefits of oatmeal soap. Perfect for sensitive skin.', // Descripción breve
+    },
+    {
+        id: 2,
+        img: Img2, // Importación correcta
+        title: 'Coconut Bliss: Hydration You Deserve', // Título correspondiente
+        date: '28 NOV', // Fecha actualizada
+        description: 'Experience deep hydration and the tropical escape of coconut soap for silky smooth skin.', // Descripción breve
+    },
+    {
+        id: 3,
+        img: Img3, // Importación correcta
+        title: 'Orange Zest: A Refreshing Start', // Título correspondiente
+        date: '28 NOV', // Fecha actualizada
+        description: 'Kickstart your day with the revitalizing and brightening power of orange soap.', // Descripción breve
+    },
     { id: 4, img: Img4, title: 'Post 4', date: '18 NOV', description: 'Curabitur porttitor orci eget neque accumsan venenatis. Nunc fermentum.' },
     { id: 5, img: Img5, title: 'Post 5', date: '18 NOV', description: 'Curabitur porttitor orci eget neque accumsan venenatis. Nunc fermentum.' },
     { id: 6, img: Img6, title: 'Post 6', date: '18 NOV', description: 'Curabitur porttitor orci eget neque accumsan venenatis. Nunc fermentum.' },

@@ -64,21 +64,16 @@ const Row = styled.div`
   justify-content: center;
 `;
 
-const Column = styled.div`
-  width: 16.6667%;
-  padding: 0.5rem;
-
-  @media (max-width: 770px) {
-    width: 33.333%;
-  }
-`;
-
 const ZoomEffect = styled.figure`
   position: relative;
   overflow: hidden;
+  width: 100%;
+  aspect-ratio: 1;
 
   img {
-    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: 0.6s ease-out;
   }
 
@@ -120,6 +115,19 @@ const ZoomEffect = styled.figure`
   }
 `;
 
+const Column = styled.div`
+  width: 16.6667%;
+  padding: 0.5rem;
+
+  @media (max-width: 770px) {
+    width: 33.333%;
+  }
+
+  @media (max-width: 500px) {
+    width: 50%;
+  }
+`;
+
 const InstagramSection = () => {
   const { theme } = useTheme();
 
@@ -134,10 +142,16 @@ const InstagramSection = () => {
         <Row>
           {images.map((image, index) => (
             <Column key={index}>
-              <ZoomEffect>
-                <img src={image.src} alt={image.alt} />
-                <FontAwesomeIcon icon={faInstagram} className="icon-instagram" />
-              </ZoomEffect>
+              <a
+                href="https://www.instagram.com/delicate.soaps/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ZoomEffect>
+                  <img src={image.src} alt={image.alt} />
+                  <FontAwesomeIcon icon={faInstagram} className="icon-instagram" />
+                </ZoomEffect>
+              </a>
             </Column>
           ))}
         </Row>

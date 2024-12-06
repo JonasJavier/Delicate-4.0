@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import aboutImage from '../assets/images/mini-about/mini-about.jpg';
 import { useTheme } from '../context/ThemeContext'; 
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   padding: 4rem 2rem;
@@ -110,7 +111,8 @@ const AboutText = styled.p`
   }
 `;
 
-const AboutButton = styled.button`
+const AboutButton = styled(Link)`
+  display: inline-block;
   background-color: #f28123;
   border: none;
   color: white;
@@ -118,6 +120,7 @@ const AboutButton = styled.button`
   font-size: 1.2rem;
   border-radius: 50px;
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  text-decoration: none;
   cursor: pointer;
 
   &:hover {
@@ -160,7 +163,7 @@ const MiniAbout = () => {
           <AboutText theme={theme}>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente facilis illo repellat veritatis minus, et labore minima mollitia qui ducimus.
           </AboutText>
-          <AboutButton>Know More</AboutButton>
+          <AboutButton to="/about">Know More</AboutButton>
         </ColumnRight>
       </Row>
     </Container>

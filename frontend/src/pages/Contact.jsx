@@ -226,7 +226,7 @@ const ContactPage = () => {
           <Box theme={theme}>
             <div className="mb-4 text-center">
               <Icon className="fas fa-map-marker-alt" theme={theme} />
-              <p>2715 Ash Dr. San Jose, South Dakota 83475</p>
+              <p>Republica Dominicana, Monsenor Nouel, Bonao</p>
             </div>
             <div className="mb-4 text-center">
               <Icon className="fas fa-envelope" theme={theme} />
@@ -234,7 +234,7 @@ const ContactPage = () => {
             </div>
             <div className="mb-4 text-center">
               <Icon className="fas fa-phone" theme={theme} />
-              <p>(219) 555-0114<br />(164) 333-0487</p>
+              <p>+1 849-862-5049<br />+1 (809) 000-0000</p>
             </div>
           </Box>
         </Col>
@@ -242,7 +242,7 @@ const ContactPage = () => {
           <BoxRight theme={theme}>
             <Title theme={theme}>Just Say Hello!</Title>
             <Subtitle theme={theme}>
-              Do you fancy saying hi to me or you want to get started with your project and you need my help? Feel free to contact me.
+            Have a question or need assistance? We’re here to help! Reach out and we’ll get back to you as soon as possible.
             </Subtitle>
             <form onSubmit={handleSubmit}>
               <Input

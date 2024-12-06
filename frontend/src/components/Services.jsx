@@ -69,10 +69,10 @@ const Services = () => {
       </ServicesTitle>
       <div className="row">
         {[
-          { icon: 'fas fa-truck', title: 'Delivery Services' },
-          { icon: 'fas fa-exchange-alt', title: 'Shipping & Return' },
-          { icon: 'fas fa-percent', title: 'Promotion' },
-          { icon: 'fas fa-user-clock', title: '24 Hours Service' },
+         { icon: 'fas fa-truck-moving', title: 'Delivery Services' },
+         { icon: 'fas fa-gift', title: 'Personalized Soaps' },
+         { icon: 'fas fa-boxes', title: 'Wholesale' },
+         { icon: 'fas fa-flask', title: 'Specialized Soap Lines' },
         ].map((service, index) => (
           <div className="col-md-3 col-sm-6 mb-4" key={index}>
             <ServiceCard theme={theme}>

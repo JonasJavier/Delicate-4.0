@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import organicFoodImage from '../assets/images/About/main1.png';
+import organicFoodImage from '../assets/images/Instagram/insta-image4.jpg'
 import { useTheme } from '../context/ThemeContext'; // Importa el contexto del tema
 
 const Container = styled.div`

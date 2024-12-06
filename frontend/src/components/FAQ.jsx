@@ -131,15 +131,39 @@ const Icon = styled.span`
 
 const faqs = [
   {
-    question: 'What type of photography do you specialize in?',
-    answer: 'I specialize in [Portrait, Landscape, Event, etc.] photography, capturing moments that tell unique stories.',
+    question: 'What types of soaps do you offer?',
+    answer: 'We offer a wide variety of handmade soaps, including natural options, fragrance-free, for sensitive skin, and organic ingredients. We also offer custom soaps based on your preferences.',
   },
   {
-    question: 'How can I book a photography session with you?',
-    answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.',
+    question: 'Are the soaps suitable for sensitive skin?',
+    answer: 'Yes, all our soaps are made with gentle and natural ingredients that are perfect for sensitive skin. If you have allergies, we can help you choose the best soap for your needs.',
   },
-  // Resto de las preguntas...
+  {
+    question: 'Can I customize my soaps?',
+    answer: 'Absolutely! We offer the option to personalize soaps with different fragrances, colors, or even labels for special occasions like weddings, birthdays, or corporate events.',
+  },
+  {
+    question: 'How should I store and care for my handmade soaps?',
+    answer: 'To prolong the life of your handmade soaps, keep them in a cool, dry place. After each use, make sure to let them dry completely before storing them back in their box or container.',
+  },
+  {
+    question: 'Do you offer home delivery?',
+    answer: 'Yes, we offer home delivery within [country/city]. You can choose from different shipping options at checkout for quick and secure delivery.',
+  },
+  {
+    question: 'Can I buy soaps in bulk?',
+    answer: 'Yes, we offer special pricing for bulk purchases. If you own a store or business and would like to resell our handmade soaps, please contact us for more information and a customized quote.',
+  },
+  {
+    question: 'Are your soaps environmentally friendly?',
+    answer: 'Yes, our soaps are made with eco-friendly ingredients, and we use sustainable packaging whenever possible. We strive to minimize our environmental impact while creating high-quality products.',
+  },
+  {
+    question: 'How long will the soap last?',
+    answer: 'The longevity of the soap depends on its usage. Typically, a bar of soap can last anywhere from 2-4 weeks with daily use. To make it last longer, we recommend storing it in a dry area between uses.'
+  },
 ];
+
 
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);

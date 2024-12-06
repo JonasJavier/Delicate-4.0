@@ -4,9 +4,9 @@ import styled, { keyframes } from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import Image1 from '../assets/images/About/main1.png';
-import Image2 from '../assets/images/About/main2.png';
-import Image3 from '../assets/images/About/main3.png';
+import Image1 from '../assets/images/Instagram/insta-image1.jpg';
+import Image2 from '../assets/images/Instagram/insta-image2.jpg';
+import Image3 from '../assets/images/Instagram/insta-image3.jpg';
 
 const AboutHero = () => {
   const [mainImage, setMainImage] = useState(Image1);
@@ -17,6 +17,16 @@ const AboutHero = () => {
     { image: Image2, caption: 'Etiam tristique, metus pretium rutrum elementumv, risus tortor.' },
     { image: Image3, caption: 'Etiam tristique, metus pretium rutrum elementumv, risus tortor.' }
   ];
+
+  const SliderItemActive = styled.div`
+  height: 100vh; 
+  width: 100vw; 
+  background-image: url(${(props) => props.$mainImage});
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  animation: ${(props) => (props.className === 'fade-in' ? fadeIn : fadeOut)} 0.5s forwards;
+`;
 
   const settings = {
     dots: false,

@@ -1,14 +1,12 @@
 /* Contenedor principal */
 .container21 {
-  margin-left: 20px;
-  margin-right: 20px;
+  margin: 15% 25px 0 25px;
   padding: 4%;
   border-radius: 12px;
   background-color: #f9f9f9;
   color: #000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-top: 10%;
-  padding-top: 13%;
+  padding-top: 10%;
 }
 
 [data-theme='dark'] .container21 {
@@ -21,6 +19,7 @@
 .table {
   border-radius: 8px;
   overflow: hidden;
+  
 }
 
 .table-hover th {
@@ -34,10 +33,6 @@
   color: #e0e0e0;
 }
 
-.table-hover tbody tr {
-  transition: background-color 0.3s ease;
-}
-
 .table-hover tbody tr:hover {
   background-color: rgba(241, 150, 76, 0.1);
 }
@@ -46,7 +41,7 @@
   background-color: rgba(241, 150, 76, 0.3);
 }
 
-/* Botones */
+/* Botones de cantidad */
 .btn-quantity-control {
   background-color: #ffa726;
   color: #fff;
@@ -70,24 +65,32 @@
 
 [data-theme='dark'] .btn-quantity-control:hover {
   background-color: #444;
-  color: #ffa726;
-  transform: scale(1.1);
 }
 
 /* Botón atractivo */
 .btn-attractive {
-  background-color: #ffa726;
+  background-color: #0b0b0b;
   color: white;
-  font-size: 18px;
+  font-size: 1.2rem;
   border: none;
-  border-radius: 12px;
-  padding: 12px 20px;
-  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 12px 24px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-attractive:hover {
   background-color: #e0853a;
-  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .btn-attractive {
+  background-color: #333;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .btn-attractive:hover {
+  background-color: #444;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* Totales */
@@ -96,20 +99,42 @@
   color: #444;
 }
 
+[data-theme='dark'] .cart-total h5 {
+  color: #e0e0e0;
+}
+
 .cart-total .price {
   color: #ffa726;
   font-weight: bold;
 }
 
-[data-theme='dark'] .cart-total h5 {
-  color: #e0e0e0;
+/* Botón "CHECK OUT" prominente */
+.btn-checkout {
+  background-color: #ff9e0d !important;
+  color: white;
+  font-size: 20px;
+  border-radius: 20px;
+  padding: 15px 25px;
+  width: 100%;
+  transition: all 0.3s ease;
 }
 
-[data-theme='dark'] .cart-total .price {
-  color: #ffa726;
+.btn-checkout:hover {
+  background-color: #161616 !important;
+  color: #ff9e0d !important;
 }
 
-/* Botón "CHECK OUT" */
+[data-theme='dark'] .btn-checkout {
+  background-color: #444 ;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .btn-checkout:hover {
+  background-color: #fcfcfc !important;
+  color: #ffa726 !important;
+}
+
+/* Botón "dark" */
 .btn-dark {
   background-color: #333;
   color: white;
@@ -141,7 +166,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
 /* Contenedor de carrito vacío */
 .empty-cart-container {
   display: flex;
@@ -171,16 +195,12 @@
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
-[data-theme='dark'] .empty-cart-icon {
-  color: #ffa726;
-}
-
 .empty-cart-icon:hover {
   transform: scale(1.1);
   color: #e0853a;
 }
 
-/* Encabezado y texto */
+/* Encabezado y texto del carrito vacío */
 .empty-cart-container h4 {
   font-size: 1.8rem;
   font-weight: bold;
@@ -202,37 +222,18 @@
   color: #cccccc;
 }
 
-/* Botón para volver a la tienda */
-.btn-attractive {
-  background-color: #ffa726;
-  color: #ffffff;
-  font-size: 1.2rem;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.btn-attractive:hover {
-  background-color: #e0853a;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme='dark'] .btn-attractive {
-  background-color: #333;
-  color: #ffa726;
-}
-
-[data-theme='dark'] .btn-attractive:hover {
-  background-color: #444;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-
 /* Responsividad */
 @media (max-width: 992px) {
   .row.align-items-center {
     flex-direction: column;
+  }
+
+  .btn-checkout {
+    order: 1; /* Botón checkout primero en pantallas pequeñas */
+  }
+
+  .btn-attractive {
+    order: 2; /* Botón para tienda después del checkout */
   }
 
   .cart-item-image {
@@ -245,11 +246,7 @@
     height: 35px;
   }
 
-  .btn-dark {
-    width: 100%;
-    padding: 12px;
-  }
-
+  .btn-dark,
   .btn-attractive {
     width: 100%;
   }

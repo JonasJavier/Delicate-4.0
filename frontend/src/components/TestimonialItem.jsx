@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import avatar1 from '../assets/images/testimonials/avatar1.jpg';
+import avatar2 from '../assets/images/testimonials/avatar2.jpg';
+import avatar3 from '../assets/images/testimonials/avatar3.jpg';
 import {
   MDBCard,
   MDBCardBody,
@@ -11,6 +14,7 @@ import {
   MDBRow,
 } from 'mdb-react-ui-kit';
 import { useTheme } from '../context/ThemeContext';
+
 
 // Estilo para el fondo degradado
 const GradientContainer = styled(MDBContainer)`
@@ -31,7 +35,7 @@ const GradientContainer = styled(MDBContainer)`
   }
 `;
 
-// Nueva capa oscura semitransparente
+
 const Overlay = styled.div`
   position: absolute;
   top: 0;
@@ -57,7 +61,7 @@ const TitleBackground = styled.div`
 const TestimonialTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;
-  color: #ffffff; /* Color fijo para ignorar el modo oscuro */
+  color: #ffffff; 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   font-family: 'Pro-text', sans-serif;
 
@@ -117,84 +121,97 @@ const CarouselControl = styled.div`
     height: 30px;
   }
 `;
+// Contenedor para alinear imagen y texto
+const TestimonialRow = styled(MDBRow)`
+  display: flex;
+  align-items: center;
+`;
+
+
+const AvatarImage = styled.img`
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
 
 const Testimonials = () => {
   const { theme } = useTheme();
 
   const testimonials = [
-    {
-      imgSrc: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(1).webp',
-      name: 'Maria Smantha - Bonao',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquam amet animi blanditiis consequatur debitis dicta distinctio, enim error eum iste libero modi nam natus perferendis possimus quasi sint sit tempora voluptatem. Est, exercitationem id ipsa ipsum laboriosam perferendis.',
-    },
-    {
-      imgSrc: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(2).webp',
-      name: 'Lisa Cudrow - Puerto Plata',
-      text: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur.',
-    },
-    {
-      imgSrc: 'https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(3).webp',
-      name: 'John Smith - Barahona',
-      text: 'At vero eos et accusamus et iusto odio dignissimos qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia mollitia animi id laborum et dolorum fuga.',
-    },
-  ];
+  {
+    imgSrc: avatar1,
+    name: 'Enyi Andujar - Bonao',
+    text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquam amet animi blanditiis...',
+  },
+  {
+    imgSrc: avatar2,
+    name: 'Lisa Cudrow - Puerto Plata',
+    text: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque...',
+  },
+  {
+    imgSrc: avatar3,
+    name: 'John Smith - Barahona',
+    text: 'At vero eos et accusamus et iusto odio dignissimos qui blanditiis praesentium voluptatum...',
+  },
+];
 
   return (
     <GradientContainer fluid className="py-5" theme={theme}>
-      {/* Capa oscura */}
-      <Overlay />
-      {/* Contenido principal */}
-      <TestimonialWrapper>
-        <MDBRow className="d-flex justify-content-center">
-          <MDBCol md="12">
-            <div className="text-center mb-4 pb-2">
-              <QuoteIcon fas icon="quote-left" />
-            </div>
-            <TitleBackground className="mb-4 pb-2">
-              <TestimonialTitle>What Our Customers Say</TestimonialTitle>
-            </TitleBackground>
-            <MDBCard className="testimonial-card">
-              <StyledCardBody theme={theme}>
-                <MDBCarousel showControls dark>
-                  {testimonials.map((testimonial, index) => (
-                    <MDBCarouselItem className={index === 0 ? 'active' : ''} key={index}>
-                      <MDBRow className="d-flex justify-content-center">
-                        <MDBCol lg="10" xl="8">
-                          <MDBRow>
-                            <MDBCol lg="4" className="d-flex justify-content-center">
-                              <img
-                                src={testimonial.imgSrc}
-                                className="rounded-circle shadow-1 mb-4 mb-lg-0"
-                                alt={`${testimonial.name} avatar`}
-                                width="200"
-                                height="200"
-                              />
-                            </MDBCol>
-                            <MDBCol
-                              md="9"
-                              lg="8"
-                              xl="8"
-                              className="text-center text-lg-start mx-auto mx-lg-0"
-                            >
-                              <TestimonialName theme={theme}>
-                                {testimonial.name}
-                              </TestimonialName>
-                              <TestimonialText theme={theme}>
-                                {testimonial.text}
-                              </TestimonialText>
-                            </MDBCol>
-                          </MDBRow>
+  {/* Capa oscura */}
+  <Overlay />
+  {/* Contenido principal */}
+  <TestimonialWrapper>
+    <MDBRow className="d-flex justify-content-center">
+      <MDBCol md="12">
+        <div className="text-center mb-4 pb-2">
+          <QuoteIcon fas icon="quote-left" />
+        </div>
+        <TitleBackground className="mb-4 pb-2">
+          <TestimonialTitle>What Our Customers Say</TestimonialTitle>
+        </TitleBackground>
+        <MDBCard className="testimonial-card">
+          <StyledCardBody theme={theme}>
+            <MDBCarousel showControls dark>
+              {testimonials.map((testimonial, index) => (
+                <MDBCarouselItem className={index === 0 ? 'active' : ''} key={index}>
+                  <MDBRow className="d-flex justify-content-center">
+                    <MDBCol lg="10" xl="8">
+                      <TestimonialRow>
+                        <MDBCol lg="4" className="d-flex justify-content-center">
+                          {/* Imagen estilizada con AvatarImage */}
+                          <AvatarImage
+                            src={testimonial.imgSrc}
+                            alt={`${testimonial.name} avatar`}
+                          />
                         </MDBCol>
-                      </MDBRow>
-                    </MDBCarouselItem>
-                  ))}
-                </MDBCarousel>
-              </StyledCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </TestimonialWrapper>
-    </GradientContainer>
+                        <MDBCol
+                          md="9"
+                          lg="8"
+                          xl="8"
+                          className="text-center text-lg-start mx-auto mx-lg-0"
+                        >
+                          <TestimonialName theme={theme}>
+                            {testimonial.name}
+                          </TestimonialName>
+                          <TestimonialText theme={theme}>
+                            {testimonial.text}
+                          </TestimonialText>
+                        </MDBCol>
+                      </TestimonialRow>
+                    </MDBCol>
+                  </MDBRow>
+                </MDBCarouselItem>
+              ))}
+            </MDBCarousel>
+          </StyledCardBody>
+        </MDBCard>
+      </MDBCol>
+    </MDBRow>
+  </TestimonialWrapper>
+</GradientContainer>
+    
   );
 };
 

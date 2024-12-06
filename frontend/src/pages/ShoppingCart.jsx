@@ -6,12 +6,18 @@ import { getCookie } from '../utils/cookies';
 import { useTheme } from '../context/ThemeContext'; 
 import '../assets/css/ShoppingCart.css';
 import { FaShoppingCart } from 'react-icons/fa';
+import CheckoutModal from '../components/CheckoutModal'; 
 
 const ShoppingCart = () => {
   const { theme } = useTheme();
   const [cartItems, setCartItems] = useState([]); // State to hold cart items
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state for notifications
+  const [showModal, setShowModal] = useState(false);
+
+const openModal = () => setShowModal(true);
+const closeModal = () => setShowModal(false);
+  
 
   const token = getCookie('access_token'); // Get access token from cookies
 
@@ -182,10 +188,9 @@ const ShoppingCart = () => {
             ))}
           </tbody>
         </table>
-        <Link to="/shop">
-          <button className="btn btn-attractive w-100">Return to shop</button>
-        </Link>
       </div>
+  
+      {/* Columna del Checkout */}
       <div className="col-lg-4 col-md-12">
         <div className="card21">
           <div className="card-body21">
@@ -201,16 +206,33 @@ const ShoppingCart = () => {
               <h5>Total:</h5>
               <p className="price">${total.toFixed(2)}</p>
             </div>
+  
+            {/* Botón de checkout (más prominente y con mayor visibilidad en responsive) */}
             <div className="checkout-container">
-              <Link to="/Checkout">
-                <button className="btn btn-dark">CHECK OUT</button>
-              </Link>
+              <button className="btn btn-dark btn-checkout" onClick={openModal}>
+                CHECK OUT
+              </button>
             </div>
+  
+            {/* Botón para volver a la tienda */}
+            <Link to="/shop">
+              <button className="btn btn-attractive w-100 mt-3">Return to shop</button>
+            </Link>
           </div>
         </div>
       </div>
     </div>
+  
+    {/* Modal de checkout */}
+    <CheckoutModal
+      cartItems={cartItems}
+      total={total}
+      showModal={showModal}
+      closeModal={closeModal}
+    />
   </div>
+  
+  
   
   );
 };

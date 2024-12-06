@@ -32,7 +32,7 @@ const Title = styled.p`
 `;
 
 const Subtitle = styled.h1`
-  font-size: 4rem;
+  font-size: 3.5rem;
   margin-bottom: 5rem;
   color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#1a1a1a')} !important;
   font-family: Pro-text;
@@ -125,13 +125,13 @@ const Feature = () => {
       <InnerContainer className={`container ${inView ? 'animate__animated animate__fadeInUp' : ''}`}>
         <TextCenter>
           <Title>Why Choose Us!</Title>
-          <Subtitle theme={theme}>The Leading Photo Studio In The Country</Subtitle>
+          <Subtitle theme={theme}>The pioneering company of handcrafted soaps in the country</Subtitle>
         </TextCenter>
         <Row>
           {[
             { end: 50, duration: 6, prefix: '+', title: 'Happy Clients', text: 'Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo' },
             { end: 5, duration: 7, prefix: '+', title: 'Years Experience', text: 'Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo' },
-            { end: 500, duration: 6, prefix: '+', title: 'Portfolio Photos', text: 'Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo' }
+            { end: 1000, duration: 6, prefix: '+', title: 'Soaps sold', text: 'Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo' }
           ].map((fact, index) => (
             <Column key={index}>
               <FactItem theme={theme}>

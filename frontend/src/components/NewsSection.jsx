@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import img1 from '../assets/images/news/img1.jpg';
-import img2 from '../assets/images/news/img2.jpg';
-import img3 from '../assets/images/news/img3.jpg';
+import img1 from '../assets/images/news/avena.jpg';
+import img2 from '../assets/images/news/coco.jpg';
+import img3 from '../assets/images/news/naranja.jpg';
 import { useTheme } from '../context/ThemeContext'; 
 
 const Container = styled.div`
@@ -151,66 +151,66 @@ const NewsSection = () => {
 
   return (
     <Container>
-      <Title theme={theme}>
-  <span>Our</span> <span className="highlight">News</span>
-</Title>
-      <Row>
-        <Col>
-          <Card theme={theme}>
-            <CardImage src={img1} alt="News 1" />
-            <CardBody>
-              <CardTitle theme={theme}>You will vainly look for fruit on it in autumn.</CardTitle>
-              <CardMeta>
-                <span><i className="fas fa-user"></i> Admin</span>
-                <span><i className="fas fa-calendar-alt"></i> 27 December, 2019</span>
-              </CardMeta>
-              <CardText theme={theme}>
-                Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.
-              </CardText>
-              <ReadMoreLink href="#" theme={theme}>
-                Read more <i className="fas fa-arrow-right"></i>
-              </ReadMoreLink>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col>
-          <Card theme={theme}>
-            <CardImage src={img2} alt="News 2" />
-            <CardBody>
-              <CardTitle theme={theme}>A man's worth has its season, like tomato.</CardTitle>
-              <CardMeta>
-                <span><i className="fas fa-user"></i> Admin</span>
-                <span><i className="fas fa-calendar-alt"></i> 27 December, 2019</span>
-              </CardMeta>
-              <CardText theme={theme}>
-                Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.
-              </CardText>
-              <ReadMoreLink href="#" theme={theme}>
-                Read more <i className="fas fa-arrow-right"></i>
-              </ReadMoreLink>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col>
-          <Card theme={theme}>
-            <CardImage src={img3} alt="News 3" />
-            <CardBody>
-              <CardTitle theme={theme}>Good thoughts bear good fresh juicy fruit.</CardTitle>
-              <CardMeta>
-                <span><i className="fas fa-user"></i> Admin</span>
-                <span><i className="fas fa-calendar-alt"></i> 27 December, 2019</span>
-              </CardMeta>
-              <CardText theme={theme}>
-                Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.
-              </CardText>
-              <ReadMoreLink href="#" theme={theme}>
-                Read more <i className="fas fa-arrow-right"></i>
-              </ReadMoreLink>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+  <Title theme={theme}>
+    <span>Our</span> <span className="highlight">News</span>
+  </Title>
+  <Row>
+    <Col>
+      <Card theme={theme}>
+        <CardImage src={img1} alt="Oatmeal Soap" />
+        <CardBody>
+          <CardTitle theme={theme}>Glow Naturally with Oatmeal Magic</CardTitle>
+          <CardMeta>
+            <span><i className="fas fa-user"></i> Admin</span>
+            <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
+          </CardMeta>
+          <CardText theme={theme}>
+            Discover how our handcrafted oatmeal soap soothes your skin while providing a natural exfoliation. Perfect for all seasons!
+          </CardText>
+          <ReadMoreLink href="#" theme={theme}>
+            Read more <i className="fas fa-arrow-right"></i>
+          </ReadMoreLink>
+        </CardBody>
+      </Card>
+    </Col>
+    <Col>
+      <Card theme={theme}>
+        <CardImage src={img2} alt="Coconut Soap" />
+        <CardBody>
+          <CardTitle theme={theme}>Coconut Bliss: Hydration You Deserve</CardTitle>
+          <CardMeta>
+            <span><i className="fas fa-user"></i> Admin</span>
+            <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
+          </CardMeta>
+          <CardText theme={theme}>
+            Dive into the tropical essence of coconut soap, rich in moisturizing properties for radiant, nourished skin every day.
+          </CardText>
+          <ReadMoreLink href="#" theme={theme}>
+            Read more <i className="fas fa-arrow-right"></i>
+          </ReadMoreLink>
+        </CardBody>
+      </Card>
+    </Col>
+    <Col>
+      <Card theme={theme}>
+        <CardImage src={img3} alt="Orange Soap" />
+        <CardBody>
+          <CardTitle theme={theme}>Orange Zest: A Refreshing Start</CardTitle>
+          <CardMeta>
+            <span><i className="fas fa-user"></i> Admin</span>
+            <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
+          </CardMeta>
+          <CardText theme={theme}>
+            Brighten your mornings with the invigorating scent and cleansing power of orange soap. A zesty boost for your skincare routine!
+          </CardText>
+          <ReadMoreLink href="#" theme={theme}>
+            Read more <i className="fas fa-arrow-right"></i>
+          </ReadMoreLink>
+        </CardBody>
+      </Card>
+    </Col>
+  </Row>
+</Container>
   );
 };
 
