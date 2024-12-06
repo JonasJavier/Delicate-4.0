@@ -47,12 +47,16 @@ class RegisterView(APIView):
 
         try:
             logger.debug("Attempting to register user with email: %s", email)
+
+            # Validar la contraseña
             validate_password(password)
 
+            # Verificar si el correo ya está registrado
             if User.objects.filter(email=email).exists():
                 logger.debug("Email %s is already registered", email)
                 return Response({"error": trans("This email is already registered.")}, status=status.HTTP_400_BAD_REQUEST)
 
+            # Crear un nuevo usuario
             user = User.objects.create_user(email=email, password=password)
             profile = UserProfile.objects.create(user=user, email=email)
             
@@ -64,17 +68,16 @@ class RegisterView(APIView):
 
         except ValidationError as e:
             logger.error("Password validation error: %s", e)
-            return Response({"password": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+            # Devolver todos los errores de validación de la contraseña
+            return Response({"errors": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+        
         except Exception as e:
             logger.error("Unexpected error during registration: %s", e)
             return Response({"error": trans("Unexpected error occurred.")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 class TwoFactorAuthView(APIView):
-    """
-    Vista modular para el flujo de autenticación en dos pasos:
-    - Paso 1: Login con email y contraseña (envío de código).
-    - Paso 2: Validación del código de verificación.
-    """
+    
     permission_classes = [AllowAny]
 
     def post(self, request):

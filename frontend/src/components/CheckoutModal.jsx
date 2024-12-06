@@ -1,8 +1,8 @@
 import React from 'react';
-import { FaWhatsapp } from 'react-icons/fa'; // Icono de WhatsApp
+import { FaWhatsapp } from 'react-icons/fa'; 
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS
-import { useTheme } from '../context/ThemeContext'; // Importa el contexto del tema
+import { useTheme } from '../context/ThemeContext'; 
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -18,8 +18,8 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background-color: ${({ theme }) => (theme === 'dark' ? '#333' : 'white')}; /* Cambia el color de fondo según el tema */
-  color: ${({ theme }) => (theme === 'dark' ? '#f1f1f1' : '#000')}; /* Cambia el color del texto según el tema */
+  background-color: ${({ theme }) => (theme === 'dark' ? '#333' : 'white')}; 
+  color: ${({ theme }) => (theme === 'dark' ? '#f1f1f1' : '#000')};
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
@@ -32,12 +32,12 @@ const ModalContainer = styled.div`
 const Title = styled.h2`
   font-size: 2rem;
   margin-bottom: 20px;
-  color: ${({ theme }) => (theme === 'dark' ? '#f1f1f1' : '#000')}; /* Cambia el color del título según el tema */
+  color: ${({ theme }) => (theme === 'dark' ? '#f1f1f1' : '#000')}; 
 `;
 
 const Message = styled.p`
   font-size: 1.2rem;
-  color: ${({ theme }) => (theme === 'dark' ? '#ddd' : '#555')}; /* Cambia el color del mensaje según el tema */
+  color: ${({ theme }) => (theme === 'dark' ? '#ddd' : '#555')}; 
   margin-bottom: 30px;
   line-height: 1.6;
 `;
@@ -45,12 +45,12 @@ const Message = styled.p`
 const CallToAction = styled.p`
   font-size: 1.3rem;
   font-weight: bold;
-  color: ${({ theme }) => (theme === 'dark' ? '#f1f1f1' : '#222')}; /* Cambia el color según el tema */
+  color: ${({ theme }) => (theme === 'dark' ? '#f1f1f1' : '#222')}; 
   margin-bottom: 30px;
   padding: 10px;
-  background-color: ${({ theme }) => (theme === 'dark' ? '#444' : '#f8f9fa')}; /* Fondo del llamado a la acción */
+  background-color: ${({ theme }) => (theme === 'dark' ? '#444' : '#f8f9fa')}; 
   border-radius: 8px;
-  border: 2px dashed ${({ theme }) => (theme === 'dark' ? '#28a745' : '#25D366')}; /* Bordes diferentes según el tema */
+  border: 2px dashed ${({ theme }) => (theme === 'dark' ? '#28a745' : '#25D366')}; 
 `;
 
 const WhatsappButton = styled.a`
@@ -75,10 +75,10 @@ const WhatsappButton = styled.a`
 `;
 
 const CheckoutModal = ({ cartItems, total, showModal, closeModal }) => {
-  const { theme } = useTheme(); // Obtener el tema actual (claro u oscuro)
+  const { theme } = useTheme(); 
 
   const whatsappMessage = encodeURIComponent(
-    `*¡Hola! Quiero realizar un pedido con los siguientes productos:* \n\n` + 
+    `*Hello! I want to place an order with the following products.:* \n\n` + 
     cartItems
       .map(
         (item) =>
@@ -88,8 +88,8 @@ const CheckoutModal = ({ cartItems, total, showModal, closeModal }) => {
           `--------------------------\n`
       )
       .join('') + 
-    `\n*Total del pedido: $${total.toFixed(2)}*\n\n` +  
-    `Por favor, confirme este pedido o infórmeme si necesita más detalles. ¡Gracias!`
+    `\n*Order Total: $${total.toFixed(2)}*\n\n` +  
+    `Please confirm this order or inform me if you need more details. Thank you!`
   );
 
   return (

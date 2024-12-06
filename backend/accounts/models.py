@@ -3,7 +3,7 @@ from django.db import models
 from django.core.validators import EmailValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
-from django.core.mail import send_mail  # Importar para enviar correos
+from django.core.mail import send_mail 
 import random 
 
 # Manager personalizado para el modelo CustomUser
@@ -36,7 +36,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         validators=[EmailValidator(message=_("Please enter a valid email address."))]
     )
     is_email_verified = models.BooleanField(default=False)
-    verification_code = models.CharField(max_length=6, blank=True, null=True)  # Código de verificación
+    verification_code = models.CharField(max_length=6, blank=True, null=True)  
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -72,15 +72,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def validate_verification_code(self, code):
         """Valida el código de verificación."""
         if self.verification_code == code:
-            self.verification_code = None  # Elimina el código después de usarlo
+            self.verification_code = None  
             self.save()
             return True
         return False
 
-# Asignar el modelo de usuario personalizado a la variable User
+
 User = CustomUser
 
-# Modelo de perfil de usuario
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     first_name = models.CharField(max_length=50, blank=True, null=True)

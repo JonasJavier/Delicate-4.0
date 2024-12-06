@@ -30,10 +30,6 @@ def contact_api(request):
             email=email,
             message=message
         )
-
-       
-        
-
         # Success response
         return Response({'success': 'Message sent successfully!'}, status=status.HTTP_200_OK)
 

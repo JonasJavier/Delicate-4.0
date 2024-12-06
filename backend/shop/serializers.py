@@ -2,12 +2,12 @@ from rest_framework import serializers
 from .models import Product, Cart, CartItem, Review
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user_email = serializers.ReadOnlyField(source='user.email')  # Mostrar el email del autor
+    user_email = serializers.ReadOnlyField(source='user.email')  
 
     class Meta:
         model = Review
         fields = ['id', 'user_email', 'comment', 'rating', 'created_at']
-        read_only_fields = ['id', 'user_email', 'created_at']  # Campos no editables
+        read_only_fields = ['id', 'user_email', 'created_at']  
 
     def validate_rating(self, value):
         if value < 1 or value > 5:

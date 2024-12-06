@@ -167,7 +167,7 @@ const faqs = [
 
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
-  const { theme } = useTheme(); // Obtener el tema actual
+  const { theme } = useTheme(); 
 
   const handleToggle = (index) => {
     setActiveIndex(activeIndex === index ? null : index);

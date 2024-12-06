@@ -11,6 +11,8 @@ import { useGoogleAuth } from '../hooks/useGoogleAuth';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
 
+
+
 const LoginContainer = styled.div`
   background: ${(props) => (props.theme === 'dark' ? '#121212' : '#f5f5f5')};
   color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#000000')};
@@ -56,11 +58,12 @@ const CardImage = styled.div`
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#007bff')};
+    color: ${(props) => (props.theme === 'dark' ? '#f28123' : '##0056b3')};
     text-decoration: none;
+    font-size: 1.2rem;
 
     &:hover {
-      color: ${(props) => (props.theme === 'dark' ? '#f28123' : '#0056b3')};
+      color: ${(props) => (props.theme === 'dark' ? '#0056b3' : '#0056b3')};
     }
   }
 `;
@@ -122,6 +125,8 @@ const Button = styled.button`
   }
 `;
 
+
+
 const GoogleButton = styled(Button)`
   background: #db4437;
   color: #ffffff;
@@ -149,7 +154,8 @@ const LoginPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError('');
+    setError(''); 
+  
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/token/', { email, password });
       if (response.data) {
@@ -162,6 +168,7 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error('Login error:', error);
+  
       if (error.response) {
         switch (error.response.status) {
           case 400:

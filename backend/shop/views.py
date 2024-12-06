@@ -42,12 +42,12 @@ def cart_detail(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_to_cart(request):
-    product_id = request.data.get('product_id')  # Solo debe recibir el ID
+    product_id = request.data.get('product_id') 
     quantity = int(request.data.get('quantity', 1))
     quantity = max(1, quantity)
 
     try:
-        product = get_object_or_404(Product, id=product_id)  # Buscar el producto por su ID
+        product = get_object_or_404(Product, id=product_id)  
     except Product.DoesNotExist:
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 

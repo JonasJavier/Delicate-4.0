@@ -48,14 +48,14 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         email = attrs.get('email')
         password = attrs.get('password')
 
-        # Autenticación usando el campo `email`
+        
         if email and password:
             user = authenticate(request=self.context.get("request"), email=email, password=password)
             if user:
                 if not user.is_active:
                     raise serializers.ValidationError(_('User is inactive'))
 
-                # Llama a la superclase para obtener el token JWT
+               
                 data = super().validate(attrs)
                 data['user'] = {
                     'email': user.email
@@ -116,9 +116,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        """
-        Personaliza el comportamiento de actualización de perfiles.
-        """
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.phone_number = validated_data.get('phone_number', instance.phone_number)

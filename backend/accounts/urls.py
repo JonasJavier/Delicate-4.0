@@ -15,6 +15,6 @@ urlpatterns = [
     path('protected/', ProtectedView.as_view(), name='protected_view'),
     path('auth/', include('rest_framework_social_oauth2.urls')),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
-    path('google-login/', GoogleLoginView.as_view(), name='google_login'),  # Ruta para GoogleLoginView
+    path('google-login/', GoogleLoginView.as_view(), name='google_login'),  
     path('auth/', TwoFactorAuthView.as_view(), name='two_factor_auth'),
 ]

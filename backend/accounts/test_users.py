@@ -108,7 +108,7 @@ def test_update_user_profile(self):
     logger.debug(f"Update response status: {response.status_code}, data: {response.data}")
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # Verificar que los datos se han actualizado correctamente en el perfil
+    
     profile = user.profile
     self.assertEqual(profile.first_name, 'NewName')
     self.assertEqual(profile.last_name, 'NewLastName')

@@ -4,6 +4,7 @@ import img1 from '../assets/images/news/avena.jpg';
 import img2 from '../assets/images/news/coco.jpg';
 import img3 from '../assets/images/news/naranja.jpg';
 import { useTheme } from '../context/ThemeContext'; 
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   max-width: 1300px;
@@ -22,13 +23,13 @@ const Title = styled.h2`
   padding-bottom: 10px;
   position: relative;
 
-  /* Estilo dinámico basado en el tema */
+  
   span {
-    color: ${({ theme }) => (theme === 'dark' ? '#ffffff' : '#000000')}; /* "Our" cambia según el tema */
+    color: ${({ theme }) => (theme === 'dark' ? '#ffffff' : '#000000')}; 
   }
 
   .highlight {
-    color: #f7941d; /* "News" siempre en este color */
+    color: #f7941d; 
   }
 
   &::after {
@@ -167,9 +168,9 @@ const NewsSection = () => {
           <CardText theme={theme}>
             Discover how our handcrafted oatmeal soap soothes your skin while providing a natural exfoliation. Perfect for all seasons!
           </CardText>
-          <ReadMoreLink href="#" theme={theme}>
-            Read more <i className="fas fa-arrow-right"></i>
-          </ReadMoreLink>
+          < Link to="/blog/1" className='ReadMoreLink' theme={theme}>
+          Read more <i className="fas fa-arrow-right"></i>
+          </Link>
         </CardBody>
       </Card>
     </Col>
@@ -185,9 +186,11 @@ const NewsSection = () => {
           <CardText theme={theme}>
             Dive into the tropical essence of coconut soap, rich in moisturizing properties for radiant, nourished skin every day.
           </CardText>
-          <ReadMoreLink href="#" theme={theme}>
-            Read more <i className="fas fa-arrow-right"></i>
-          </ReadMoreLink>
+          
+          < Link to="/blog/2" className='ReadMoreLink' theme={theme}>
+          Read more <i className="fas fa-arrow-right"></i>
+          </Link>
+
         </CardBody>
       </Card>
     </Col>
@@ -203,9 +206,9 @@ const NewsSection = () => {
           <CardText theme={theme}>
             Brighten your mornings with the invigorating scent and cleansing power of orange soap. A zesty boost for your skincare routine!
           </CardText>
-          <ReadMoreLink href="#" theme={theme}>
-            Read more <i className="fas fa-arrow-right"></i>
-          </ReadMoreLink>
+          < Link to="/blog/3" className='ReadMoreLink' theme={theme}>
+          Read more <i className="fas fa-arrow-right"></i>
+          </Link>
         </CardBody>
       </Card>
     </Col>

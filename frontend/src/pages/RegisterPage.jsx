@@ -166,9 +166,10 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(''); 
+  
     if (!validateForm()) return;
-
+  
     try {
       const response = await axiosInstance.post('/register/', { email, password });
       if (response.data) {
@@ -178,7 +179,20 @@ const RegisterPage = () => {
       }
     } catch (error) {
       console.error('Register error:', error);
-      setError(error.response?.data?.error || 'An unexpected error occurred.');
+  
+      // Manejo mejorado de errores
+      if (error.response && error.response.data) {
+        const { errors, error: generalError } = error.response.data;
+  
+        // Si hay errores específicos (como los de validación de contraseña)
+        if (errors) {
+          setError(errors.join(' ')); 
+        } else if (generalError) {
+          setError(generalError); 
+        } else {
+          setError('An unexpected error occurred.');
+        }
+      }
     }
   };
 

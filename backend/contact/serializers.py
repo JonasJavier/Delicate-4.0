@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import NewsletterSubscription  # Asegúrate de importar el modelo
+from .models import NewsletterSubscription  
 
 class NewsletterSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:

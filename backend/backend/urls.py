@@ -4,12 +4,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Ruta para el panel de administración
-    path('api/', include('accounts.urls')),  # Tus rutas para la app accounts
-    path('api/', include('shop.urls')),  # Tus rutas para la app shop
+    path('admin/', admin.site.urls),  
+    path('api/', include('accounts.urls')),  
+    path('api/', include('shop.urls')),  
     path('contact/', include('contact.urls')),
     path('accounts/', include('django.contrib.auth.urls')), 
-    path('accounts/', include('allauth.urls')),  # Agrega esta línea
+    path('accounts/', include('allauth.urls')), 
     path('accounts/', include('accounts.urls')),
 ]
 

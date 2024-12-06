@@ -11,14 +11,14 @@ class UppercaseValidator:
     def validate(self, password, user=None):
         if sum(1 for c in password if c.isupper()) < self.min_upper:
             raise ValidationError(
-                _("La contraseña debe contener al menos %(min_upper)d letra mayúscula."),
+                _("The password must contain at least %(min_upper)d uppercase letter."),
                 code='password_no_upper',
                 params={'min_upper': self.min_upper},
             )
 
     def get_help_text(self):
         return _(
-            "Tu contraseña debe contener al menos %(min_upper)d letra mayúscula."
+            "Your password must contain at least %(min_upper)d uppercase letter."
         ) % {'min_upper': self.min_upper}
 
 class LowercaseValidator:
@@ -28,14 +28,14 @@ class LowercaseValidator:
     def validate(self, password, user=None):
         if sum(1 for c in password if c.islower()) < self.min_lower:
             raise ValidationError(
-                _("La contraseña debe contener al menos %(min_lower)d letra minúscula."),
+                _("The password must contain at least %(min_lower)d lowercase letter."),
                 code='password_no_lower',
                 params={'min_lower': self.min_lower},
             )
 
     def get_help_text(self):
         return _(
-            "Tu contraseña debe contener al menos %(min_lower)d letra minúscula."
+            "Your password must contain at least %(min_lower)d lowercase letter."
         ) % {'min_lower': self.min_lower}
 
 class CustomPasswordValidator:
@@ -44,13 +44,13 @@ class CustomPasswordValidator:
         if len(password) < 8:
             logger.debug("Password too short")
             raise ValidationError(
-                _("La contraseña debe tener al menos 8 caracteres."),
+                _("The password must be at least 8 characters long."),
                 code='password_too_short'
             )
         if password.isdigit():
             logger.debug("Password is entirely numeric")
             raise ValidationError(
-                _("La contraseña no puede ser completamente numérica."),
+                _("The password cannot be entirely numeric."),
                 code='password_entirely_numeric'
             )
         logger.debug("Password validation passed")

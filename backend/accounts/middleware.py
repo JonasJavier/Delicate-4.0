@@ -14,7 +14,7 @@ class CustomExceptionMiddleware:
             try:
                 request.json_body = json.loads(request.body.decode('utf-8'))
             except json.JSONDecodeError:
-                request.json_body = {}  # Si falla, asignar un diccionario vacío
+                request.json_body = {}  
         else:
             request.json_body = {}
 

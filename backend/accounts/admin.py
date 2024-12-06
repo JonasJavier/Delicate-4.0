@@ -28,7 +28,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
-    inlines = [UserProfileInline]  # Agregar UserProfile como inline
+    inlines = [UserProfileInline] 
 
 # Registro del modelo CustomUser y desregistro de Group
 admin.site.register(CustomUser, UserAdmin)

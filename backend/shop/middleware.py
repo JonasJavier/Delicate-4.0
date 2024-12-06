@@ -6,20 +6,20 @@ import json
 
 class UserCartOwnershipMiddleware:
     """
-    Middleware para garantizar que un usuario autenticado
-    solo pueda acceder a su propio carrito o elementos del carrito.
+    Middleware to ensure that an authenticated user
+    can only access their own cart or cart items.
     """
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Asegurar que `request.user` esté disponible
+        # Ensure `request.user` is available
         request.user = SimpleLazyObject(lambda: get_user(request))
 
-        # Procesar solo métodos que podrían modificar el carrito
+        # Process only methods that could modify the cart
         if request.method in ['POST', 'PUT', 'DELETE']:
             try:
-                # Procesar el cuerpo JSON de la solicitud si existe
+                # Process the JSON body of the request if it exists
                 if not hasattr(request, 'json_body'):
                     try:
                         request.json_body = json.loads(request.body.decode('utf-8'))
@@ -29,7 +29,7 @@ class UserCartOwnershipMiddleware:
                 cart_item_id = request.json_body.get('cart_item_id')
                 cart_id = request.json_body.get('cart_id')
 
-                # Verificar acceso a un elemento del carrito
+                # Verify access to a cart item
                 if cart_item_id and getattr(request, 'user', None) and request.user.is_authenticated:
                     try:
                         cart_item = CartItem.objects.get(id=cart_item_id)
@@ -38,7 +38,7 @@ class UserCartOwnershipMiddleware:
                     except CartItem.DoesNotExist:
                         return JsonResponse({"error": "Cart item not found."}, status=404)
 
-                # Verificar acceso al carrito
+                # Verify access to the cart
                 elif cart_id and getattr(request, 'user', None) and request.user.is_authenticated:
                     try:
                         cart = Cart.objects.get(id=cart_id)
@@ -49,6 +49,6 @@ class UserCartOwnershipMiddleware:
             except Exception as e:
                 return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
-        # Continuar con la solicitud
+        # Proceed with the request
         response = self.get_response(request)
         return response
