@@ -23,7 +23,6 @@ const Title = styled.h2`
   padding-bottom: 10px;
   position: relative;
 
-  
   span {
     color: ${({ theme }) => (theme === 'dark' ? '#ffffff' : '#000000')}; 
   }
@@ -55,8 +54,6 @@ const Title = styled.h2`
     }
   }
 `;
-
-
 
 const Row = styled.div`
   display: flex;
@@ -133,7 +130,7 @@ const CardText = styled.p`
   }
 `;
 
-const ReadMoreLink = styled.a`
+const StyledLink = styled(Link)`
   font-weight: bold;
   color: ${(props) => (props.theme === 'dark' ? '#f7941d' : '#000')};
   text-decoration: none;
@@ -152,68 +149,66 @@ const NewsSection = () => {
 
   return (
     <Container>
-  <Title theme={theme}>
-    <span>Our</span> <span className="highlight">News</span>
-  </Title>
-  <Row>
-    <Col>
-      <Card theme={theme}>
-        <CardImage src={img1} alt="Oatmeal Soap" />
-        <CardBody>
-          <CardTitle theme={theme}>Glow Naturally with Oatmeal Magic</CardTitle>
-          <CardMeta>
-            <span><i className="fas fa-user"></i> Admin</span>
-            <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
-          </CardMeta>
-          <CardText theme={theme}>
-            Discover how our handcrafted oatmeal soap soothes your skin while providing a natural exfoliation. Perfect for all seasons!
-          </CardText>
-          < Link to="/blog/1" className='ReadMoreLink' theme={theme}>
-          Read more <i className="fas fa-arrow-right"></i>
-          </Link>
-        </CardBody>
-      </Card>
-    </Col>
-    <Col>
-      <Card theme={theme}>
-        <CardImage src={img2} alt="Coconut Soap" />
-        <CardBody>
-          <CardTitle theme={theme}>Coconut Bliss: Hydration You Deserve</CardTitle>
-          <CardMeta>
-            <span><i className="fas fa-user"></i> Admin</span>
-            <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
-          </CardMeta>
-          <CardText theme={theme}>
-            Dive into the tropical essence of coconut soap, rich in moisturizing properties for radiant, nourished skin every day.
-          </CardText>
-          
-          < Link to="/blog/2" className='ReadMoreLink' theme={theme}>
-          Read more <i className="fas fa-arrow-right"></i>
-          </Link>
-
-        </CardBody>
-      </Card>
-    </Col>
-    <Col>
-      <Card theme={theme}>
-        <CardImage src={img3} alt="Orange Soap" />
-        <CardBody>
-          <CardTitle theme={theme}>Orange Zest: A Refreshing Start</CardTitle>
-          <CardMeta>
-            <span><i className="fas fa-user"></i> Admin</span>
-            <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
-          </CardMeta>
-          <CardText theme={theme}>
-            Brighten your mornings with the invigorating scent and cleansing power of orange soap. A zesty boost for your skincare routine!
-          </CardText>
-          < Link to="/blog/3" className='ReadMoreLink' theme={theme}>
-          Read more <i className="fas fa-arrow-right"></i>
-          </Link>
-        </CardBody>
-      </Card>
-    </Col>
-  </Row>
-</Container>
+      <Title theme={theme}>
+        <span>Our</span> <span className="highlight">News</span>
+      </Title>
+      <Row>
+        <Col>
+          <Card theme={theme}>
+            <CardImage src={img1} alt="Oatmeal Soap" />
+            <CardBody>
+              <CardTitle theme={theme}>Glow Naturally with Oatmeal Magic</CardTitle>
+              <CardMeta>
+                <span><i className="fas fa-user"></i> Admin</span>
+                <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
+              </CardMeta>
+              <CardText theme={theme}>
+                Discover how our handcrafted oatmeal soap soothes your skin while providing a natural exfoliation. Perfect for all seasons!
+              </CardText>
+              <StyledLink to="/blog/1" theme={theme}>
+                Read more <i className="fas fa-arrow-right"></i>
+              </StyledLink>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col>
+          <Card theme={theme}>
+            <CardImage src={img2} alt="Coconut Soap" />
+            <CardBody>
+              <CardTitle theme={theme}>Coconut Bliss: Hydration You Deserve</CardTitle>
+              <CardMeta>
+                <span><i className="fas fa-user"></i> Admin</span>
+                <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
+              </CardMeta>
+              <CardText theme={theme}>
+                Dive into the tropical essence of coconut soap, rich in moisturizing properties for radiant, nourished skin every day.
+              </CardText>
+              <StyledLink to="/blog/2" theme={theme}>
+                Read more <i className="fas fa-arrow-right"></i>
+              </StyledLink>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col>
+          <Card theme={theme}>
+            <CardImage src={img3} alt="Orange Soap" />
+            <CardBody>
+              <CardTitle theme={theme}>Orange Zest: A Refreshing Start</CardTitle>
+              <CardMeta>
+                <span><i className="fas fa-user"></i> Admin</span>
+                <span><i className="fas fa-calendar-alt"></i> 28 November, 2024</span>
+              </CardMeta>
+              <CardText theme={theme}>
+                Brighten your mornings with the invigorating scent and cleansing power of orange soap. A zesty boost for your skincare routine!
+              </CardText>
+              <StyledLink to="/blog/3" theme={theme}>
+                Read more <i className="fas fa-arrow-right"></i>
+              </StyledLink>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

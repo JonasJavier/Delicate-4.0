@@ -1,6 +1,6 @@
 // src/utils/syncCart.js
 import axiosInstance from '../axiosInstance';
-import { getCart, clearCart, saveCart } from './cart'; // Ensure saveCart handles localStorage
+import { getCart, clearCart, } from './cart'; // Ensure saveCart handles localStorage
 
 // Queue to store failed sync operations
 let failedSyncQueue = [];

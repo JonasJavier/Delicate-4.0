@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'; // Importar PropTypes
 import { FaWhatsapp } from 'react-icons/fa'; 
 import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS
@@ -78,7 +79,7 @@ const CheckoutModal = ({ cartItems, total, showModal, closeModal }) => {
   const { theme } = useTheme(); 
 
   const whatsappMessage = encodeURIComponent(
-    `*Hello! I want to place an order with the following products.:* \n\n` + 
+    `*Hello! I want to place an order with the following products:* \n\n` + 
     cartItems
       .map(
         (item) =>
@@ -95,25 +96,40 @@ const CheckoutModal = ({ cartItems, total, showModal, closeModal }) => {
   return (
     showModal && (
       <ModalOverlay onClick={closeModal}>
-    <ModalContainer theme={theme} onClick={(e) => e.stopPropagation()}>
-      <Title theme={theme}>Thank you for your purchase! 👋</Title>
-      <Message theme={theme}>
-        Unfortunately, the online payment systems are still in process, but don't worry, you can place your order via WhatsApp! 😎
-      </Message>
-      <CallToAction theme={theme}>Click the button below and send us your cart.</CallToAction>
-      <WhatsappButton
-        href={`https://wa.me/+18498625049?text=${whatsappMessage}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <FaWhatsapp size={24} className="whatsapp-icon" />
-        Order via WhatsApp
-      </WhatsappButton>
-    </ModalContainer>
-  </ModalOverlay>
-
+        <ModalContainer theme={theme} onClick={(e) => e.stopPropagation()}>
+          <Title theme={theme}>Thank you for your purchase! 👋</Title>
+          <Message theme={theme}>
+            Unfortunately, the online payment systems are still in process, but don&apos;t worry, you can place your order via WhatsApp! 😎
+          </Message> {/* Se escapó el apóstrofe */}
+          <CallToAction theme={theme}>Click the button below and send us your cart.</CallToAction>
+          <WhatsappButton
+            href={`https://wa.me/+18498625049?text=${whatsappMessage}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaWhatsapp size={24} className="whatsapp-icon" />
+            Order via WhatsApp
+          </WhatsappButton>
+        </ModalContainer>
+      </ModalOverlay>
     )
   );
+};
+
+//PropTypes
+CheckoutModal.propTypes = {
+  cartItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      product: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+      }).isRequired,
+      quantity: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  total: PropTypes.number.isRequired,
+  showModal: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
 };
 
 export default CheckoutModal;

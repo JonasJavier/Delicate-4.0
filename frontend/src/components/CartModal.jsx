@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'; 
 import { Modal, Button } from 'react-bootstrap';
 
 const CartModal = ({ show, onHide, title, message, onRedirect, redirectLabel }) => {
@@ -22,6 +23,24 @@ const CartModal = ({ show, onHide, title, message, onRedirect, redirectLabel }) 
       </Modal.Footer>
     </Modal>
   );
+};
+
+// Definir los tipos de propiedades esperadas
+CartModal.propTypes = {
+  show: PropTypes.bool.isRequired, // Propiedad obligatoria
+  onHide: PropTypes.func.isRequired, // Propiedad obligatoria
+  title: PropTypes.string, // Propiedad opcional
+  message: PropTypes.string, // Propiedad opcional
+  onRedirect: PropTypes.func, // Propiedad opcional
+  redirectLabel: PropTypes.string, // Propiedad opcional
+};
+
+
+CartModal.defaultProps = {
+  title: '',
+  message: '',
+  onRedirect: null,
+  redirectLabel: 'Go',
 };
 
 export default CartModal;

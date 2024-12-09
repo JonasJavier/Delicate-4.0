@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import styled, { keyframes } from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import PropTypes from 'prop-types';
 
 import Image1 from '../assets/images/Instagram/insta-image1.jpg';
 import Image2 from '../assets/images/Instagram/insta-image2.jpg';
@@ -80,6 +81,12 @@ const AboutHero = () => {
   );
 };
 
+//PropTypes
+AboutHero.propTypes = {
+  $mainImage: PropTypes.string.isRequired, 
+  className: PropTypes.string.isRequired,  
+};
+
 export default AboutHero;
 
 const fadeIn = keyframes`
@@ -102,17 +109,7 @@ const SliderArea = styled.div`
   background-color: #ffffff !important;
 `;
 
-const SliderItemActive = styled.div`
-  background-image: url(${props => props.$mainImage});
-  animation: ${props => (props.className === 'fade-in' ? fadeIn : fadeOut)} 0.5s forwards;
-  height: 100%;
-  width: 100%;
 
-  .slick-track {
-    display: flex;
-    align-items: center;
-  }
-`;
 
 const SliderHeight = styled.div`
   background: none !important;

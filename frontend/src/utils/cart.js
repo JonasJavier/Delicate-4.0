@@ -1,3 +1,6 @@
+/* global process */
+import axiosInstance from '../axiosInstance'; // Ajusta la ruta correctamente
+
 // Helper para manejo de logs
 const debugLog = (message, ...optionalParams) => {
   if (process.env.NODE_ENV === 'development') {

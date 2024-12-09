@@ -114,15 +114,13 @@ const closeModal = () => setShowModal(false);
       <div className={`empty-cart-container ${theme}`} data-theme={theme}>
         <FaShoppingCart className="empty-cart-icon" />
         <h4>Your cart is empty</h4>
-        <p>It seems you haven't added anything to your cart yet.</p>
+        <p>It seems you haven&#39;t added anything to your cart yet.</p> 
         <Link to="/shop">
           <button className="btn btn-attractive">Return to shop</button>
         </Link>
       </div>
     );
   }
-  
-
   return (
     <div className={`container21 my-5 ${theme}`} data-theme={theme}>
     {error && <p className="text-danger">{error}</p>}

@@ -111,16 +111,8 @@ const QuoteIcon = styled(MDBIcon)`
   font-size: 3rem;
 `;
 
-// Flechas del carrusel
-const CarouselControl = styled.div`
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    background-color: ${(props) => (props.theme === 'dark' ? '#ffffff' : 'transparent')};
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-  }
-`;
+
+
 // Contenedor para alinear imagen y texto
 const TestimonialRow = styled(MDBRow)`
   display: flex;

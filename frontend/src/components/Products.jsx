@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { fetchProducts, deleteProductAPI, addToCart } from '../services/api'; 
 import '../assets/css/ProductCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faEye, faTrash, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import {faEye, faTrash, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../context/AuthContext';
 import { getCookie } from '../utils/cookies'; 
 import CartModal from '../components/CartModal'; 

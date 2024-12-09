@@ -5,8 +5,9 @@ import '../assets/css/User.css';
 import strawberryImg from '../assets/images/products/img-2.png';
 import lemonImg from '../assets/images/products/img-3.png';
 import { useTheme } from '../context/ThemeContext';
+import PropTypes from 'prop-types';  
 
-const OrderDetailsPage = () => {
+const OrderDetailsPage = ({ formData }) => {  
   const { id } = useParams();
   const { theme } = useTheme();
   const orderDetails = {
@@ -37,7 +38,6 @@ const OrderDetailsPage = () => {
     <div className={`user-page-container p-4`} data-theme={theme}>
       <div className="row">
         <div className="col-lg-3">
-          <Navigation />
         </div>
         <div className="col-lg-9">
           <div className="order-details-container">
@@ -94,31 +94,7 @@ const OrderDetailsPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="order-status mt-4">
-                <div className="d-flex align-items-center">
-                  <div className="status-circle completed">
-                    <i className="fas fa-check"></i>
-                  </div>
-                  <div className="status-line completed"></div>
-                  <div className="status-circle completed">
-                    <span>02</span>
-                  </div>
-                  <div className="status-line"></div>
-                  <div className="status-circle">
-                    <span>03</span>
-                  </div>
-                  <div className="status-line"></div>
-                  <div className="status-circle">
-                    <span>04</span>
-                  </div>
-                </div>
-                <div className="d-flex justify-content-between mt-2">
-                  <span>Order received</span>
-                  <span>Processing</span>
-                  <span>On the way</span>
-                  <span>Delivered</span>
-                </div>
-              </div>
+              {/* Otros detalles */}
             </div>
             <div className="order-items">
               <table className="table">
@@ -150,6 +126,13 @@ const OrderDetailsPage = () => {
       </div>
     </div>
   );
+};
+
+// Define los propTypes para 'formData' y 'paymentMethod'
+OrderDetailsPage.propTypes = {
+  formData: PropTypes.shape({
+    paymentMethod: PropTypes.string.isRequired,
+  }),
 };
 
 export default OrderDetailsPage;

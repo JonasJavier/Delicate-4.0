@@ -14,6 +14,7 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 import ProductManagement from './pages/ProductManagement'; 
 import ThemeToggleButton from './components/ThemeToggleButton';
 import './assets/css/global.css'; 
+import PropTypes from 'prop-types';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -23,7 +24,6 @@ const Blog = lazy(() => import('./pages/Blog'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 const ShoppingCart = lazy(() => import('./pages/ShoppingCart'));
-const Checkout = lazy(() => import('./pages/Checkout'));
 const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'));
 const ThankYouPage = lazy(() => import('./pages/ThankYouPage'));
 const OrderHistoryPage = lazy(() => import('./pages/OrderHistoryPage'));
@@ -100,7 +100,6 @@ function App() {
                     <Route path="/orderdetails/:id" element={<OrderDetailsPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/thankyoupage" element={<ThankYouPage />} />
-                    <Route path="/checkout" element={<Checkout />} />
                     <Route path="/orderconfirmation" element={<OrderConfirmation />} />
                     <Route path="/admin/product-management" element={<ProductManagement />} />
                   </Route>
@@ -113,5 +112,8 @@ function App() {
     </ThemeProvider>
   );
 }
+ThemedAppWrapper.propTypes = {
+  children: PropTypes.node.isRequired, // children es obligatorio y puede ser cualquier elemento React
+};
 
 export default App;

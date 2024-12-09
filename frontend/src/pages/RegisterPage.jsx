@@ -119,15 +119,6 @@ const Button = styled.button`
   }
 `;
 
-const GoogleButton = styled(Button)`
-  background: #db4437;
-  color: #ffffff;
-
-  &:hover {
-    background: #c23321;
-  }
-`;
-
 const ErrorMessage = styled.p`
   color: #ff6b6b;
   margin-bottom: 1rem;

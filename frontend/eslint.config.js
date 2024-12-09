@@ -37,14 +37,14 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      'react/react-in-jsx-scope': 'off',  // Desactiva la regla de React en el ámbito JSX
+      'react/react-in-jsx-scope': 'off',  
       'no-unused-vars': [
         'error',
         {
           vars: 'all',
           args: 'after-used',
           ignoreRestSiblings: true,
-          varsIgnorePattern: '^React$',  // Ignora la variable 'React'
+          varsIgnorePattern: '^React$',  
         },
       ],
     },
