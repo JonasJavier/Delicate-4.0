@@ -4,6 +4,10 @@ import naranja from '../assets/images/products/img-3.webp';
 import avena from '../assets/images/products/img-6.webp';
 import botanico from '../assets/images/products/img-5.webp';
 import facial from '../assets/images/products/img-1.webp';
+import arcillaAvena from '../assets/images/products/arcilla-avena.webp';
+import cafeExfoliante from '../assets/images/products/cafe-exfoliante.webp';
+import cacaoAlmendras from '../assets/images/products/cacao-almendras.webp';
+import corazonLavanda from '../assets/images/products/corazon-lavanda.webp';
 
 export const fallbackProducts = [
   {
@@ -107,6 +111,74 @@ export const fallbackProducts = [
     image: facial,
     is_featured: false,
     stock: 6,
+  },
+  {
+    id: 'arcilla-avena',
+    slug: 'arcilla-avena',
+    name: 'Arcilla & Avena',
+    short_description: 'Equilibrio suave con una textura naturalmente especial.',
+    description: 'Una barra de arcilla verde y avena creada para una limpieza agradable y delicada.',
+    price: '425.00',
+    category: 'botanicos',
+    category_label: 'Botánico',
+    ingredients: 'Arcilla verde y avena.',
+    benefit: 'Limpia con suavidad',
+    skin_type: 'Mixta y sensible',
+    weight_grams: 105,
+    image: arcillaAvena,
+    is_featured: false,
+    stock: 8,
+  },
+  {
+    id: 'cafe-exfoliante',
+    slug: 'cafe-exfoliante',
+    name: 'Café Despierto',
+    short_description: 'Una exfoliación corporal con aroma cálido a café.',
+    description: 'Su textura con café molido acompaña una limpieza corporal estimulante y sensorial.',
+    price: '450.00',
+    category: 'botanicos',
+    category_label: 'Exfoliante corporal',
+    ingredients: 'Café molido.',
+    benefit: 'Exfolia y renueva',
+    skin_type: 'Uso corporal',
+    weight_grams: 110,
+    image: cafeExfoliante,
+    is_featured: false,
+    stock: 7,
+  },
+  {
+    id: 'cacao-almendras',
+    slug: 'cacao-almendras',
+    name: 'Cacao & Almendras',
+    short_description: 'Un abrazo cremoso con un aroma profundo y envolvente.',
+    description: 'Cacao y aceite de almendras se unen en una barra nutritiva de espuma cremosa.',
+    price: '450.00',
+    category: 'nutritivos',
+    category_label: 'Nutritivo',
+    ingredients: 'Cacao y almendras.',
+    benefit: 'Nutre y suaviza',
+    skin_type: 'Normal a seca',
+    weight_grams: 105,
+    image: cacaoAlmendras,
+    is_featured: false,
+    stock: 6,
+  },
+  {
+    id: 'corazon-lavanda',
+    slug: 'corazon-lavanda',
+    name: 'Corazón de Lavanda',
+    short_description: 'Un detalle floral creado para regalar amor.',
+    description: 'Una barra en forma de corazón con aroma de lavanda para convertir el cuidado en un regalo especial.',
+    price: '425.00',
+    category: 'regalos',
+    category_label: 'Edición regalo',
+    ingredients: 'Lavanda.',
+    benefit: 'Relaja y perfuma',
+    skin_type: 'Todo tipo de piel',
+    weight_grams: 95,
+    image: corazonLavanda,
+    is_featured: true,
+    stock: 10,
   },
 ];
 

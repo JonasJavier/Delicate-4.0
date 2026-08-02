@@ -10,7 +10,7 @@ export function Footer() {
             <span className="brand-mark">D</span>
             <span><strong>Delicaté</strong><small>hecho a mano</small></span>
           </a>
-          <p>Jabones artesanales para convertir lo cotidiano en un pequeño ritual.</p>
+          <p>Jabones artesanales hechos con amor para acompañar el cuidado de tu piel.</p>
         </div>
         <div>
           <h2>Explora</h2>
@@ -32,7 +32,7 @@ export function Footer() {
       </div>
       <div className="footer-bottom section-shell">
         <span>© {new Date().getFullYear()} Delicaté</span>
-        <span>Hecho con calma en República Dominicana</span>
+        <span>Hecho con amor en República Dominicana</span>
       </div>
     </footer>
   );

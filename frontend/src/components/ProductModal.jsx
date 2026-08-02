@@ -41,7 +41,15 @@ export function ProductModal({ product, onClose, onAdd }) {
       <div className="product-dialog-grid">
         <div className="product-dialog-image">
           {product.is_featured && <span className="product-badge">Favorito</span>}
-          <img src={product.image} alt={`Jabón artesanal ${product.name}`} />
+          <img
+            src={product.image}
+            alt={`Jabón artesanal ${product.name}`}
+            onError={(event) => {
+              if (product.fallback_image && event.currentTarget.src !== product.fallback_image) {
+                event.currentTarget.src = product.fallback_image;
+              }
+            }}
+          />
         </div>
         <div className="product-dialog-content">
           <span className="eyebrow">{product.category_label || product.category}</span>
@@ -63,7 +71,7 @@ export function ProductModal({ product, onClose, onAdd }) {
           </div>
 
           <div className="product-dialog-footer">
-            <span>{product.weight_grams || 100} g · Elaborado en pequeñas tandas</span>
+            <span>{product.weight_grams || 100} g · Hecho con amor en pequeñas tandas</span>
             <button className="primary-button" type="button" onClick={handleAdd} disabled={!product.stock}>
               <BagIcon /> {product.stock ? 'Agregar al carrito' : 'Agotado'}
             </button>

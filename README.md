@@ -8,7 +8,7 @@ Ecommerce y sitio de marca para jabones artesanales. El catálogo se administra 
 
 - Landing ecommerce responsive con identidad visual propia.
 - Catálogo conectado a Django REST Framework; el respaldo visual queda limitado a desarrollo/demo.
-- Filtros por categoría, detalle de fórmula e ingredientes, estados de carga, error y productos agotados.
+- Filtros por categoría, ingredientes y beneficios, estados de carga, error y productos agotados.
 - Carrito persistente en `localStorage`, sin obligar al cliente a registrarse.
 - Pedido preformateado con productos, cantidades y total para WhatsApp.
 - Formulario de consulta que abre una conversación de WhatsApp.
@@ -121,7 +121,7 @@ Luego entra a `/admin/`. Desde **Productos** puedes:
 - marcar productos destacados o agotados;
 - ocultar un producto sin borrarlo.
 
-El comando siguiente crea o actualiza seis productos de demostración. Con `--reset` también oculta los productos antiguos; úsalo solo cuando quieras restaurar el catálogo demo.
+El comando siguiente crea o actualiza diez productos de demostración y comprueba que ninguno comparta fotografía. Con `--reset` también oculta los productos antiguos; úsalo solo cuando quieras restaurar el catálogo demo.
 
 ```powershell
 python backend\manage.py seed_products --reset
@@ -191,6 +191,8 @@ npm run preview
 6. Mantén el número de WhatsApp en `VITE_WHATSAPP_NUMBER` y deja `VITE_ENABLE_DEMO_CATALOG=false`.
 
 Antes de recibir pedidos reales, completa la [lista de salida a producción](docs/GO_LIVE.md). Incluye contenido, privacidad, entrega, respaldo y comprobaciones operativas que dependen del negocio y no pueden resolverse únicamente con código.
+
+La propuesta funcional y técnica para una futura experiencia de jabón personalizado está desarrollada en [Atelier Delicaté](docs/ATELIER_JABON_PERSONALIZADO.md). Es una especificación de producto; todavía no añade modelos, endpoints ni pantallas al sistema.
 
 La base `backend/db.sqlite3`, los entornos virtuales, los logs, `node_modules` y los builds están ignorados por Git para evitar publicar datos personales o archivos generados.
 

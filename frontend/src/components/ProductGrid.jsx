@@ -35,7 +35,8 @@ export function ProductGrid({ onAdd }) {
         if (!results?.length) throw new Error('Catálogo vacío');
         const normalizedProducts = results.map((product) => {
           const localProduct = fallbackProducts.find((item) => item.slug === product.slug);
-          return { ...product, image: product.image || localProduct?.image || fallbackProducts[0].image };
+          const fallbackImage = localProduct?.image || fallbackProducts[0].image;
+          return { ...product, image: product.image || fallbackImage, fallback_image: fallbackImage };
         });
         setProducts(normalizedProducts);
         setStatus('ready');
@@ -71,9 +72,9 @@ export function ProductGrid({ onAdd }) {
       <div className="section-heading section-heading--row">
         <div>
           <span className="eyebrow">La colección</span>
-          <h2 id="products-title">Elige tu ritual cotidiano</h2>
+          <h2 id="products-title">Encuentra el jabón que vas a amar</h2>
         </div>
-        <p>Fórmulas sencillas, texturas honestas y aromas que acompañan sin invadir.</p>
+        <p>Descubre ingredientes, aromas y texturas creados para regalarle a tu piel un momento especial.</p>
       </div>
 
       <div className="category-filter" role="group" aria-label="Filtrar por categoría">
@@ -115,7 +116,16 @@ export function ProductGrid({ onAdd }) {
             <article className="product-card" key={product.id}>
               <div className="product-image-wrap">
                 {product.is_featured && <span className="product-badge">Favorito</span>}
-                <img src={product.image} alt={`Jabón artesanal ${product.name}`} loading="lazy" />
+                <img
+                  src={product.image}
+                  alt={`Jabón artesanal ${product.name}`}
+                  loading="lazy"
+                  onError={(event) => {
+                    if (product.fallback_image && event.currentTarget.src !== product.fallback_image) {
+                      event.currentTarget.src = product.fallback_image;
+                    }
+                  }}
+                />
                 <button type="button" onClick={() => handleAdd(product)} disabled={!product.stock}>
                   <BagIcon />
                   {addedId === product.id ? 'Agregado' : product.stock ? 'Agregar' : 'Agotado'}
@@ -133,8 +143,13 @@ export function ProductGrid({ onAdd }) {
                 <div><dt>Ideal para</dt><dd>{product.skin_type || 'Todo tipo de piel'}</dd></div>
                 <div><dt>Peso</dt><dd>{product.weight_grams || 100} g</dd></div>
               </dl>
-              <button className="product-details-button" type="button" onClick={() => setSelectedProduct(product)}>
-                Ver fórmula y detalles <ArrowIcon />
+              <button
+                className="product-details-button"
+                type="button"
+                onClick={() => setSelectedProduct(product)}
+                aria-label={`Ver ingredientes y beneficios de ${product.name}`}
+              >
+                Ver ingredientes y beneficios <ArrowIcon />
               </button>
             </article>
           ))}

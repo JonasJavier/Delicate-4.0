@@ -10,13 +10,13 @@ import { useCart } from './hooks/useCart.js';
 import { WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from './config.js';
 
 const features = [
-  { icon: LeafIcon, title: 'Ingredientes honestos', text: 'Aceites vegetales, mantecas y botánicos elegidos con intención.' },
-  { icon: HeartIcon, title: 'Hecho en pequeñas tandas', text: 'Cada barra recibe tiempo, cuidado y un acabado verdaderamente artesanal.' },
-  { icon: SparkIcon, title: 'Una rutina más amable', text: 'Limpieza efectiva y sensorial, sin complicar tu cuidado diario.' },
+  { icon: LeafIcon, title: 'Ingredientes que cuidan', text: 'Aceites vegetales, mantecas y botánicos elegidos para acompañar tu piel con suavidad.' },
+  { icon: HeartIcon, title: 'Hechos con amor', text: 'Cada barra se prepara en pequeñas tandas, con manos, tiempo y atención.' },
+  { icon: SparkIcon, title: 'Un momento para ti', text: 'Aromas y texturas que convierten tu rutina diaria en una pausa especial.' },
 ];
 
 const faqs = [
-  ['¿Cómo realizo mi pedido?', 'Agrega tus jabones al carrito y pulsa “Finalizar por WhatsApp”. Recibiremos el detalle completo y coordinaremos contigo disponibilidad, entrega y pago.'],
+  ['¿Cómo hago mi pedido?', 'Agrega tus jabones al carrito y pulsa “Finalizar por WhatsApp”. Recibiremos tu selección y coordinaremos contigo disponibilidad, entrega y pago.'],
   ['¿Hacen entregas?', 'Sí. Coordinamos opciones de entrega o recogida directamente por WhatsApp según tu ubicación en República Dominicana.'],
   ['¿Cuánto dura una barra?', 'Depende del uso y el secado entre duchas. Para alargar su vida, déjala escurrir en una jabonera seca y ventilada.'],
   ['¿Puedo pedir recuerdos o regalos?', 'Claro. Podemos conversar sobre cantidades, combinaciones y presentación para celebraciones o regalos corporativos.'],
@@ -46,22 +46,20 @@ function App() {
       <main id="contenido">
         <section className="hero" id="inicio" style={{ '--hero-image': `url(${heroImage})` }}>
           <div className="hero-content section-shell">
-            <span className="eyebrow">Jabones artesanales · RD</span>
-            <h1>Cuidado que se siente <em>honesto.</em></h1>
-            <p>Ingredientes botánicos, procesos lentos y barras hechas a mano para cuidar tu piel todos los días.</p>
+            <span className="eyebrow">Jabones artesanales · Hechos en RD</span>
+            <h1>Cuidado hecho con <em>amor.</em></h1>
+            <p>Jabones creados en pequeñas tandas para llenar tu rutina de suavidad, aromas y cariño.</p>
             <div className="hero-actions">
               <a className="primary-button" href="#coleccion">Descubrir la colección <ArrowIcon /></a>
               <a className="secondary-link" href="#historia">Conoce nuestra historia</a>
             </div>
-            <div className="hero-note"><span>100%</span><p>hecho a mano en pequeñas tandas</p></div>
           </div>
         </section>
 
         <section className="feature-strip" aria-label="Nuestros valores">
           <div className="section-shell">
-            {features.map(({ icon: Icon, title, text }, index) => (
+            {features.map(({ icon: Icon, title, text }) => (
               <article key={title}>
-                <span className="feature-number">0{index + 1}</span>
                 <Icon />
                 <div><h2>{title}</h2><p>{text}</p></div>
               </article>
@@ -75,41 +73,41 @@ function App() {
           <div className="story-grid section-shell">
             <div className="story-image-wrap">
               <img src={storyImage} alt="Proceso artesanal de preparación de jabones botánicos" loading="lazy" />
-              <span className="story-seal">Hecho<br />con calma</span>
+              <span className="story-seal">Hecho<br />con amor</span>
             </div>
             <div className="story-copy">
               <span className="eyebrow">Nuestra historia</span>
-              <h2>Volver a lo simple también es una forma de cuidarse.</h2>
-              <p className="story-lead">Delicaté nace del deseo de hacer mejor una de las rutinas más cotidianas: limpiar y cuidar nuestra piel.</p>
-              <p>Trabajamos en pequeñas tandas, combinando aceites vegetales, mantecas y botánicos. No buscamos prometer milagros; buscamos crear una barra honesta, agradable y hecha con atención.</p>
+              <h2>El amor por lo hecho a mano se siente en cada barra.</h2>
+              <p className="story-lead">Delicaté nació para transformar un gesto diario en un momento especial de cuidado.</p>
+              <p>Elegimos aceites vegetales, mantecas y botánicos, y elaboramos cada tanda con paciencia. Queremos que cada aroma, textura y detalle te recuerde regalarte un poco de amor todos los días.</p>
               <dl className="story-stats">
-                <div><dt>Pequeñas</dt><dd>tandas</dd></div>
+                <div><dt>Hecho</dt><dd>a mano</dd></div>
                 <div><dt>Origen</dt><dd>local</dd></div>
-                <div><dt>Proceso</dt><dd>artesanal</dd></div>
+                <div><dt>Mucho</dt><dd>amor</dd></div>
               </dl>
-              <a className="text-link" href="#proceso">Así puedes ordenar <ArrowIcon /></a>
+              <a className="text-link" href="#proceso">Conoce cómo pedir <ArrowIcon /></a>
             </div>
           </div>
         </section>
 
         <section className="process-section section-shell" id="proceso">
           <div className="section-heading section-heading--center">
-            <span className="eyebrow">Comprar es sencillo</span>
-            <h2>De nuestra mesa a tus manos</h2>
-            <p>Sin formularios largos ni pagos confusos. Te acompañamos personalmente.</p>
+            <span className="eyebrow">Pedir es muy fácil</span>
+            <h2>Tu jabón favorito, más cerca de ti</h2>
+            <p>Elige lo que amas y nosotros nos encargamos de acompañarte personalmente.</p>
           </div>
           <div className="process-grid">
-            <article><span>01</span><h3>Elige tus barras</h3><p>Explora la colección y agrega al carrito tus favoritas.</p></article>
-            <article><span>02</span><h3>Envía el pedido</h3><p>Tu carrito se convierte en un mensaje listo para WhatsApp.</p></article>
-            <article><span>03</span><h3>Coordinamos contigo</h3><p>Confirmamos existencias, forma de entrega y método de pago.</p></article>
+            <article><span>01</span><h3>Encuentra tu favorito</h3><p>Descubre sus ingredientes, aromas y beneficios antes de elegir.</p></article>
+            <article><span>02</span><h3>Prepara tu pedido</h3><p>Guarda tus favoritos y envíanos tu selección por WhatsApp.</p></article>
+            <article><span>03</span><h3>Lo coordinamos contigo</h3><p>Confirmamos disponibilidad, entrega y forma de pago.</p></article>
           </div>
         </section>
 
         <section className="quote-section">
           <div className="section-shell">
             <span className="quote-mark">“</span>
-            <blockquote>La belleza de un objeto cotidiano está en cómo fue hecho y en cómo te hace sentir.</blockquote>
-            <p>La filosofía detrás de cada barra Delicaté</p>
+            <blockquote>Cada barra guarda el tiempo, el cuidado y el amor que ponemos en crearla.</blockquote>
+            <p>Hecho a mano en República Dominicana</p>
           </div>
         </section>
 
@@ -132,15 +130,15 @@ function App() {
           <div className="contact-grid section-shell">
             <div>
               <span className="eyebrow">Hablemos</span>
-              <h2>¿Te ayudamos a encontrar tu jabón?</h2>
-              <p>Cuéntanos qué buscas y continuaremos la conversación personalmente por WhatsApp.</p>
+              <h2>Encontremos el jabón ideal para ti.</h2>
+              <p>Cuéntanos qué te gusta y te ayudaremos a elegir con cariño por WhatsApp.</p>
               <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> {WHATSAPP_DISPLAY}</a>
             </div>
             <form onSubmit={handleContact}>
               <label htmlFor="name">Tu nombre</label>
               <input id="name" name="name" type="text" autoComplete="name" placeholder="¿Cómo te llamas?" required />
               <label htmlFor="message">¿Cómo podemos ayudarte?</label>
-              <textarea id="message" name="message" rows="4" placeholder="Quiero conocer cuál jabón es ideal para mí…" required />
+              <textarea id="message" name="message" rows="4" placeholder="Cuéntanos qué aromas, ingredientes o tipo de cuidado buscas…" required />
               <button className="primary-button" type="submit">Enviar por WhatsApp <ArrowIcon /></button>
             </form>
           </div>

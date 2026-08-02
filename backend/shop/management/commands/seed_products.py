@@ -1,4 +1,7 @@
-from django.core.management.base import BaseCommand
+from collections import Counter
+
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
 
 from shop.models import Product
 
@@ -71,7 +74,7 @@ PRODUCTS = [
         "description": "Una mezcla de romero y arcilla verde pensada para una limpieza profunda.",
         "price": 400,
         "stock": 8,
-        "image": "products/img-1.webp",
+        "image": "products/img-5.webp",
         "category": "botanicos",
         "ingredients": "Aceite de oliva, romero, arcilla verde y manteca de karité.",
         "benefit": "Equilibra",
@@ -86,13 +89,73 @@ PRODUCTS = [
         "description": "Moldeada a mano con aceites vegetales y un aroma floral discreto.",
         "price": 425,
         "stock": 6,
-        "image": "products/img-1_eCRfnXT.webp",
+        "image": "products/img-1.webp",
         "category": "regalos",
         "ingredients": "Aceite de oliva, manteca de cacao y mezcla aromática floral.",
         "benefit": "Suaviza",
         "skin_type": "Todo tipo de piel",
         "weight_grams": 95,
         "is_featured": False,
+    },
+    {
+        "slug": "arcilla-avena",
+        "name": "Arcilla & Avena",
+        "short_description": "Equilibrio suave con una textura naturalmente especial.",
+        "description": "Una barra de arcilla verde y avena creada para una limpieza agradable y delicada.",
+        "price": 425,
+        "stock": 8,
+        "image": "products/arcilla-avena.webp",
+        "category": "botanicos",
+        "ingredients": "Arcilla verde y avena.",
+        "benefit": "Limpia con suavidad",
+        "skin_type": "Mixta y sensible",
+        "weight_grams": 105,
+        "is_featured": False,
+    },
+    {
+        "slug": "cafe-exfoliante",
+        "name": "Café Despierto",
+        "short_description": "Una exfoliación corporal con aroma cálido a café.",
+        "description": "Su textura con café molido acompaña una limpieza corporal estimulante y sensorial.",
+        "price": 450,
+        "stock": 7,
+        "image": "products/cafe-exfoliante.webp",
+        "category": "botanicos",
+        "ingredients": "Café molido.",
+        "benefit": "Exfolia y renueva",
+        "skin_type": "Uso corporal",
+        "weight_grams": 110,
+        "is_featured": False,
+    },
+    {
+        "slug": "cacao-almendras",
+        "name": "Cacao & Almendras",
+        "short_description": "Un abrazo cremoso con un aroma profundo y envolvente.",
+        "description": "Cacao y aceite de almendras se unen en una barra nutritiva de espuma cremosa.",
+        "price": 450,
+        "stock": 6,
+        "image": "products/cacao-almendras.webp",
+        "category": "nutritivos",
+        "ingredients": "Cacao y almendras.",
+        "benefit": "Nutre y suaviza",
+        "skin_type": "Normal a seca",
+        "weight_grams": 105,
+        "is_featured": False,
+    },
+    {
+        "slug": "corazon-lavanda",
+        "name": "Corazón de Lavanda",
+        "short_description": "Un detalle floral creado para regalar amor.",
+        "description": "Una barra en forma de corazón con aroma de lavanda para convertir el cuidado en un regalo especial.",
+        "price": 425,
+        "stock": 10,
+        "image": "products/corazon-lavanda.webp",
+        "category": "regalos",
+        "ingredients": "Lavanda.",
+        "benefit": "Relaja y perfuma",
+        "skin_type": "Todo tipo de piel",
+        "weight_grams": 95,
+        "is_featured": True,
     },
 ]
 
@@ -108,6 +171,19 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        image_counts = Counter(product["image"] for product in PRODUCTS)
+        duplicate_images = [image for image, count in image_counts.items() if count > 1]
+        if duplicate_images:
+            raise CommandError(f"Cada producto demo debe tener una imagen única: {', '.join(duplicate_images)}")
+
+        missing_images = [
+            product["image"]
+            for product in PRODUCTS
+            if not (settings.MEDIA_ROOT / product["image"]).is_file()
+        ]
+        if missing_images:
+            raise CommandError(f"Faltan imágenes del catálogo: {', '.join(missing_images)}")
+
         if options["reset"]:
             Product.objects.update(is_active=False, is_featured=False)
 

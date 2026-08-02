@@ -72,15 +72,15 @@ export function CartDrawer({ open, onClose, items, total, updateQuantity, remove
       <button className="drawer-backdrop" type="button" onClick={onClose} aria-label="Cerrar carrito" tabIndex="-1" />
       <aside ref={drawerRef} className="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title">
         <div className="cart-header">
-          <div><span className="eyebrow">Tu selección</span><h2 id="cart-title">Carrito</h2></div>
+          <div><span className="eyebrow">Tus favoritos</span><h2 id="cart-title">Tu pedido</h2></div>
           <button ref={closeButtonRef} className="icon-button" type="button" onClick={onClose} aria-label="Cerrar carrito"><CloseIcon /></button>
         </div>
 
         {items.length === 0 ? (
           <div className="empty-cart">
             <span>01</span>
-            <h3>Tu ritual empieza aquí</h3>
-            <p>Agrega los jabones que más te gusten y prepara tu pedido por WhatsApp.</p>
+            <h3>Elige algo hecho con amor</h3>
+            <p>Agrega tus jabones favoritos y prepara tu pedido por WhatsApp.</p>
             <button type="button" className="text-link" onClick={browseProducts}>Ver la colección <ArrowIcon /></button>
           </div>
         ) : (

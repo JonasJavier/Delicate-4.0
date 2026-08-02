@@ -1,3 +1,6 @@
+from io import StringIO
+
+from django.core.management import call_command
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -58,3 +61,11 @@ class ProductApiTests(APITestCase):
     def test_inactive_product_detail_is_not_public(self):
         response = self.client.get(reverse("shop:product-detail", kwargs={"slug": "oculto"}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_demo_catalog_has_unique_images(self):
+        call_command("seed_products", "--reset", stdout=StringIO())
+        products = Product.objects.filter(is_active=True)
+        images = list(products.values_list("image", flat=True))
+
+        self.assertEqual(products.count(), 10)
+        self.assertEqual(len(images), len(set(images)))
