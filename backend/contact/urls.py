@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import contact_api, newsletter_subscription_api
 
-app_name = 'contact'
+from .views import ContactMessageCreateView, NewsletterSubscriptionCreateView
+
+
+app_name = "contact"
 
 urlpatterns = [
-    path('api/contact/', contact_api, name='contact_api'), 
-    path('api/newsletter/', newsletter_subscription_api, name='newsletter_subscription_api'),
+    path("contact/", ContactMessageCreateView.as_view(), name="contact-create"),
+    path("newsletter/", NewsletterSubscriptionCreateView.as_view(), name="newsletter-create"),
 ]

@@ -1,35 +1,27 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
+
 from .models import CustomUser, UserProfile
+
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
-    verbose_name_plural = 'User Profile'
+    extra = 0
 
-class UserAdmin(BaseUserAdmin):
-    list_display = ('email', 'is_staff', 'is_active', 'is_superuser', 'is_email_verified')
-    list_filter = ('is_staff', 'is_active', 'is_superuser', 'is_email_verified')
-    
+
+@admin.register(CustomUser)
+class CustomUserAdmin(BaseUserAdmin):
+    ordering = ("email",)
+    list_display = ("email", "is_staff", "is_active", "last_login")
+    list_filter = ("is_staff", "is_active")
+    search_fields = ("email",)
+    inlines = (UserProfileInline,)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_email_verified')}),
-        ('Important dates', {'fields': ('last_login',)}),
+        (None, {"fields": ("email", "password")}),
+        ("Permisos", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Actividad", {"fields": ("last_login",)}),
     )
-    
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active', 'is_superuser', 'is_email_verified')}
-        ),
+        (None, {"classes": ("wide",), "fields": ("email", "password1", "password2", "is_staff", "is_active")}),
     )
-    
-    search_fields = ('email',)
-    ordering = ('email',)
-    filter_horizontal = ()
-    inlines = [UserProfileInline] 
-
-# Registro del modelo CustomUser y desregistro de Group
-admin.site.register(CustomUser, UserAdmin)
-admin.site.unregister(Group)

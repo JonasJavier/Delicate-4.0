@@ -1,0 +1,30 @@
+# Python
+.venv/
+.env/
+__pycache__/
+*.py[cod]
+*.log
+.pytest_cache/
+.coverage
+
+# Django local state
+backend/*.sqlite3*
+backend/staticfiles/
+backend/media/uploads/
+
+# Environment variables
+.env
+!.env.example
+backend/.env
+frontend/.env
+
+# Node / Vite
+frontend/node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,119 +1,165 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import './assets/css/App.css';
-import Navbar from './components/Navbar';
-import Loader from './components/Loader';
-import ErrorBoundary from './components/ErrorBoundary';
-import PrivateRoute from './components/PrivateRoute'; 
-import CreateBlogPost from './pages/CreateBlogPost';
-import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
-import ProductManagement from './pages/ProductManagement'; 
-import ThemeToggleButton from './components/ThemeToggleButton';
-import './assets/css/global.css'; 
-import PropTypes from 'prop-types';
+import { useCallback, useState } from 'react';
+import heroImage from './assets/images/brand/hero-artesanal.webp';
+import storyImage from './assets/images/brand/proceso-artesanal.webp';
+import { CartDrawer } from './components/CartDrawer.jsx';
+import { Footer } from './components/Footer.jsx';
+import { Header } from './components/Header.jsx';
+import { ArrowIcon, HeartIcon, LeafIcon, SparkIcon, WhatsAppIcon } from './components/Icons.jsx';
+import { ProductGrid } from './components/ProductGrid.jsx';
+import { useCart } from './hooks/useCart.js';
 
-const Home = lazy(() => import('./pages/Home'));
-const About = lazy(() => import('./pages/About'));
-const Shop = lazy(() => import('./pages/Shop'));
-const Contact = lazy(() => import('./pages/Contact'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogDetail = lazy(() => import('./pages/BlogDetail'));
-const ProductDetail = lazy(() => import('./pages/ProductDetail'));
-const ShoppingCart = lazy(() => import('./pages/ShoppingCart'));
-const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'));
-const ThankYouPage = lazy(() => import('./pages/ThankYouPage'));
-const OrderHistoryPage = lazy(() => import('./pages/OrderHistoryPage'));
-const OrderDetailsPage = lazy(() => import('./pages/OrderDetailsPage'));
-const SettingsPage = lazy(() => import('./pages/SettingsPage'));
-const RegisterPage = lazy(() => import('./pages/RegisterPage'));
-const LoginPage = lazy(() => import('./pages/LoginPage'));
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '18498625049';
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
+const features = [
+  { icon: LeafIcon, title: 'Ingredientes honestos', text: 'Aceites vegetales, mantecas y botánicos elegidos con intención.' },
+  { icon: HeartIcon, title: 'Hecho en pequeñas tandas', text: 'Cada barra recibe tiempo, cuidado y un acabado verdaderamente artesanal.' },
+  { icon: SparkIcon, title: 'Una rutina más amable', text: 'Limpieza efectiva y sensorial, sin complicar tu cuidado diario.' },
+];
 
-const AppWrapper = styled.div`
-  animation: ${fadeIn} 1s ease-in-out;
-  background-color: ${(props) => (props.theme === 'dark' ? '#121212' : '#ffffff')};
-  color: ${(props) => (props.theme === 'dark' ? '#ffffff' : '#000000')};
-  min-height: 100vh;
-  transition: all 0.3s ease;
-`;
-
-function ThemedAppWrapper({ children }) {
-  const { theme } = useTheme();
-  return <AppWrapper theme={theme}>{children}</AppWrapper>;
-}
+const faqs = [
+  ['¿Cómo realizo mi pedido?', 'Agrega tus jabones al carrito y pulsa “Finalizar por WhatsApp”. Recibiremos el detalle completo y coordinaremos contigo disponibilidad, entrega y pago.'],
+  ['¿Hacen entregas?', 'Sí. Coordinamos opciones de entrega o recogida directamente por WhatsApp según tu ubicación en República Dominicana.'],
+  ['¿Cuánto dura una barra?', 'Depende del uso y el secado entre duchas. Para alargar su vida, déjala escurrir en una jabonera seca y ventilada.'],
+  ['¿Puedo pedir recuerdos o regalos?', 'Claro. Podemos conversar sobre cantidades, combinaciones y presentación para celebraciones o regalos corporativos.'],
+  ['¿Los jabones sustituyen un tratamiento dermatológico?', 'No. Son productos cosméticos de limpieza. Si tienes una condición, alergia o sensibilidad importante, consulta a un profesional de salud antes de usarlos.'],
+];
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [cartOpen, setCartOpen] = useState(false);
+  const cart = useCart();
+  const closeCart = useCallback(() => setCartOpen(false), []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+  const addToCart = (product) => {
+    cart.addItem(product);
+    setCartOpen(true);
+  };
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <Loader minLoadTime={2000} />;
-  }
+  const handleContact = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const message = `Hola Delicaté 👋\nMi nombre es ${data.get('name')}.\n\n${data.get('message')}`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+  };
 
   return (
-    <ThemeProvider>
-      <ThemedAppWrapper>
-        <AuthProvider>
-          <Router>
-            <ErrorBoundary>
-              <Suspense fallback={<Loader />}>
-                <Navbar />
-                <ThemeToggleButton />
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/shop" element={<Shop />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog/:id" element={<BlogDetail />} />
-                  <Route path="/product/:id" element={<ProductDetail />} />
-                  <Route path="/shoppingcart" element={<ShoppingCart />} />
-                  <Route path="/register" element={<RegisterPage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/" element={<Blog />} />
-                  <Route path="/blog/:id" element={<BlogDetail />} />
+    <>
+      <Header cartCount={cart.count} onCartOpen={() => setCartOpen(true)} />
+      <main id="contenido">
+        <section className="hero" id="inicio" style={{ '--hero-image': `url(${heroImage})` }}>
+          <div className="hero-content section-shell">
+            <span className="eyebrow">Jabones artesanales · RD</span>
+            <h1>Cuidado que se siente <em>honesto.</em></h1>
+            <p>Ingredientes botánicos, procesos lentos y barras hechas a mano para cuidar tu piel todos los días.</p>
+            <div className="hero-actions">
+              <a className="primary-button" href="#coleccion">Descubrir la colección <ArrowIcon /></a>
+              <a className="secondary-link" href="#historia">Conoce nuestra historia</a>
+            </div>
+            <div className="hero-note"><span>100%</span><p>hecho a mano en pequeñas tandas</p></div>
+          </div>
+        </section>
 
-                  {/* Private Routes */}
-                  <Route element={<PrivateRoute />}>
-                    <Route path="/orderhistorypage" element={<OrderHistoryPage />} />
-                    <Route path="/createblogpost" element= {<CreateBlogPost/>}/>
-                    <Route path="/orderdetails/:id" element={<OrderDetailsPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
-                    <Route path="/thankyoupage" element={<ThankYouPage />} />
-                    <Route path="/orderconfirmation" element={<OrderConfirmation />} />
-                    <Route path="/admin/product-management" element={<ProductManagement />} />
-                  </Route>
-                </Routes>
-              </Suspense>
-            </ErrorBoundary>
-          </Router>
-        </AuthProvider>
-      </ThemedAppWrapper>
-    </ThemeProvider>
+        <section className="feature-strip" aria-label="Nuestros valores">
+          <div className="section-shell">
+            {features.map(({ icon: Icon, title, text }, index) => (
+              <article key={title}>
+                <span className="feature-number">0{index + 1}</span>
+                <Icon />
+                <div><h2>{title}</h2><p>{text}</p></div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <ProductGrid onAdd={addToCart} />
+
+        <section className="story-section" id="historia">
+          <div className="story-grid section-shell">
+            <div className="story-image-wrap">
+              <img src={storyImage} alt="Proceso artesanal de preparación de jabones botánicos" loading="lazy" />
+              <span className="story-seal">Hecho<br />con calma</span>
+            </div>
+            <div className="story-copy">
+              <span className="eyebrow">Nuestra historia</span>
+              <h2>Volver a lo simple también es una forma de cuidarse.</h2>
+              <p className="story-lead">Delicaté nace del deseo de hacer mejor una de las rutinas más cotidianas: limpiar y cuidar nuestra piel.</p>
+              <p>Trabajamos en pequeñas tandas, combinando aceites vegetales, mantecas y botánicos. No buscamos prometer milagros; buscamos crear una barra honesta, agradable y hecha con atención.</p>
+              <dl className="story-stats">
+                <div><dt>Pequeñas</dt><dd>tandas</dd></div>
+                <div><dt>Origen</dt><dd>local</dd></div>
+                <div><dt>Proceso</dt><dd>artesanal</dd></div>
+              </dl>
+              <a className="text-link" href="#proceso">Así puedes ordenar <ArrowIcon /></a>
+            </div>
+          </div>
+        </section>
+
+        <section className="process-section section-shell" id="proceso">
+          <div className="section-heading section-heading--center">
+            <span className="eyebrow">Comprar es sencillo</span>
+            <h2>De nuestra mesa a tus manos</h2>
+            <p>Sin formularios largos ni pagos confusos. Te acompañamos personalmente.</p>
+          </div>
+          <div className="process-grid">
+            <article><span>01</span><h3>Elige tus barras</h3><p>Explora la colección y agrega al carrito tus favoritas.</p></article>
+            <article><span>02</span><h3>Envía el pedido</h3><p>Tu carrito se convierte en un mensaje listo para WhatsApp.</p></article>
+            <article><span>03</span><h3>Coordinamos contigo</h3><p>Confirmamos existencias, forma de entrega y método de pago.</p></article>
+          </div>
+        </section>
+
+        <section className="quote-section">
+          <div className="section-shell">
+            <span className="quote-mark">“</span>
+            <blockquote>La belleza de un objeto cotidiano está en cómo fue hecho y en cómo te hace sentir.</blockquote>
+            <p>La filosofía detrás de cada barra Delicaté</p>
+          </div>
+        </section>
+
+        <section className="faq-section section-shell" id="preguntas">
+          <div className="section-heading section-heading--row">
+            <div><span className="eyebrow">Antes de ordenar</span><h2>Preguntas frecuentes</h2></div>
+            <p>Si no encuentras tu respuesta, escríbenos. Nos encantará ayudarte a elegir.</p>
+          </div>
+          <div className="faq-list">
+            {faqs.map(([question, answer], index) => (
+              <details key={question} open={index === 0}>
+                <summary><span>{String(index + 1).padStart(2, '0')}</span>{question}<i>+</i></summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="contact-section" id="contacto">
+          <div className="contact-grid section-shell">
+            <div>
+              <span className="eyebrow">Hablemos</span>
+              <h2>¿Te ayudamos a encontrar tu jabón?</h2>
+              <p>Cuéntanos qué buscas y continuaremos la conversación personalmente por WhatsApp.</p>
+              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> (849) 862-5049</a>
+            </div>
+            <form onSubmit={handleContact}>
+              <label htmlFor="name">Tu nombre</label>
+              <input id="name" name="name" type="text" autoComplete="name" placeholder="¿Cómo te llamas?" required />
+              <label htmlFor="message">¿Cómo podemos ayudarte?</label>
+              <textarea id="message" name="message" rows="4" placeholder="Quiero conocer cuál jabón es ideal para mí…" required />
+              <button className="primary-button" type="submit">Enviar por WhatsApp <ArrowIcon /></button>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+      <a className="floating-whatsapp" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="Escribir a Delicaté por WhatsApp"><WhatsAppIcon /></a>
+      <CartDrawer
+        open={cartOpen}
+        onClose={closeCart}
+        items={cart.items}
+        total={cart.total}
+        updateQuantity={cart.updateQuantity}
+        removeItem={cart.removeItem}
+      />
+    </>
   );
 }
-ThemedAppWrapper.propTypes = {
-  children: PropTypes.node.isRequired, // children es obligatorio y puede ser cualquier elemento React
-};
 
 export default App;

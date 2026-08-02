@@ -1,15 +1,20 @@
 from rest_framework import serializers
-from .models import NewsletterSubscription  
+
+from .models import ContactMessage, NewsletterSubscription
+
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = ["id", "name", "email", "phone", "subject", "message", "submitted_at"]
+        read_only_fields = ["id", "submitted_at"]
+
 
 class NewsletterSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsletterSubscription
-        fields = ['email']
+        fields = ["id", "email", "subscribed_at"]
+        read_only_fields = ["id", "subscribed_at"]
 
     def validate_email(self, value):
-        """
-        Validate that the email is valid and not already subscribed.
-        """
-        if NewsletterSubscription.objects.filter(email=value).exists():
-            raise serializers.ValidationError("This email is already subscribed.")
-        return value
+        return value.strip().lower()

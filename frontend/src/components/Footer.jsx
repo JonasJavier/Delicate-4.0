@@ -1,65 +1,40 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import '../assets/css/Footer.css';
+import { WhatsAppIcon } from './Icons.jsx';
 
-const Footer = () => {
-  const [email, setEmail] = useState('');
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '18498625049';
 
-  const handleSubscribe = async (e) => {
-    e.preventDefault();
-
-    const response = await fetch('http://localhost:8000/contact/api/newsletter/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      alert(data.success);
-      setEmail(''); 
-    } else {
-      alert(data.error);
-    }
-  };
-
+export function Footer() {
   return (
-    <footer className="footer">
-      <div className="container">
-        <div className="footer-content">
-          <div className="footer-logo">
-            <h2 className='Logo'>Delicaté</h2>
-          </div>
-          <div className="footer-links">
-            <Link to="/">Home</Link>
-            <Link to="/about">About Us</Link>
-            <Link to="/shop">Shop</Link>
-            <Link to="/contact">Contact</Link>
-            <Link to="/privacy-policy">Privacy Policy</Link>
-          </div>
-          <div className="footer-newsletter">
-            <h4>Subscribe to our Newsletter</h4>
-            <form onSubmit={handleSubscribe}>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                aria-label="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <button type="submit">Subscribe</button>
-            </form>
-          </div>
+    <footer className="site-footer">
+      <div className="footer-main section-shell">
+        <div className="footer-brand">
+          <a className="brand brand--light" href="#inicio">
+            <span className="brand-mark">D</span>
+            <span><strong>Delicaté</strong><small>hecho a mano</small></span>
+          </a>
+          <p>Jabones artesanales para convertir lo cotidiano en un pequeño ritual.</p>
         </div>
-        <div className="footer-bottom">
-          <p>&copy; 2024 Delicaté. All Rights Reserved.</p>
+        <div>
+          <h2>Explora</h2>
+          <a href="#coleccion">Colección</a>
+          <a href="#historia">Nuestra historia</a>
+          <a href="#proceso">Cómo comprar</a>
         </div>
+        <div>
+          <h2>Ayuda</h2>
+          <a href="#preguntas">Preguntas frecuentes</a>
+          <a href="#contacto">Contacto</a>
+          <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">WhatsApp</a>
+        </div>
+        <div className="footer-contact">
+          <h2>Hablemos</h2>
+          <p>¿Tienes una piel sensible, buscas un regalo o quieres hacer un pedido especial?</p>
+          <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> (849) 862-5049</a>
+        </div>
+      </div>
+      <div className="footer-bottom section-shell">
+        <span>© {new Date().getFullYear()} Delicaté</span>
+        <span>Hecho con calma en República Dominicana</span>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

@@ -1,78 +1,61 @@
-from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils import timezone
+from django.utils.text import slugify
+
 
 class Product(models.Model):
-    """
-    Model to represent a product in the store.
-    """
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.PositiveIntegerField()
-    image = models.ImageField(upload_to='products/', blank=True, null=True)
+    class Category(models.TextChoices):
+        SOFT = "suaves", "Piel sensible"
+        NOURISHING = "nutritivos", "Nutritivos"
+        CLASSIC = "clasicos", "Clásicos"
+        AROMATIC = "aromaticos", "Aromáticos"
+        BOTANICAL = "botanicos", "Botánicos"
+        GIFT = "regalos", "Para regalar"
 
-    # Additional fields for product attributes
-    ingredients = models.TextField(blank=True, null=True)
-    dimensions = models.CharField(max_length=255, blank=True, null=True)
-    weight = models.CharField(max_length=255, blank=True, null=True)
-    skintype = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField("nombre", max_length=160)
+    slug = models.SlugField(max_length=180, blank=True, db_index=True)
+    short_description = models.CharField("descripción breve", max_length=180, blank=True)
+    description = models.TextField("descripción")
+    price = models.DecimalField(
+        "precio (RD$)",
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(0)],
+    )
+    stock = models.PositiveIntegerField("existencias", default=0)
+    image = models.ImageField("imagen", upload_to="products/", blank=True, null=True)
+    category = models.CharField(
+        "categoría",
+        max_length=20,
+        choices=Category.choices,
+        default=Category.CLASSIC,
+    )
+    ingredients = models.TextField("ingredientes", blank=True, default="")
+    benefit = models.CharField("beneficio principal", max_length=120, blank=True)
+    skin_type = models.CharField("tipo de piel", max_length=120, blank=True)
+    weight_grams = models.PositiveSmallIntegerField("peso (g)", default=100)
+    is_featured = models.BooleanField("destacado", default=False)
+    is_active = models.BooleanField("activo", default=True)
+    created_at = models.DateTimeField("creado", default=timezone.now, editable=False)
+    updated_at = models.DateTimeField("actualizado", auto_now=True)
+
+    class Meta:
+        ordering = ["-is_featured", "name"]
+        verbose_name = "producto"
+        verbose_name_plural = "productos"
+        indexes = [models.Index(fields=["is_active", "category"])]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name) or "producto"
+            slug = base_slug
+            suffix = 2
+            while Product.objects.exclude(pk=self.pk).filter(slug=slug).exists():
+                slug = f"{base_slug}-{suffix}"
+                suffix += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
-
-
-class Review(models.Model):
-    """
-    Model to store reviews for products.
-    Each review is linked to a specific product and user.
-    """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    comment = models.TextField()  # The review comment left by the user
-    rating = models.PositiveSmallIntegerField()  # Rating from 1 to 5
-    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp of when the review was created
-
-    def __str__(self):
-        return f"{self.user.email} - {self.product.name} ({self.rating}/5)"
-
-
-class Cart(models.Model):
-    """
-    Model to represent a shopping cart.
-    A cart can belong to a user or be anonymous (session-based).
-    """
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    session_key = models.CharField(max_length=40, null=True, blank=True)  # For anonymous users, link by session key
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        if self.user:
-            return f"Cart of {self.user.email}"
-        return f"Anonymous Cart with session key {self.session_key}"
-
-    @property
-    def items(self):
-        """
-        Property to get all items in the cart.
-        """
-        return self.cartitem_set.all()  # Returns all cart items related to this cart
-
-
-class CartItem(models.Model):
-    """
-    Model to represent individual items in a shopping cart.
-    Each CartItem links to a Cart and a Product.
-    """
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)  # Link to the cart
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # The product being added to the cart
-    quantity = models.PositiveIntegerField(default=1)  # Quantity of the product
-
-    def subtotal(self):
-        """
-        Calculate the subtotal for this cart item (price * quantity).
-        """
-        return self.quantity * self.product.price
-
-    def __str__(self):
-        return f"{self.quantity} x {self.product.name}"
