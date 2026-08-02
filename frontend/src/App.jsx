@@ -7,8 +7,7 @@ import { Header } from './components/Header.jsx';
 import { ArrowIcon, HeartIcon, LeafIcon, SparkIcon, WhatsAppIcon } from './components/Icons.jsx';
 import { ProductGrid } from './components/ProductGrid.jsx';
 import { useCart } from './hooks/useCart.js';
-
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '18498625049';
+import { WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from './config.js';
 
 const features = [
   { icon: LeafIcon, title: 'Ingredientes honestos', text: 'Aceites vegetales, mantecas y botánicos elegidos con intención.' },
@@ -135,7 +134,7 @@ function App() {
               <span className="eyebrow">Hablemos</span>
               <h2>¿Te ayudamos a encontrar tu jabón?</h2>
               <p>Cuéntanos qué buscas y continuaremos la conversación personalmente por WhatsApp.</p>
-              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> (849) 862-5049</a>
+              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> {WHATSAPP_DISPLAY}</a>
             </div>
             <form onSubmit={handleContact}>
               <label htmlFor="name">Tu nombre</label>

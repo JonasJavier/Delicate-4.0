@@ -1,7 +1,13 @@
-from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
+
+
+def validate_image_size(image):
+    if image.size > 5 * 1024 * 1024:
+        raise ValidationError("La imagen no puede superar 5 MB.")
 
 
 class Product(models.Model):
@@ -14,7 +20,7 @@ class Product(models.Model):
         GIFT = "regalos", "Para regalar"
 
     name = models.CharField("nombre", max_length=160)
-    slug = models.SlugField(max_length=180, blank=True, db_index=True)
+    slug = models.SlugField(max_length=180, blank=True, unique=True)
     short_description = models.CharField("descripción breve", max_length=180, blank=True)
     description = models.TextField("descripción")
     price = models.DecimalField(
@@ -24,7 +30,13 @@ class Product(models.Model):
         validators=[MinValueValidator(0)],
     )
     stock = models.PositiveIntegerField("existencias", default=0)
-    image = models.ImageField("imagen", upload_to="products/", blank=True, null=True)
+    image = models.ImageField(
+        "imagen",
+        upload_to="products/",
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(["jpg", "jpeg", "png", "webp"]), validate_image_size],
+    )
     category = models.CharField(
         "categoría",
         max_length=20,

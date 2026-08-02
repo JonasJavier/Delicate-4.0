@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fallbackProducts, formatPrice } from '../data/fallbackProducts.js';
-import { BagIcon } from './Icons.jsx';
+import { ArrowIcon, BagIcon } from './Icons.jsx';
+import { ProductModal } from './ProductModal.jsx';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
+const DEMO_CATALOG_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_CATALOG === 'true';
 const categories = [
   ['todos', 'Todos'],
   ['suaves', 'Piel sensible'],
@@ -18,6 +20,8 @@ export function ProductGrid({ onAdd }) {
   const [category, setCategory] = useState('todos');
   const [status, setStatus] = useState('loading');
   const [addedId, setAddedId] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -29,18 +33,27 @@ export function ProductGrid({ onAdd }) {
         const data = await response.json();
         const results = Array.isArray(data) ? data : data.results;
         if (!results?.length) throw new Error('Catálogo vacío');
-        setProducts(results);
+        const normalizedProducts = results.map((product) => {
+          const localProduct = fallbackProducts.find((item) => item.slug === product.slug);
+          return { ...product, image: product.image || localProduct?.image || fallbackProducts[0].image };
+        });
+        setProducts(normalizedProducts);
         setStatus('ready');
       } catch (error) {
         if (error.name === 'AbortError') return;
-        setProducts(fallbackProducts);
-        setStatus('fallback');
+        if (DEMO_CATALOG_ENABLED) {
+          setProducts(fallbackProducts);
+          setStatus('fallback');
+        } else {
+          setProducts([]);
+          setStatus('error');
+        }
       }
     }
 
     loadProducts();
     return () => controller.abort();
-  }, []);
+  }, [loadAttempt]);
 
   const visibleProducts = useMemo(
     () => products.filter((product) => category === 'todos' || product.category === category),
@@ -69,6 +82,7 @@ export function ProductGrid({ onAdd }) {
             key={value}
             type="button"
             className={category === value ? 'is-active' : ''}
+            aria-pressed={category === value}
             onClick={() => setCategory(value)}
           >
             {label}
@@ -77,8 +91,23 @@ export function ProductGrid({ onAdd }) {
       </div>
 
       {status === 'loading' ? (
-        <div className="product-grid" aria-label="Cargando productos">
+        <div className="product-grid" aria-label="Cargando productos" aria-busy="true">
           {[1, 2, 3].map((item) => <div className="product-skeleton" key={item} />)}
+        </div>
+      ) : status === 'error' ? (
+        <div className="catalog-error" role="alert">
+          <span>Catálogo temporalmente no disponible</span>
+          <h3>No pudimos cargar los productos.</h3>
+          <p>Inténtalo nuevamente o escríbenos por WhatsApp para consultar disponibilidad.</p>
+          <button className="primary-button" type="button" onClick={() => { setStatus('loading'); setLoadAttempt((value) => value + 1); }}>
+            Volver a intentar <ArrowIcon />
+          </button>
+        </div>
+      ) : visibleProducts.length === 0 ? (
+        <div className="catalog-empty" role="status">
+          <h3>No hay productos en esta categoría por ahora.</h3>
+          <p>Prueba otra selección o consulta por WhatsApp nuestras próximas tandas.</p>
+          <button type="button" className="text-link" onClick={() => setCategory('todos')}>Ver todos <ArrowIcon /></button>
         </div>
       ) : (
         <div className="product-grid">
@@ -104,6 +133,9 @@ export function ProductGrid({ onAdd }) {
                 <div><dt>Ideal para</dt><dd>{product.skin_type || 'Todo tipo de piel'}</dd></div>
                 <div><dt>Peso</dt><dd>{product.weight_grams || 100} g</dd></div>
               </dl>
+              <button className="product-details-button" type="button" onClick={() => setSelectedProduct(product)}>
+                Ver fórmula y detalles <ArrowIcon />
+              </button>
             </article>
           ))}
         </div>
@@ -112,6 +144,7 @@ export function ProductGrid({ onAdd }) {
       {status === 'fallback' && (
         <p className="catalog-note" role="status">Mostrando la colección de demostración. Al iniciar Django, el catálogo se sincroniza automáticamente.</p>
       )}
+      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAdd={handleAdd} />
     </section>
   );
 }

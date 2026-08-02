@@ -1,0 +1,18 @@
+{
+  "name": "Delicaté — Jabones artesanales",
+  "short_name": "Delicaté",
+  "description": "Jabones artesanales hechos con calma en República Dominicana.",
+  "lang": "es-DO",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfaf7",
+  "theme_color": "#f5f0e8",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

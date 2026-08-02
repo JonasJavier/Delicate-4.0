@@ -1,6 +1,5 @@
 import { WhatsAppIcon } from './Icons.jsx';
-
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '18498625049';
+import { WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from '../config.js';
 
 export function Footer() {
   return (
@@ -28,7 +27,7 @@ export function Footer() {
         <div className="footer-contact">
           <h2>Hablemos</h2>
           <p>¿Tienes una piel sensible, buscas un regalo o quieres hacer un pedido especial?</p>
-          <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> (849) 862-5049</a>
+          <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> {WHATSAPP_DISPLAY}</a>
         </div>
       </div>
       <div className="footer-bottom section-shell">

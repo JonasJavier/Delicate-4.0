@@ -44,3 +44,17 @@ class ProductApiTests(APITestCase):
         response = self.client.get(reverse("shop:product-detail", kwargs={"slug": self.featured.slug}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["category_label"], "Piel sensible")
+
+    def test_duplicate_names_receive_unique_slugs(self):
+        duplicate = Product.objects.create(
+            name="Avena Calma",
+            description="Otra fórmula",
+            price=360,
+            stock=2,
+        )
+        self.assertEqual(self.featured.slug, "avena-calma")
+        self.assertEqual(duplicate.slug, "avena-calma-2")
+
+    def test_inactive_product_detail_is_not_public(self):
+        response = self.client.get(reverse("shop:product-detail", kwargs={"slug": "oculto"}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

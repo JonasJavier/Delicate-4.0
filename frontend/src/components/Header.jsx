@@ -18,6 +18,17 @@ export function Header({ cartCount, onCartOpen }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const onKeyDown = (event) => event.key === 'Escape' && setMenuOpen(false);
+    document.body.classList.add('menu-is-open');
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.classList.remove('menu-is-open');
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [menuOpen]);
+
   return (
     <header className={`site-header${scrolled ? ' site-header--scrolled' : ''}`}>
       <a className="skip-link" href="#contenido">Saltar al contenido</a>
@@ -30,7 +41,7 @@ export function Header({ cartCount, onCartOpen }) {
           </span>
         </a>
 
-        <nav className={`main-nav${menuOpen ? ' main-nav--open' : ''}`} aria-label="Navegación principal">
+        <nav id="main-navigation" className={`main-nav${menuOpen ? ' main-nav--open' : ''}`} aria-label="Navegación principal">
           {navItems.map(([label, href]) => (
             <a key={href} href={href} onClick={() => setMenuOpen(false)}>{label}</a>
           ))}
@@ -49,6 +60,7 @@ export function Header({ cartCount, onCartOpen }) {
             onClick={() => setMenuOpen((value) => !value)}
             aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={menuOpen}
+            aria-controls="main-navigation"
           >
             {menuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>

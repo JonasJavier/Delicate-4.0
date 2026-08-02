@@ -1,6 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -27,8 +26,6 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField("correo electrónico", unique=True)
-    is_email_verified = models.BooleanField("correo verificado", default=False)
-    verification_code = models.CharField(max_length=6, blank=True, null=True)
     is_active = models.BooleanField("activo", default=True)
     is_staff = models.BooleanField("staff", default=False)
 
@@ -43,29 +40,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-
-phone_validator = RegexValidator(
-    regex=r"^\+?[0-9()\-\s]{9,20}$",
-    message="Introduce un número de teléfono válido.",
-)
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="profile")
-    first_name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
-    phone_number = models.CharField(max_length=20, blank=True, null=True, validators=[phone_validator])
-    billing_first_name = models.CharField(max_length=50, blank=True, null=True)
-    billing_last_name = models.CharField(max_length=50, blank=True, null=True)
-    company_name = models.CharField(max_length=100, blank=True, null=True)
-    street_address = models.CharField(max_length=255, blank=True, null=True)
-    country = models.CharField(max_length=100, blank=True, null=True)
-    state = models.CharField(max_length=100, blank=True, null=True)
-    zip_code = models.CharField(max_length=10, blank=True, null=True)
-    billing_email = models.EmailField(blank=True, null=True)
-    billing_phone = models.CharField(max_length=20, blank=True, null=True, validators=[phone_validator])
-
-    def __str__(self):
-        return f"Perfil de {self.user.email}"

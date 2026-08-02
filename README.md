@@ -7,14 +7,16 @@ Ecommerce y sitio de marca para jabones artesanales. El catálogo se administra 
 ## Qué incluye
 
 - Landing ecommerce responsive con identidad visual propia.
-- Catálogo conectado a Django REST Framework y catálogo local de respaldo.
-- Filtros por categoría, estados de carga y productos agotados.
+- Catálogo conectado a Django REST Framework; el respaldo visual queda limitado a desarrollo/demo.
+- Filtros por categoría, detalle de fórmula e ingredientes, estados de carga, error y productos agotados.
 - Carrito persistente en `localStorage`, sin obligar al cliente a registrarse.
 - Pedido preformateado con productos, cantidades y total para WhatsApp.
 - Formulario de consulta que abre una conversación de WhatsApp.
 - Django Admin para inventario, precios, imágenes, destacados y contactos.
 - API pública de solo lectura para productos.
-- Configuración segura mediante variables de entorno.
+- Navegación accesible por teclado, foco controlado en diálogos y soporte para movimiento reducido.
+- Configuración segura mediante variables de entorno, PostgreSQL y archivos estáticos comprimidos.
+- Límites de frecuencia para formularios públicos y validación de imágenes del catálogo.
 - Pruebas de API, lint y build de producción.
 
 ## Stack
@@ -23,7 +25,7 @@ Ecommerce y sitio de marca para jabones artesanales. El catálogo se administra 
 | --- | --- |
 | Backend | Python 3.12+ · Django 5.2 LTS · Django REST Framework 3.17 |
 | Frontend | React 19 · Vite 8 · CSS responsive propio |
-| Desarrollo | SQLite · proxy de Vite hacia Django |
+| Datos | SQLite en desarrollo · PostgreSQL recomendado en producción |
 | Compra | Carrito local + WhatsApp |
 
 ## Estructura
@@ -76,7 +78,7 @@ Abre otra terminal:
 
 ```powershell
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 
@@ -98,7 +100,7 @@ En otra terminal:
 
 ```bash
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 
@@ -134,10 +136,14 @@ Los valores por defecto funcionan en desarrollo. Para personalizarlos, copia `.e
 | `DJANGO_SECRET_KEY` | Clave larga y privada para Django |
 | `DJANGO_DEBUG` | `True` en local, `False` en producción |
 | `DJANGO_ALLOWED_HOSTS` | Dominios permitidos, separados por coma |
+| `DATABASE_URL` | Conexión PostgreSQL de producción; si se omite usa SQLite |
 | `CORS_ALLOWED_ORIGINS` | Orígenes autorizados para consumir la API |
 | `CSRF_TRUSTED_ORIGINS` | Orígenes confiables para formularios de Django |
+| `DJANGO_TRUST_PROXY_SSL_HEADER` | `True` si el proveedor termina HTTPS en un proxy confiable |
 | `VITE_API_URL` | Base de la API; en local se recomienda `/api` |
 | `VITE_WHATSAPP_NUMBER` | Número internacional sin `+`, espacios ni guiones |
+| `VITE_WHATSAPP_DISPLAY` | Número con formato legible para mostrar al cliente |
+| `VITE_ENABLE_DEMO_CATALOG` | `true` solo para demo; en producción comercial usa `false` |
 
 Vite solo incorpora variables que empiecen por `VITE_`. Si cambias el número de WhatsApp en producción debes volver a generar el build.
 
@@ -178,18 +184,21 @@ npm run preview
 ## Build y producción
 
 1. Define `DJANGO_DEBUG=False`, una clave secreta fuerte y los hosts/orígenes reales.
-2. Usa PostgreSQL en producción si el proyecto empieza a recibir pedidos frecuentes.
+2. Configura `DATABASE_URL` con PostgreSQL y ejecuta las migraciones antes de publicar.
 3. Sirve `frontend/dist` desde un hosting estático y Django desde un servicio Python.
 4. Configura almacenamiento persistente para `backend/media` o un servicio de objetos.
 5. Ejecuta `python backend/manage.py collectstatic` y las migraciones en cada despliegue.
-6. Mantén el número de WhatsApp en `VITE_WHATSAPP_NUMBER`.
+6. Mantén el número de WhatsApp en `VITE_WHATSAPP_NUMBER` y deja `VITE_ENABLE_DEMO_CATALOG=false`.
+
+Antes de recibir pedidos reales, completa la [lista de salida a producción](docs/GO_LIVE.md). Incluye contenido, privacidad, entrega, respaldo y comprobaciones operativas que dependen del negocio y no pueden resolverse únicamente con código.
 
 La base `backend/db.sqlite3`, los entornos virtuales, los logs, `node_modules` y los builds están ignorados por Git para evitar publicar datos personales o archivos generados.
 
 ## Decisiones de experiencia
 
 - No hay registro ni login de clientes: para este modelo de venta añade fricción sin aportar valor.
-- El carrito vive en el navegador y funciona incluso si la API está temporalmente fuera de línea.
+- El usuario personalizado de Django existe solo para el equipo administrador; no se conservan perfiles, direcciones ni datos de facturación de compradores.
+- El carrito vive en el navegador. El catálogo demo puede respaldar una presentación local, pero nunca reemplaza silenciosamente los datos reales en producción.
 - El cliente ve un total estimado, pero el sitio aclara que no realiza cobros.
 - El mensaje de WhatsApp incluye el pedido completo y campos para nombre y modalidad de entrega.
 - El contenido evita promesas médicas; cualquier condición o alergia debe consultarse con un profesional.

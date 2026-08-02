@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { formatPrice } from '../data/fallbackProducts.js';
+import { WHATSAPP_NUMBER } from '../config.js';
 import { ArrowIcon, CloseIcon, WhatsAppIcon } from './Icons.jsx';
-
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '18498625049';
 
 function createWhatsAppUrl(items, total) {
   const lines = items.map(
@@ -25,25 +24,56 @@ function createWhatsAppUrl(items, total) {
 }
 
 export function CartDrawer({ open, onClose, items, total, updateQuantity, removeItem }) {
+  const drawerRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const previouslyFocusedRef = useRef(null);
+
   useEffect(() => {
     if (!open) return undefined;
-    const onKeyDown = (event) => event.key === 'Escape' && onClose();
+    previouslyFocusedRef.current = document.activeElement;
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (event.key !== 'Tab' || !drawerRef.current) return;
+      const focusable = drawerRef.current.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKeyDown);
+    window.requestAnimationFrame(() => closeButtonRef.current?.focus());
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
+      if (previouslyFocusedRef.current?.isConnected) previouslyFocusedRef.current.focus();
     };
   }, [onClose, open]);
 
+  const browseProducts = () => {
+    onClose();
+    window.setTimeout(() => document.querySelector('#coleccion')?.scrollIntoView({ behavior: 'smooth' }), 100);
+  };
+
   return (
     <div className={`drawer-root${open ? ' drawer-root--open' : ''}`} aria-hidden={!open}>
-      <button className="drawer-backdrop" type="button" onClick={onClose} aria-label="Cerrar carrito" tabIndex={open ? 0 : -1} />
-      <aside className="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <button className="drawer-backdrop" type="button" onClick={onClose} aria-label="Cerrar carrito" tabIndex="-1" />
+      <aside ref={drawerRef} className="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title">
         <div className="cart-header">
           <div><span className="eyebrow">Tu selección</span><h2 id="cart-title">Carrito</h2></div>
-          <button className="icon-button" type="button" onClick={onClose} aria-label="Cerrar carrito"><CloseIcon /></button>
+          <button ref={closeButtonRef} className="icon-button" type="button" onClick={onClose} aria-label="Cerrar carrito"><CloseIcon /></button>
         </div>
 
         {items.length === 0 ? (
@@ -51,7 +81,7 @@ export function CartDrawer({ open, onClose, items, total, updateQuantity, remove
             <span>01</span>
             <h3>Tu ritual empieza aquí</h3>
             <p>Agrega los jabones que más te gusten y prepara tu pedido por WhatsApp.</p>
-            <button type="button" className="text-link" onClick={onClose}>Ver la colección <ArrowIcon /></button>
+            <button type="button" className="text-link" onClick={browseProducts}>Ver la colección <ArrowIcon /></button>
           </div>
         ) : (
           <>
@@ -60,12 +90,12 @@ export function CartDrawer({ open, onClose, items, total, updateQuantity, remove
                 <article className="cart-item" key={product.id}>
                   <img src={product.image} alt="" />
                   <div className="cart-item-info">
-                    <div><h3>{product.name}</h3><strong>{formatPrice(product.price)}</strong></div>
+                    <div><h3>{product.name}</h3><strong>{formatPrice(Number(product.price) * quantity)}</strong></div>
                     <div className="quantity-row">
                       <div className="quantity-control" aria-label={`Cantidad de ${product.name}`}>
                         <button type="button" onClick={() => updateQuantity(product.id, quantity - 1)} aria-label="Restar uno">−</button>
                         <span>{quantity}</span>
-                        <button type="button" onClick={() => updateQuantity(product.id, quantity + 1)} aria-label="Agregar uno">+</button>
+                        <button type="button" onClick={() => updateQuantity(product.id, quantity + 1)} aria-label="Agregar uno" disabled={quantity >= (product.stock || 99)}>+</button>
                       </div>
                       <button className="remove-button" type="button" onClick={() => removeItem(product.id)}>Quitar</button>
                     </div>
