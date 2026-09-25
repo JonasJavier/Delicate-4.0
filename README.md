@@ -28,6 +28,12 @@ Ecommerce y sitio de marca para jabones artesanales. El catálogo se administra 
 | Datos | SQLite en desarrollo · PostgreSQL recomendado en producción |
 | Compra | Carrito local + WhatsApp |
 
+## License
+
+This project is proprietary and all rights reserved. See [LICENSE](LICENSE).
+The repository may be inspected for evaluation, but its code, design, brand,
+catalog, and visual materials may not be reused without written permission.
+
 ## Estructura
 
 ```text
