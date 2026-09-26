@@ -19,4 +19,8 @@ export default [
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
+  {
+    files: ['vite.config.js'],
+    languageOptions: { globals: globals.node },
+  },
 ];

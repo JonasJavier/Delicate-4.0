@@ -7,7 +7,7 @@ import { Header } from './components/Header.jsx';
 import { ArrowIcon, HeartIcon, LeafIcon, SparkIcon, WhatsAppIcon } from './components/Icons.jsx';
 import { ProductGrid } from './components/ProductGrid.jsx';
 import { useCart } from './hooks/useCart.js';
-import { WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from './config.js';
+import { WHATSAPP_DISPLAY, whatsappUrl } from './config.js';
 
 const features = [
   { icon: LeafIcon, title: 'Ingredientes que cuidan', text: 'Aceites vegetales, mantecas y botánicos elegidos para acompañar tu piel con suavidad.' },
@@ -26,7 +26,11 @@ const faqs = [
 function App() {
   const [cartOpen, setCartOpen] = useState(false);
   const cart = useCart();
-  const closeCart = useCallback(() => setCartOpen(false), []);
+  const { dismissNotice } = cart;
+  const closeCart = useCallback(() => {
+    setCartOpen(false);
+    dismissNotice();
+  }, [dismissNotice]);
 
   const addToCart = (product) => {
     cart.addItem(product);
@@ -36,8 +40,10 @@ function App() {
   const handleContact = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const message = `Hola Delicaté 👋\nMi nombre es ${data.get('name')}.\n\n${data.get('message')}`;
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+    const name = String(data.get('name')).trim();
+    const request = String(data.get('message')).trim();
+    const message = `Hola Delicaté 👋\nMi nombre es ${name}.\n\n${request}`;
+    window.open(whatsappUrl(message), '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -67,7 +73,7 @@ function App() {
           </div>
         </section>
 
-        <ProductGrid onAdd={addToCart} />
+        <ProductGrid onAdd={addToCart} onCatalogLoad={cart.syncWithCatalog} />
 
         <section className="story-section" id="historia">
           <div className="story-grid section-shell">
@@ -132,13 +138,13 @@ function App() {
               <span className="eyebrow">Hablemos</span>
               <h2>Encontremos el jabón ideal para ti.</h2>
               <p>Cuéntanos qué te gusta y te ayudaremos a elegir con cariño por WhatsApp.</p>
-              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> {WHATSAPP_DISPLAY}</a>
+              <a href={whatsappUrl()} target="_blank" rel="noreferrer"><WhatsAppIcon /> {WHATSAPP_DISPLAY}</a>
             </div>
             <form onSubmit={handleContact}>
               <label htmlFor="name">Tu nombre</label>
-              <input id="name" name="name" type="text" autoComplete="name" placeholder="¿Cómo te llamas?" required />
+              <input id="name" name="name" type="text" autoComplete="name" placeholder="¿Cómo te llamas?" maxLength={80} required />
               <label htmlFor="message">¿Cómo podemos ayudarte?</label>
-              <textarea id="message" name="message" rows="4" placeholder="Cuéntanos qué aromas, ingredientes o tipo de cuidado buscas…" required />
+              <textarea id="message" name="message" rows="4" placeholder="Cuéntanos qué aromas, ingredientes o tipo de cuidado buscas…" maxLength={1000} required />
               <button className="primary-button" type="submit">Enviar por WhatsApp <ArrowIcon /></button>
             </form>
           </div>
@@ -146,12 +152,13 @@ function App() {
       </main>
 
       <Footer />
-      <a className="floating-whatsapp" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="Escribir a Delicaté por WhatsApp"><WhatsAppIcon /></a>
+      <a className="floating-whatsapp" href={whatsappUrl()} target="_blank" rel="noreferrer" aria-label="Escribir a Delicaté por WhatsApp"><WhatsAppIcon /></a>
       <CartDrawer
         open={cartOpen}
         onClose={closeCart}
         items={cart.items}
         total={cart.total}
+        adjusted={cart.adjusted}
         updateQuantity={cart.updateQuantity}
         removeItem={cart.removeItem}
       />

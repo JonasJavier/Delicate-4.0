@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { formatPrice } from '../data/fallbackProducts.js';
-import { WHATSAPP_NUMBER } from '../config.js';
+import { whatsappUrl } from '../config.js';
+import { maxQuantity } from '../hooks/useCart.js';
 import { ArrowIcon, CloseIcon, WhatsAppIcon } from './Icons.jsx';
 
-function createWhatsAppUrl(items, total) {
+function createOrderMessage(items, total) {
   const lines = items.map(
     ({ product, quantity }) => `• ${quantity} × ${product.name} — ${formatPrice(Number(product.price) * quantity)}`,
   );
-  const message = [
+  return [
     'Hola Delicaté 👋',
     'Quiero realizar este pedido:',
     '',
@@ -20,10 +21,9 @@ function createWhatsAppUrl(items, total) {
     '',
     '¿Me confirman disponibilidad y forma de entrega? Gracias.',
   ].join('\n');
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-export function CartDrawer({ open, onClose, items, total, updateQuantity, removeItem }) {
+export function CartDrawer({ open, onClose, items, total, adjusted, updateQuantity, removeItem }) {
   const drawerRef = useRef(null);
   const closeButtonRef = useRef(null);
   const previouslyFocusedRef = useRef(null);
@@ -76,6 +76,12 @@ export function CartDrawer({ open, onClose, items, total, updateQuantity, remove
           <button ref={closeButtonRef} className="icon-button" type="button" onClick={onClose} aria-label="Cerrar carrito"><CloseIcon /></button>
         </div>
 
+        {adjusted && (
+          <p className="cart-notice" role="status">
+            Actualizamos tu pedido con los precios y la disponibilidad de hoy.
+          </p>
+        )}
+
         {items.length === 0 ? (
           <div className="empty-cart">
             <span>01</span>
@@ -95,7 +101,7 @@ export function CartDrawer({ open, onClose, items, total, updateQuantity, remove
                       <div className="quantity-control" aria-label={`Cantidad de ${product.name}`}>
                         <button type="button" onClick={() => updateQuantity(product.id, quantity - 1)} aria-label="Restar uno">−</button>
                         <span>{quantity}</span>
-                        <button type="button" onClick={() => updateQuantity(product.id, quantity + 1)} aria-label="Agregar uno" disabled={quantity >= (product.stock || 99)}>+</button>
+                        <button type="button" onClick={() => updateQuantity(product.id, quantity + 1)} aria-label="Agregar uno" disabled={quantity >= maxQuantity(product)}>+</button>
                       </div>
                       <button className="remove-button" type="button" onClick={() => removeItem(product.id)}>Quitar</button>
                     </div>
@@ -107,7 +113,7 @@ export function CartDrawer({ open, onClose, items, total, updateQuantity, remove
             <div className="cart-summary">
               <div><span>Total estimado</span><strong>{formatPrice(total)}</strong></div>
               <p>Coordinaremos disponibilidad, entrega y pago directamente contigo.</p>
-              <a className="whatsapp-checkout" href={createWhatsAppUrl(items, total)} target="_blank" rel="noreferrer">
+              <a className="whatsapp-checkout" href={whatsappUrl(createOrderMessage(items, total))} target="_blank" rel="noreferrer">
                 <WhatsAppIcon /> Finalizar por WhatsApp <ArrowIcon />
               </a>
               <small>No se realizará ningún cobro en este sitio.</small>

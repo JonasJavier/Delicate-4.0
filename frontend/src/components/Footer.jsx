@@ -1,5 +1,5 @@
 import { WhatsAppIcon } from './Icons.jsx';
-import { WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from '../config.js';
+import { WHATSAPP_DISPLAY, whatsappUrl } from '../config.js';
 
 export function Footer() {
   return (
@@ -22,12 +22,12 @@ export function Footer() {
           <h2>Ayuda</h2>
           <a href="#preguntas">Preguntas frecuentes</a>
           <a href="#contacto">Contacto</a>
-          <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">WhatsApp</a>
+          <a href={whatsappUrl()} target="_blank" rel="noreferrer">WhatsApp</a>
         </div>
         <div className="footer-contact">
           <h2>Hablemos</h2>
           <p>¿Tienes una piel sensible, buscas un regalo o quieres hacer un pedido especial?</p>
-          <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><WhatsAppIcon /> {WHATSAPP_DISPLAY}</a>
+          <a href={whatsappUrl()} target="_blank" rel="noreferrer"><WhatsAppIcon /> {WHATSAPP_DISPLAY}</a>
         </div>
       </div>
       <div className="footer-bottom section-shell">

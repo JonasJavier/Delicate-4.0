@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
+import { fetchCatalog } from '../api.js';
+import { DEMO_CATALOG_ENABLED } from '../config.js';
 import { fallbackProducts, formatPrice } from '../data/fallbackProducts.js';
 import { ArrowIcon, BagIcon } from './Icons.jsx';
 import { ProductModal } from './ProductModal.jsx';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
-const DEMO_CATALOG_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEMO_CATALOG === 'true';
 const categories = [
   ['todos', 'Todos'],
   ['suaves', 'Piel sensible'],
@@ -15,7 +15,7 @@ const categories = [
   ['regalos', 'Para regalar'],
 ];
 
-export function ProductGrid({ onAdd }) {
+export function ProductGrid({ onAdd, onCatalogLoad }) {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState('todos');
   const [status, setStatus] = useState('loading');
@@ -28,18 +28,11 @@ export function ProductGrid({ onAdd }) {
 
     async function loadProducts() {
       try {
-        const response = await fetch(`${API_URL}/products/`, { signal: controller.signal });
-        if (!response.ok) throw new Error('No se pudo cargar el catálogo');
-        const data = await response.json();
-        const results = Array.isArray(data) ? data : data.results;
-        if (!results?.length) throw new Error('Catálogo vacío');
-        const normalizedProducts = results.map((product) => {
-          const localProduct = fallbackProducts.find((item) => item.slug === product.slug);
-          const fallbackImage = localProduct?.image || fallbackProducts[0].image;
-          return { ...product, image: product.image || fallbackImage, fallback_image: fallbackImage };
-        });
-        setProducts(normalizedProducts);
+        const catalog = await fetchCatalog(controller.signal);
+        if (!catalog.length) throw new Error('Catálogo vacío');
+        setProducts(catalog);
         setStatus('ready');
+        onCatalogLoad?.(catalog);
       } catch (error) {
         if (error.name === 'AbortError') return;
         if (DEMO_CATALOG_ENABLED) {
@@ -54,7 +47,7 @@ export function ProductGrid({ onAdd }) {
 
     loadProducts();
     return () => controller.abort();
-  }, [loadAttempt]);
+  }, [loadAttempt, onCatalogLoad]);
 
   const visibleProducts = useMemo(
     () => products.filter((product) => category === 'todos' || product.category === category),
@@ -157,7 +150,7 @@ export function ProductGrid({ onAdd }) {
       )}
 
       {status === 'fallback' && (
-        <p className="catalog-note" role="status">Mostrando la colección de demostración. Al iniciar Django, el catálogo se sincroniza automáticamente.</p>
+        <p className="catalog-note" role="status">Mostrando una colección de referencia. Confirma disponibilidad y precios por WhatsApp.</p>
       )}
       <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAdd={handleAdd} />
     </section>
