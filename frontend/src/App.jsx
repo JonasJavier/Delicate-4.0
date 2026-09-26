@@ -42,7 +42,7 @@ function App() {
     const data = new FormData(event.currentTarget);
     const name = String(data.get('name')).trim();
     const request = String(data.get('message')).trim();
-    // Sin emojis: la página web de WhatsApp los convierte en «�».
+    // No emoji: WhatsApp's web page turns them into "�".
     const message = `¡Hola, Delicaté!\nMi nombre es ${name}.\n\n${request}`;
     window.open(whatsappUrl(message), '_blank', 'noopener,noreferrer');
   };

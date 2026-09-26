@@ -1,82 +1,82 @@
-# Despliegue en Railway
+# Deploying to Railway
 
-Delicaté corre en Railway como un solo servicio web (Django + build de React) con PostgreSQL y un volumen para las imágenes subidas desde el admin.
+Delicaté runs on Railway as a single web service (Django + the React build) with PostgreSQL and a volume for the images uploaded from the admin.
 
-- **Sitio:** <https://delicate.jonasjavier.dev> (también responde en la URL `*.up.railway.app` que genera Railway)
+- **Site:** <https://delicate.jonasjavier.dev> (it also answers on the `*.up.railway.app` URL that Railway generates)
 - **Admin:** <https://delicate.jonasjavier.dev/admin/>
-- **Salud:** <https://delicate.jonasjavier.dev/api/health/>
+- **Health:** <https://delicate.jonasjavier.dev/api/health/>
 
-## Recursos
+## Resources
 
-| Recurso | Nombre |
+| Resource | Name |
 | --- | --- |
-| Proyecto | `delicate` |
-| Ambiente | `production` |
-| Servicio web | `web` |
-| Base de datos | `Postgres` |
-| Volumen de imágenes | `web-volume` → `/data` |
-| Dominio propio | `delicate.jonasjavier.dev` |
+| Project | `delicate` |
+| Environment | `production` |
+| Web service | `web` |
+| Database | `Postgres` |
+| Image volume | `web-volume` → `/data` |
+| Custom domain | `delicate.jonasjavier.dev` |
 
-Los IDs de cada recurso están en el panel de Railway.
+The ID of every resource is in the Railway dashboard.
 
-El servicio `web` despliega desde la rama `main` de `JonasJavier/Delicate-4.0`: cada push a `main` publica una versión nueva.
+The `web` service deploys from the `main` branch of `JonasJavier/Delicate-4.0`: every push to `main` releases a new version.
 
-## Cómo se despliega
+## How a deployment works
 
-1. Railway construye el [`Dockerfile`](../Dockerfile): compila React con las variables `VITE_*`, instala Django, ejecuta `collectstatic` y comprime el build.
-2. Antes de publicar corre `python /app/backend/manage.py migrate --noinput` (*pre-deploy*, definido en [`railway.json`](../railway.json)). Si falla, la versión anterior sigue en línea.
-3. Arranca gunicorn (configuración en [`backend/gunicorn.conf.py`](../backend/gunicorn.conf.py)).
-4. Railway espera a que `/api/health/` responda 200 (la ruta comprueba también la base de datos) y solo entonces cambia el tráfico.
+1. Railway builds the [`Dockerfile`](../Dockerfile): it compiles React with the `VITE_*` variables, installs Django, runs `collectstatic` and compresses the build.
+2. Before the release it runs `python /app/backend/manage.py migrate --noinput` (the *pre-deploy* command, defined in [`railway.json`](../railway.json)). If it fails, the previous version stays online.
+3. It starts gunicorn (configured in [`backend/gunicorn.conf.py`](../backend/gunicorn.conf.py)).
+4. Railway waits for `/api/health/` to return 200 (the endpoint also checks the database) and only then switches traffic.
 
-Con un volumen montado, Railway detiene el contenedor anterior antes de iniciar el nuevo, así que cada despliegue tiene unos segundos de corte.
+With a volume attached, Railway stops the old container before starting the new one, so each deployment has a few seconds of downtime.
 
-> **Importante:** Railway detectó `railway.json` pero no aplicó sus valores a este servicio (creado por CLI). Por eso el builder, el *pre-deploy*, el healthcheck y los reintentos están fijados también en la configuración del servicio (dashboard → `web` → **Settings**). Si cambias alguno, hazlo en los dos sitios.
+> **Important:** Railway detected `railway.json` but did not apply its values to this service (it was created from the CLI). That is why the builder, the pre-deploy command, the health check and the restart policy are also set in the service configuration (dashboard → `web` → **Settings**). If you change any of them, change them in both places.
 
-## Variables del servicio `web`
+## `web` service variables
 
-| Variable | Valor |
+| Variable | Value |
 | --- | --- |
-| `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (referencia, red privada) |
-| `DJANGO_SECRET_KEY` | Generada aleatoriamente; no se guarda en ningún otro lugar |
-| `DJANGO_ALLOWED_HOSTS` | `delicate.jonasjavier.dev,<servicio>.up.railway.app` |
-| `CSRF_TRUSTED_ORIGINS` | `https://delicate.jonasjavier.dev,https://<servicio>.up.railway.app` |
+| `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (reference, private network) |
+| `DJANGO_SECRET_KEY` | Randomly generated; not stored anywhere else |
+| `DJANGO_ALLOWED_HOSTS` | `delicate.jonasjavier.dev,<service>.up.railway.app` |
+| `CSRF_TRUSTED_ORIGINS` | `https://delicate.jonasjavier.dev,https://<service>.up.railway.app` |
 | `VITE_SITE_URL` | `https://${{RAILWAY_PUBLIC_DOMAIN}}` |
 | `VITE_ENABLE_DEMO_CATALOG` | `false` |
 | `VITE_WHATSAPP_NUMBER` | `18498625049` |
 | `VITE_WHATSAPP_DISPLAY` | `(849) 862-5049` |
 
-No hace falta definir `DJANGO_DEBUG` (la imagen usa `False`), la cabecera de proxy HTTPS ni el número de proxies: la configuración los deriva de `RAILWAY_PROJECT_ID`. El dominio de `RAILWAY_PUBLIC_DOMAIN` también se autoriza solo, pero desde que existe el dominio propio esa variable vale `delicate.jonasjavier.dev`, y Railway ya no expone la URL `*.up.railway.app`; por eso ambas están escritas en `DJANGO_ALLOWED_HOSTS` y `CSRF_TRUSTED_ORIGINS`. Las imágenes van a `<volumen>/media` usando `RAILWAY_VOLUME_MOUNT_PATH`; `DJANGO_MEDIA_ROOT` solo se usa para forzar otra ruta, y debe ser absoluta.
+There is no need to set `DJANGO_DEBUG` (the image uses `False`), the HTTPS proxy header or the number of proxies: the settings derive them from `RAILWAY_PROJECT_ID`. The `RAILWAY_PUBLIC_DOMAIN` host is also allowed automatically, but since the custom domain exists that variable holds `delicate.jonasjavier.dev` and Railway no longer exposes the `*.up.railway.app` URL, so both hosts are written into `DJANGO_ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`. Images are stored in `<volume>/media` using `RAILWAY_VOLUME_MOUNT_PATH`; `DJANGO_MEDIA_ROOT` is only for forcing another location, and it must be absolute.
 
-> **Git Bash en Windows:** convierte cualquier argumento que empiece por `/` en una ruta de Windows (`/data` → `C:/Program Files/Git/data`), también dentro de `railway variable set` y `railway ssh`. Antepón siempre `MSYS_NO_PATHCONV=1` a esos comandos, o usa PowerShell.
+> **Git Bash on Windows:** it rewrites any argument that starts with `/` into a Windows path (`/data` → `C:/Program Files/Git/data`), including inside `railway variable set` and `railway ssh`. Always prefix those commands with `MSYS_NO_PATHCONV=1`, or use PowerShell.
 
-Las variables `VITE_*` se incrustan al construir. Si cambias el número de WhatsApp, Railway vuelve a construir y desplegar automáticamente.
+The `VITE_*` variables are embedded at build time. If you change the WhatsApp number, Railway rebuilds and redeploys automatically.
 
-## Operación
+## Operations
 
-Los comandos se ejecutan desde la raíz de este repositorio, que está enlazado al proyecto `delicate`. En Git Bash antepón `MSYS_NO_PATHCONV=1` para que no convierta las rutas `/app/...` en rutas de Windows.
+Run the commands from the root of this repository, linked to the `delicate` project. In Git Bash, prefix them with `MSYS_NO_PATHCONV=1` so `/app/...` paths are not turned into Windows paths.
 
-### Crear el usuario administrador
+### Create the admin user
 
-Abre una terminal dentro del contenedor y ejecuta el comando ahí, porque pide correo y contraseña de forma interactiva:
+Open a shell inside the container and run the command there, because it asks for the email and password interactively:
 
 ```bash
 railway ssh --service web
 python manage.py createsuperuser
 ```
 
-Usa una contraseña única y larga, y sal con `exit`.
+Use a long, unique password, then leave with `exit`.
 
-### Cargar el catálogo inicial
+### Load the initial catalog
 
-Ya se ejecutó el 25 de septiembre de 2026 al crear el servicio. Solo hace falta de nuevo con una base vacía. Crea los diez productos y copia sus fotos al volumen:
+This already ran on 25 September 2026 when the service was created. It is only needed again on an empty database. It creates the ten products and copies their photos to the volume:
 
 ```bash
 railway ssh --service web -- python manage.py seed_products
 ```
 
-No lo vuelvas a ejecutar después de editar productos en el admin: restablece precio, existencias y textos de esos diez productos.
+Do not run it again after editing products in the admin: it resets the price, stock and copy of those ten products.
 
-### Logs y estado
+### Logs and status
 
 ```bash
 railway deployment list --service web --limit 5 --json
@@ -84,29 +84,29 @@ railway logs --service web --deployment --lines 200
 railway logs --service web --build --lines 200
 ```
 
-### Volver a una versión anterior
+### Roll back
 
-Desde el dashboard: servicio `web` → **Deployments** → versión deseada → **Redeploy**. Las migraciones no se revierten solas; si la versión nueva cambió el esquema, revisa antes.
+From the dashboard: `web` service → **Deployments** → the version you want → **Redeploy**. Migrations are not reverted automatically; if the newer version changed the schema, check it first.
 
-### Copias de seguridad
+### Backups
 
-Activa backups programados en el dashboard para el volumen de `Postgres` y para `web-volume` (servicio → **Backups**). La base guarda el catálogo y los mensajes; el volumen, las fotos subidas.
+Enable scheduled backups in the dashboard for the `Postgres` volume and for `web-volume` (service → **Backups**). The database holds the catalog and messages; the volume holds the uploaded photos.
 
-## Dominio propio
+## Custom domain
 
-La tienda usa `delicate.jonasjavier.dev`. El DNS de `jonasjavier.dev` está en **Name.com**, con estos registros:
+The store uses `delicate.jonasjavier.dev`. DNS for `jonasjavier.dev` is managed at **Name.com**, with these records:
 
-| Tipo | Host (en Name.com) | Valor |
+| Type | Host (at Name.com) | Value |
 | --- | --- | --- |
-| `CNAME` | `delicate` | el destino que indica Railway |
-| `TXT` | `_railway-verify.delicate` | el valor que devuelve `railway domain status` |
+| `CNAME` | `delicate` | the target given by Railway |
+| `TXT` | `_railway-verify.delicate` | the value returned by `railway domain status` |
 
-Comprueba el estado del dominio y del certificado con:
+Check the domain and certificate status with:
 
 ```bash
 railway domain status delicate.jonasjavier.dev --service web --json
 ```
 
-`VITE_SITE_URL` referencia a `RAILWAY_PUBLIC_DOMAIN`, así que la vista previa de WhatsApp y la etiqueta canónica siguen solas al dominio propio.
+`VITE_SITE_URL` references `RAILWAY_PUBLIC_DOMAIN`, so the WhatsApp link preview and the canonical tag follow the custom domain automatically.
 
-Para cambiar o añadir otro dominio: `railway domain otro.dominio.com --service web`, crea los registros que devuelve y añádelo a `DJANGO_ALLOWED_HOSTS` y `CSRF_TRUSTED_ORIGINS`. `jonasjavier.dev` es `.dev`, así que los navegadores ya exigen HTTPS en todos sus subdominios; no hace falta activar `DJANGO_HSTS_INCLUDE_SUBDOMAINS`.
+To change or add a domain: run `railway domain other.example.com --service web`, create the records it returns and add the host to `DJANGO_ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`. `jonasjavier.dev` is a `.dev` domain, so browsers already require HTTPS on all its subdomains; there is no need to enable `DJANGO_HSTS_INCLUDE_SUBDOMAINS`.

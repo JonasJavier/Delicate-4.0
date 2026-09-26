@@ -1,39 +1,39 @@
-# Lista de salida a producción
+# Launch checklist
 
-Esta lista separa lo que ya protege el código de las decisiones que debe confirmar el negocio antes de vender a clientes reales.
+This checklist separates what the code already guarantees from the decisions the business must confirm before selling to real customers.
 
-## Catálogo y marca
+## Catalog and brand
 
-- Reemplazar cualquier fotografía o texto de demostración por contenido aprobado por la marca.
-- Confirmar nombre, precio, existencias, peso, ingredientes y tipo de piel de cada producto.
-- Revisar que las afirmaciones sean cosméticas y no prometan tratar enfermedades.
-- Añadir datos de contacto, horario de respuesta y zonas de entrega reales.
-- Probar el pedido completo con el número `18498625049` desde Android y iPhone.
+- Replace any demo photo or copy with content approved by the brand.
+- Confirm the name, price, stock, weight, ingredients and skin type of every product.
+- Check that every claim is cosmetic and does not promise to treat medical conditions.
+- Add real contact details, response hours and delivery areas.
+- Test a complete order with the number `18498625049` from Android and iPhone.
 
-## Servicio al cliente
+## Customer service
 
-- Definir por escrito costo y tiempos de entrega, cambios, devoluciones y productos dañados.
-- Preparar respuestas de WhatsApp para confirmar disponibilidad, dirección, modalidad de pago y entrega.
-- Informar al cliente que el total del carrito es estimado hasta confirmar el pedido.
-- Definir quién revisa mensajes, con qué frecuencia y cómo se actualiza el inventario después de una venta.
+- Write down delivery costs and times, and the policy for exchanges, returns and damaged products.
+- Prepare WhatsApp replies to confirm availability, address, payment method and delivery.
+- Tell customers that the cart total is an estimate until the order is confirmed.
+- Decide who reviews messages, how often, and how stock is updated after a sale.
 
-## Privacidad y cumplimiento
+## Privacy and compliance
 
-- Publicar una política de privacidad que refleje los datos realmente recopilados.
-- Publicar términos de compra y política de cambios aplicables a República Dominicana.
-- Obtener consentimiento antes de utilizar correos del boletín para marketing.
-- Evitar almacenar información médica o sensible en los mensajes de contacto.
+- Publish a privacy policy that reflects the data actually collected.
+- Publish purchase terms and an exchange policy that apply in the Dominican Republic.
+- Get consent before using newsletter emails for marketing.
+- Avoid storing medical or sensitive information in contact messages.
 
-## Infraestructura
+## Infrastructure
 
-- Usar `DJANGO_DEBUG=False`, una `DJANGO_SECRET_KEY` única y dominios HTTPS reales.
-- Configurar PostgreSQL mediante `DATABASE_URL` y copias de seguridad automáticas.
-- Configurar almacenamiento persistente para las imágenes subidas desde Django Admin.
-- Restringir el acceso al panel administrador y activar autenticación multifactor en el proveedor.
-- Dejar `VITE_ENABLE_DEMO_CATALOG=false` para no mostrar inventario ficticio si falla la API.
-- Configurar monitoreo de disponibilidad y errores antes de anunciar el sitio.
+- Use `DJANGO_DEBUG=False`, a unique `DJANGO_SECRET_KEY` and real HTTPS domains.
+- Configure PostgreSQL through `DATABASE_URL`, with automatic backups.
+- Configure persistent storage for the images uploaded from Django Admin.
+- Restrict access to the admin panel and enable multi-factor authentication with the hosting provider.
+- Keep `VITE_ENABLE_DEMO_CATALOG=false` so no fictional stock is shown if the API fails.
+- Set up uptime and error monitoring before announcing the site.
 
-## Validación final
+## Final validation
 
 ```powershell
 python backend\manage.py check
@@ -45,4 +45,4 @@ npm run lint
 npm run build
 ```
 
-Finalmente, prueba navegación, detalle de producto, carrito, cantidades, productos agotados y enlace de WhatsApp en anchos de 390, 768, 1024 y 1440 píxeles.
+Finally, test navigation, product details, the cart, quantities, sold-out products and the WhatsApp link at widths of 390, 768, 1024 and 1440 pixels.
