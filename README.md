@@ -154,7 +154,7 @@ Los valores por defecto funcionan en desarrollo. Para personalizarlos, copia `.e
 | `DJANGO_DEBUG` | `True` en local; la imagen Docker usa `False` por defecto |
 | `DJANGO_ALLOWED_HOSTS` | Dominios permitidos, separados por coma (el dominio de Railway se añade solo) |
 | `DATABASE_URL` | Conexión PostgreSQL de producción; si se omite usa SQLite |
-| `DJANGO_MEDIA_ROOT` | Carpeta de imágenes subidas; en producción, la ruta del volumen (`/data/media`) |
+| `DJANGO_MEDIA_ROOT` | Carpeta absoluta de imágenes subidas; en Railway se deriva del volumen montado |
 | `CORS_ALLOWED_ORIGINS` | Orígenes autorizados para consumir la API desde otro dominio |
 | `CSRF_TRUSTED_ORIGINS` | Orígenes confiables para formularios de Django (el dominio de Railway se añade solo) |
 | `DJANGO_TRUST_PROXY_SSL_HEADER` | `True` si un proxy confiable termina HTTPS (automático en Railway) |

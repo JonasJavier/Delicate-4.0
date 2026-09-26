@@ -129,9 +129,15 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
-# Point this at a persistent volume in production; container disks are wiped
-# on every deploy.
-MEDIA_ROOT = Path(os.getenv("DJANGO_MEDIA_ROOT", BASE_DIR / "media"))
+# Uploads must live on a persistent volume in production: container disks are
+# wiped on every deploy. Railway exposes the attached volume's mount path.
+railway_volume = os.getenv("RAILWAY_VOLUME_MOUNT_PATH")
+MEDIA_ROOT = Path(
+    os.getenv("DJANGO_MEDIA_ROOT")
+    or (Path(railway_volume) / "media" if railway_volume else BASE_DIR / "media")
+)
+if not DEBUG and not MEDIA_ROOT.is_absolute():
+    raise ImproperlyConfigured(f"DJANGO_MEDIA_ROOT must be an absolute path, got {MEDIA_ROOT}.")
 SERVE_MEDIA = env_bool("DJANGO_SERVE_MEDIA", True)
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},

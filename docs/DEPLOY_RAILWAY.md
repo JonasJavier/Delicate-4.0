@@ -35,13 +35,14 @@ Con un volumen montado, Railway detiene el contenedor anterior antes de iniciar 
 | --- | --- |
 | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (referencia, red privada) |
 | `DJANGO_SECRET_KEY` | Generada aleatoriamente; no se guarda en ningún otro lugar |
-| `DJANGO_MEDIA_ROOT` | `/data/media` |
 | `VITE_SITE_URL` | `https://${{RAILWAY_PUBLIC_DOMAIN}}` |
 | `VITE_ENABLE_DEMO_CATALOG` | `false` |
 | `VITE_WHATSAPP_NUMBER` | `18498625049` |
 | `VITE_WHATSAPP_DISPLAY` | `(849) 862-5049` |
 
-No hace falta definir `DJANGO_DEBUG` (la imagen usa `False`), ni hosts, orígenes CSRF, cabecera de proxy HTTPS o número de proxies: la configuración los deriva de `RAILWAY_PUBLIC_DOMAIN` y `RAILWAY_PROJECT_ID`.
+No hace falta definir `DJANGO_DEBUG` (la imagen usa `False`), ni hosts, orígenes CSRF, cabecera de proxy HTTPS o número de proxies: la configuración los deriva de `RAILWAY_PUBLIC_DOMAIN` y `RAILWAY_PROJECT_ID`. Las imágenes van a `<volumen>/media` usando `RAILWAY_VOLUME_MOUNT_PATH`; `DJANGO_MEDIA_ROOT` solo se usa para forzar otra ruta, y debe ser absoluta.
+
+> **Git Bash en Windows:** convierte cualquier argumento que empiece por `/` en una ruta de Windows (`/data` → `C:/Program Files/Git/data`), también dentro de `railway variable set` y `railway ssh`. Antepón siempre `MSYS_NO_PATHCONV=1` a esos comandos, o usa PowerShell.
 
 Las variables `VITE_*` se incrustan al construir. Si cambias el número de WhatsApp, Railway vuelve a construir y desplegar automáticamente.
 
