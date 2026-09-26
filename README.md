@@ -279,7 +279,7 @@ La siguiente línea, un configurador guiado de jabón personalizado, está espec
 
 ## Créditos y licencia
 
-Diseño y desarrollo: **Jonas Javier Encarnacion**, para Delicaté.
-La marca Delicaté, su catálogo y sus fotografías pertenecen a su propietaria. Las fotografías de ambiente de la portada y de la historia se generaron para esta versión; las de producto proceden del proyecto original.
+Diseño y desarrollo: **Jonas Javier Encarnacion**.
+Las fotografías de ambiente de la portada y de la historia se generaron para esta versión; las de producto proceden del proyecto original.
 
-Código propietario, todos los derechos reservados: puede consultarse para evaluación, pero no reutilizarse sin permiso escrito. Ver [LICENSE](LICENSE).
+© 2024-2026 Jonas Javier Encarnacion. Todos los derechos reservados sobre el código, el diseño, la marca, el catálogo y los materiales visuales: el repositorio puede consultarse para evaluación, pero no reutilizarse sin permiso escrito. Ver [LICENSE](LICENSE).
