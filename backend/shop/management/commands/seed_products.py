@@ -1,9 +1,16 @@
 from collections import Counter
+from pathlib import Path
 
-from django.conf import settings
+from django.core.files import File
+from django.core.files.storage import default_storage
 from django.core.management.base import BaseCommand, CommandError
 
 from shop.models import Product
+
+
+# Source photos ship with the code; they are copied into the media storage
+# (a persistent volume in production) the first time the catalog is seeded.
+SEED_IMAGES_DIR = Path(__file__).resolve().parents[2] / "seed_images"
 
 
 PRODUCTS = [
@@ -179,7 +186,7 @@ class Command(BaseCommand):
         missing_images = [
             product["image"]
             for product in PRODUCTS
-            if not (settings.MEDIA_ROOT / product["image"]).is_file()
+            if not self.seed_image_path(product["image"]).is_file()
         ]
         if missing_images:
             raise CommandError(f"Faltan imágenes del catálogo: {', '.join(missing_images)}")
@@ -189,9 +196,10 @@ class Command(BaseCommand):
 
         created_count = 0
         for payload in PRODUCTS:
+            image = self.ensure_stored_image(payload["image"])
             _, created = Product.objects.update_or_create(
                 slug=payload["slug"],
-                defaults={**payload, "is_active": True},
+                defaults={**payload, "image": image, "is_active": True},
             )
             created_count += int(created)
 
@@ -200,3 +208,13 @@ class Command(BaseCommand):
                 f"Catálogo listo: {len(PRODUCTS)} productos ({created_count} nuevos)."
             )
         )
+
+    @staticmethod
+    def seed_image_path(name):
+        return SEED_IMAGES_DIR / Path(name).name
+
+    def ensure_stored_image(self, name):
+        if default_storage.exists(name):
+            return name
+        with self.seed_image_path(name).open("rb") as source:
+            return default_storage.save(name, File(source))

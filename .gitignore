@@ -10,7 +10,7 @@ __pycache__/
 # Django local state
 backend/*.sqlite3*
 backend/staticfiles/
-backend/media/uploads/
+backend/media/
 
 # Environment variables
 .env

@@ -2,11 +2,13 @@ from django.db.models import Q
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from .models import Product
+from .pagination import CatalogPagination
 from .serializers import ProductSerializer
 
 
 class ProductListView(ListAPIView):
     serializer_class = ProductSerializer
+    pagination_class = CatalogPagination
 
     def get_queryset(self):
         queryset = Product.objects.filter(is_active=True)

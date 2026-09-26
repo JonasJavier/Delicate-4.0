@@ -1,6 +1,9 @@
+import tempfile
 from io import StringIO
+from pathlib import Path
 
 from django.core.management import call_command
+from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -62,10 +65,29 @@ class ProductApiTests(APITestCase):
         response = self.client.get(reverse("shop:product-detail", kwargs={"slug": "oculto"}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_demo_catalog_has_unique_images(self):
-        call_command("seed_products", "--reset", stdout=StringIO())
-        products = Product.objects.filter(is_active=True)
-        images = list(products.values_list("image", flat=True))
+    def test_page_size_can_be_requested_and_is_capped(self):
+        response = self.client.get(reverse("shop:product-list"), {"page_size": 1})
+        self.assertEqual(len(response.data["results"]), 1)
+        self.assertIsNotNone(response.data["next"])
 
-        self.assertEqual(products.count(), 10)
-        self.assertEqual(len(images), len(set(images)))
+        Product.objects.bulk_create(
+            Product(name=f"Extra {index}", slug=f"extra-{index}", description="Extra", price=100)
+            for index in range(120)
+        )
+        response = self.client.get(reverse("shop:product-list"), {"page_size": 500})
+        self.assertEqual(len(response.data["results"]), 100)
+
+    def test_demo_catalog_has_unique_images(self):
+        with tempfile.TemporaryDirectory() as media_root, override_settings(MEDIA_ROOT=media_root):
+            call_command("seed_products", "--reset", stdout=StringIO())
+            products = Product.objects.filter(is_active=True)
+            images = list(products.values_list("image", flat=True))
+
+            self.assertEqual(products.count(), 10)
+            self.assertEqual(len(images), len(set(images)))
+            for image in images:
+                self.assertTrue((Path(media_root) / image).is_file(), image)
+
+            # Running it again reuses the stored photos instead of duplicating them.
+            call_command("seed_products", stdout=StringIO())
+            self.assertEqual(sorted(images), sorted(products.values_list("image", flat=True)))

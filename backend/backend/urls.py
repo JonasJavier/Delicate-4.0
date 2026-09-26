@@ -1,12 +1,10 @@
+import re
+
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
-from django.http import JsonResponse
-from django.urls import include, path
+from django.urls import include, path, re_path
 
-
-def health_check(_request):
-    return JsonResponse({"status": "ok", "service": "delicate-api"})
+from . import views
 
 
 admin.site.site_header = "Delicaté · Administración"
@@ -15,10 +13,11 @@ admin.site.index_title = "Catálogo y contactos"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/health/", health_check, name="health-check"),
+    path("api/health/", views.health_check, name="health-check"),
     path("api/", include("shop.urls")),
     path("api/", include("contact.urls")),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.SERVE_MEDIA:
+    media_prefix = re.escape(settings.MEDIA_URL.lstrip("/"))
+    urlpatterns.append(re_path(rf"^{media_prefix}(?P<path>.+)$", views.media, name="media"))
