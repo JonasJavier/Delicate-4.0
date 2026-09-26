@@ -27,6 +27,8 @@ El servicio `web` despliega desde la rama `main` de `JonasJavier/Delicate-4.0`: 
 
 Con un volumen montado, Railway detiene el contenedor anterior antes de iniciar el nuevo, así que cada despliegue tiene unos segundos de corte.
 
+> **Importante:** Railway detectó `railway.json` pero no aplicó sus valores a este servicio (creado por CLI). Por eso el builder, el *pre-deploy*, el healthcheck y los reintentos están fijados también en la configuración del servicio (dashboard → `web` → **Settings**). Si cambias alguno, hazlo en los dos sitios.
+
 ## Variables del servicio `web`
 
 | Variable | Valor |
@@ -60,7 +62,7 @@ Usa una contraseña única y larga, y sal con `exit`.
 
 ### Cargar el catálogo inicial
 
-Solo una vez, con la base vacía. Crea los diez productos y copia sus fotos al volumen:
+Ya se ejecutó el 25 de septiembre de 2026 al crear el servicio. Solo hace falta de nuevo con una base vacía. Crea los diez productos y copia sus fotos al volumen:
 
 ```bash
 railway ssh --service web -- python manage.py seed_products

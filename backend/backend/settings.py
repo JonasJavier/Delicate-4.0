@@ -160,6 +160,7 @@ def whitenoise_headers(headers, _path, url):
 
 WHITENOISE_IMMUTABLE_FILE_TEST = whitenoise_immutable_file
 WHITENOISE_ADD_HEADERS_FUNCTION = whitenoise_headers
+WHITENOISE_MIMETYPES = {".webmanifest": "application/manifest+json"}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.CustomUser"
