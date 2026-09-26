@@ -2,9 +2,9 @@
 
 Delicaté corre en Railway como un solo servicio web (Django + build de React) con PostgreSQL y un volumen para las imágenes subidas desde el admin.
 
-- **Sitio:** <https://web-production-3706c.up.railway.app>
-- **Admin:** <https://web-production-3706c.up.railway.app/admin/>
-- **Salud:** <https://web-production-3706c.up.railway.app/api/health/>
+- **Sitio:** <https://delicate.jonasjavier.dev> (respaldo: <https://web-production-3706c.up.railway.app>)
+- **Admin:** <https://delicate.jonasjavier.dev/admin/>
+- **Salud:** <https://delicate.jonasjavier.dev/api/health/>
 
 ## Recursos
 
@@ -15,6 +15,7 @@ Delicaté corre en Railway como un solo servicio web (Django + build de React) c
 | Servicio web | `web` | `f97e72be-a19b-46e2-a299-ba30f5f6e06b` |
 | Base de datos | `Postgres` | `ea71415b-e2b2-45d8-a5d3-553443c9a3c7` |
 | Volumen de imágenes | `web-volume` → `/data` | `2531d094-0f28-4f7a-8d1d-9d1796d4544b` |
+| Dominio propio | `delicate.jonasjavier.dev` | `9a11b7d0-f70f-4a1f-bbc2-c98a64c3761a` |
 
 El servicio `web` despliega desde la rama `main` de `JonasJavier/Delicate-4.0`: cada push a `main` publica una versión nueva.
 
@@ -35,12 +36,14 @@ Con un volumen montado, Railway detiene el contenedor anterior antes de iniciar 
 | --- | --- |
 | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (referencia, red privada) |
 | `DJANGO_SECRET_KEY` | Generada aleatoriamente; no se guarda en ningún otro lugar |
+| `DJANGO_ALLOWED_HOSTS` | `delicate.jonasjavier.dev,web-production-3706c.up.railway.app` |
+| `CSRF_TRUSTED_ORIGINS` | `https://delicate.jonasjavier.dev,https://web-production-3706c.up.railway.app` |
 | `VITE_SITE_URL` | `https://${{RAILWAY_PUBLIC_DOMAIN}}` |
 | `VITE_ENABLE_DEMO_CATALOG` | `false` |
 | `VITE_WHATSAPP_NUMBER` | `18498625049` |
 | `VITE_WHATSAPP_DISPLAY` | `(849) 862-5049` |
 
-No hace falta definir `DJANGO_DEBUG` (la imagen usa `False`), ni hosts, orígenes CSRF, cabecera de proxy HTTPS o número de proxies: la configuración los deriva de `RAILWAY_PUBLIC_DOMAIN` y `RAILWAY_PROJECT_ID`. Las imágenes van a `<volumen>/media` usando `RAILWAY_VOLUME_MOUNT_PATH`; `DJANGO_MEDIA_ROOT` solo se usa para forzar otra ruta, y debe ser absoluta.
+No hace falta definir `DJANGO_DEBUG` (la imagen usa `False`), la cabecera de proxy HTTPS ni el número de proxies: la configuración los deriva de `RAILWAY_PROJECT_ID`. El dominio de `RAILWAY_PUBLIC_DOMAIN` también se autoriza solo, pero desde que existe el dominio propio esa variable vale `delicate.jonasjavier.dev`, y Railway ya no expone la URL `*.up.railway.app`; por eso ambas están escritas en `DJANGO_ALLOWED_HOSTS` y `CSRF_TRUSTED_ORIGINS`. Las imágenes van a `<volumen>/media` usando `RAILWAY_VOLUME_MOUNT_PATH`; `DJANGO_MEDIA_ROOT` solo se usa para forzar otra ruta, y debe ser absoluta.
 
 > **Git Bash en Windows:** convierte cualquier argumento que empiece por `/` en una ruta de Windows (`/data` → `C:/Program Files/Git/data`), también dentro de `railway variable set` y `railway ssh`. Antepón siempre `MSYS_NO_PATHCONV=1` a esos comandos, o usa PowerShell.
 
@@ -89,7 +92,19 @@ Activa backups programados en el dashboard para el volumen de `Postgres` y para 
 
 ## Dominio propio
 
-1. `railway domain www.tudominio.com --service web` y crea en tu proveedor DNS los registros que devuelve.
-2. Añade el dominio a Django: `DJANGO_ALLOWED_HOSTS=www.tudominio.com` y `CSRF_TRUSTED_ORIGINS=https://www.tudominio.com`.
-3. Cambia `VITE_SITE_URL=https://www.tudominio.com` para que la vista previa en WhatsApp y la etiqueta canónica usen el dominio nuevo.
-4. Cuando todos los subdominios sirvan HTTPS, puedes activar `DJANGO_HSTS_INCLUDE_SUBDOMAINS=True` (y `DJANGO_HSTS_PRELOAD=True` si vas a inscribir el dominio en la lista de precarga).
+La tienda usa `delicate.jonasjavier.dev`. El DNS de `jonasjavier.dev` está en **Name.com**, con estos registros:
+
+| Tipo | Host (en Name.com) | Valor |
+| --- | --- | --- |
+| `CNAME` | `delicate` | `i90d3v6l.up.railway.app` |
+| `TXT` | `_railway-verify.delicate` | `railway-verify=be05dd8cf444702320549b6b6e3a7acf7c199a142b29b01b3100a019577475c7` |
+
+Comprueba el estado del dominio y del certificado con:
+
+```bash
+railway domain status delicate.jonasjavier.dev --service web --json
+```
+
+`VITE_SITE_URL` referencia a `RAILWAY_PUBLIC_DOMAIN`, así que la vista previa de WhatsApp y la etiqueta canónica siguen solas al dominio propio.
+
+Para cambiar o añadir otro dominio: `railway domain otro.dominio.com --service web`, crea los registros que devuelve y añádelo a `DJANGO_ALLOWED_HOSTS` y `CSRF_TRUSTED_ORIGINS`. `jonasjavier.dev` es `.dev`, así que los navegadores ya exigen HTTPS en todos sus subdominios; no hace falta activar `DJANGO_HSTS_INCLUDE_SUBDOMAINS`.
