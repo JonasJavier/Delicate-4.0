@@ -8,8 +8,9 @@ function createOrderMessage(items, total) {
   const lines = items.map(
     ({ product, quantity }) => `• ${quantity} × ${product.name} — ${formatPrice(Number(product.price) * quantity)}`,
   );
+  // Sin emojis: la página web de WhatsApp los convierte en «�».
   return [
-    'Hola Delicaté 👋',
+    '¡Hola, Delicaté!',
     'Quiero realizar este pedido:',
     '',
     ...lines,
