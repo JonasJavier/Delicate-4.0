@@ -1,0 +1,21 @@
+# Secrets and local state never enter the image.
+**/.env
+**/.env.*
+.venv
+.git
+**/__pycache__
+**/*.py[cod]
+**/*.log
+backend/*.sqlite3*
+backend/media
+backend/staticfiles
+
+# Rebuilt inside the image.
+**/node_modules
+frontend/dist
+
+# Not needed at runtime.
+docs
+.vscode
+.idea
+.claude

@@ -25,8 +25,9 @@ Ecommerce y sitio de marca para jabones artesanales. El catálogo se administra 
 | --- | --- |
 | Backend | Python 3.12+ · Django 5.2 LTS · Django REST Framework 3.17 |
 | Frontend | React 19 · Vite 8 · CSS responsive propio |
-| Datos | SQLite en desarrollo · PostgreSQL recomendado en producción |
+| Datos | SQLite en desarrollo · PostgreSQL en producción |
 | Compra | Carrito local + WhatsApp |
+| Hosting | Railway · un contenedor Docker (Django + build de React) · volumen para imágenes |
 
 ## License
 
@@ -40,22 +41,30 @@ catalog, and visual materials may not be reused without written permission.
 Delicate-4.0/
 ├── backend/
 │   ├── accounts/        # Usuario administrador por correo
-│   ├── backend/         # Configuración y rutas del proyecto
+│   ├── backend/         # Configuración, rutas, salud, media y cabeceras de seguridad
 │   ├── contact/         # Mensajes y suscripciones
 │   ├── shop/            # Productos, API, admin y comando de datos demo
-│   ├── media/           # Imágenes del catálogo local
+│   │   └── seed_images/ # Fotos originales que copia `seed_products`
+│   ├── media/           # Imágenes subidas (local; ignorado por Git)
+│   ├── gunicorn.conf.py
 │   ├── manage.py
 │   └── requirements.txt
 ├── frontend/
+│   ├── public/          # Íconos, portada para redes y robots.txt
 │   ├── src/
 │   │   ├── assets/      # Fotografía de marca y productos
 │   │   ├── components/  # Navegación, catálogo, carrito y footer
 │   │   ├── data/        # Catálogo visual de respaldo
 │   │   ├── hooks/       # Estado persistente del carrito
+│   │   ├── api.js       # Lectura del catálogo (todas las páginas)
+│   │   ├── config.js    # Variables VITE_* y enlaces de WhatsApp
 │   │   ├── App.jsx
 │   │   └── styles.css
 │   ├── package.json
 │   └── vite.config.js
+├── docs/                # Salida a producción y despliegue en Railway
+├── Dockerfile           # Build de React + runtime de Django en una imagen
+├── railway.json         # Build, migraciones y healthcheck en Railway
 ├── .env.example
 └── README.md
 ```
@@ -127,7 +136,9 @@ Luego entra a `/admin/`. Desde **Productos** puedes:
 - marcar productos destacados o agotados;
 - ocultar un producto sin borrarlo.
 
-El comando siguiente crea o actualiza diez productos de demostración y comprueba que ninguno comparta fotografía. Con `--reset` también oculta los productos antiguos; úsalo solo cuando quieras restaurar el catálogo demo.
+El comando siguiente crea o actualiza diez productos de demostración, copia sus fotos desde `backend/shop/seed_images/` al almacenamiento de media si aún no están y comprueba que ninguno comparta fotografía. Con `--reset` también oculta los productos antiguos; úsalo solo cuando quieras restaurar el catálogo demo.
+
+> **Cuidado en producción:** vuelve a poner precio, existencias y textos de demostración a esos diez productos. Ejecútalo solo una vez, sobre una base vacía.
 
 ```powershell
 python backend\manage.py seed_products --reset
@@ -140,25 +151,30 @@ Los valores por defecto funcionan en desarrollo. Para personalizarlos, copia `.e
 | Variable | Uso |
 | --- | --- |
 | `DJANGO_SECRET_KEY` | Clave larga y privada para Django |
-| `DJANGO_DEBUG` | `True` en local, `False` en producción |
-| `DJANGO_ALLOWED_HOSTS` | Dominios permitidos, separados por coma |
+| `DJANGO_DEBUG` | `True` en local; la imagen Docker usa `False` por defecto |
+| `DJANGO_ALLOWED_HOSTS` | Dominios permitidos, separados por coma (el dominio de Railway se añade solo) |
 | `DATABASE_URL` | Conexión PostgreSQL de producción; si se omite usa SQLite |
-| `CORS_ALLOWED_ORIGINS` | Orígenes autorizados para consumir la API |
-| `CSRF_TRUSTED_ORIGINS` | Orígenes confiables para formularios de Django |
-| `DJANGO_TRUST_PROXY_SSL_HEADER` | `True` si el proveedor termina HTTPS en un proxy confiable |
-| `VITE_API_URL` | Base de la API; en local se recomienda `/api` |
+| `DJANGO_MEDIA_ROOT` | Carpeta de imágenes subidas; en producción, la ruta del volumen (`/data/media`) |
+| `CORS_ALLOWED_ORIGINS` | Orígenes autorizados para consumir la API desde otro dominio |
+| `CSRF_TRUSTED_ORIGINS` | Orígenes confiables para formularios de Django (el dominio de Railway se añade solo) |
+| `DJANGO_TRUST_PROXY_SSL_HEADER` | `True` si un proxy confiable termina HTTPS (automático en Railway) |
+| `DJANGO_NUM_PROXIES` | Proxies delante de Django, para identificar la IP real en los límites de frecuencia (`1` en Railway) |
+| `DJANGO_HSTS_INCLUDE_SUBDOMAINS` / `DJANGO_HSTS_PRELOAD` | Actívalos solo con dominio propio y todos sus subdominios en HTTPS |
+| `DJANGO_LOG_LEVEL` | Nivel de logs de Django (por defecto `INFO`) |
+| `VITE_API_URL` | Base de la API; `/api` en local y en producción |
 | `VITE_WHATSAPP_NUMBER` | Número internacional sin `+`, espacios ni guiones |
 | `VITE_WHATSAPP_DISPLAY` | Número con formato legible para mostrar al cliente |
 | `VITE_ENABLE_DEMO_CATALOG` | `true` solo para demo; en producción comercial usa `false` |
+| `VITE_SITE_URL` | URL pública; se usa en la vista previa de enlaces y la etiqueta canónica |
 
-Vite solo incorpora variables que empiecen por `VITE_`. Si cambias el número de WhatsApp en producción debes volver a generar el build.
+Vite solo incorpora variables que empiecen por `VITE_`, y lo hace al construir. Si cambias el número de WhatsApp o la URL pública en producción, hay que volver a desplegar.
 
 ## API
 
 | Método | Ruta | Descripción |
 | --- | --- | --- |
-| `GET` | `/api/health/` | Estado del servicio |
-| `GET` | `/api/products/` | Productos activos paginados |
+| `GET` | `/api/health/` | Estado del servicio y de la base de datos (503 si no responde) |
+| `GET` | `/api/products/` | Productos activos paginados (`?page_size=` hasta 100) |
 | `GET` | `/api/products/?category=suaves` | Filtro por categoría |
 | `GET` | `/api/products/?featured=true` | Solo destacados |
 | `GET` | `/api/products/?search=avena` | Búsqueda en catálogo |
@@ -189,12 +205,24 @@ npm run preview
 
 ## Build y producción
 
-1. Define `DJANGO_DEBUG=False`, una clave secreta fuerte y los hosts/orígenes reales.
-2. Configura `DATABASE_URL` con PostgreSQL y ejecuta las migraciones antes de publicar.
-3. Sirve `frontend/dist` desde un hosting estático y Django desde un servicio Python.
-4. Configura almacenamiento persistente para `backend/media` o un servicio de objetos.
-5. Ejecuta `python backend/manage.py collectstatic` y las migraciones en cada despliegue.
-6. Mantén el número de WhatsApp en `VITE_WHATSAPP_NUMBER` y deja `VITE_ENABLE_DEMO_CATALOG=false`.
+Producción corre como **un solo servicio**: el `Dockerfile` construye React y lo sirve Django con WhiteNoise junto a la API y el admin. Tienda, API y panel comparten dominio, así que no hace falta CORS.
+
+| Ruta | La atiende |
+| --- | --- |
+| `/`, `/assets/*`, íconos | Build de React (WhiteNoise, comprimido y con caché larga en archivos con hash) |
+| `/api/*` | Django REST Framework |
+| `/admin/` | Django Admin |
+| `/static/*` | Archivos del admin (WhiteNoise) |
+| `/media/*` | Imágenes subidas, guardadas en un volumen persistente |
+
+En cada despliegue Railway construye la imagen, ejecuta `migrate` como *pre-deploy* y solo publica la nueva versión cuando `/api/health/` responde 200. La guía completa, con los recursos creados y cómo operar el servicio, está en [docs/DEPLOY_RAILWAY.md](docs/DEPLOY_RAILWAY.md).
+
+Para probar la imagen de producción en local:
+
+```bash
+docker build -t delicate .
+docker run --rm -p 8080:8000 -e DJANGO_SECRET_KEY=solo-local-$(date +%s)-cambia-esto -e DJANGO_ALLOWED_HOSTS=localhost -e DJANGO_SECURE_SSL_REDIRECT=False delicate
+```
 
 Antes de recibir pedidos reales, completa la [lista de salida a producción](docs/GO_LIVE.md). Incluye contenido, privacidad, entrega, respaldo y comprobaciones operativas que dependen del negocio y no pueden resolverse únicamente con código.
 
@@ -206,7 +234,7 @@ La base `backend/db.sqlite3`, los entornos virtuales, los logs, `node_modules` y
 
 - No hay registro ni login de clientes: para este modelo de venta añade fricción sin aportar valor.
 - El usuario personalizado de Django existe solo para el equipo administrador; no se conservan perfiles, direcciones ni datos de facturación de compradores.
-- El carrito vive en el navegador. El catálogo demo puede respaldar una presentación local, pero nunca reemplaza silenciosamente los datos reales en producción.
+- El carrito vive en el navegador y se actualiza con los precios y existencias del catálogo en cada visita; si algo cambió, se avisa al abrirlo. El catálogo demo puede respaldar una presentación local, pero nunca reemplaza silenciosamente los datos reales en producción.
 - El cliente ve un total estimado, pero el sitio aclara que no realiza cobros.
 - El mensaje de WhatsApp incluye el pedido completo y campos para nombre y modalidad de entrega.
 - El contenido evita promesas médicas; cualquier condición o alergia debe consultarse con un profesional.
